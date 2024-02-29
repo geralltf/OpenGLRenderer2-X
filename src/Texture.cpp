@@ -52,7 +52,7 @@ void Texture::bindToUnit(GLuint unit)
 	glBindTexture(type, textureId);
 }
 
-TextureBuilder Texture::LoadTexture(std::string textureFile)
+TextureBuilder* Texture::LoadTexture(std::string* textureFile)
 {
-	return TextureBuilder(textureFile);
+	return new TextureBuilder(textureFile);
 }

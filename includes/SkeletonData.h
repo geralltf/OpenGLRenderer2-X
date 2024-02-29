@@ -8,14 +8,14 @@ class SkeletonData
 public:
 
 	int jointCount;
-	JointData headJoint;
+	JointData* headJoint;
 
 	SkeletonData() : jointCount(0)
 	{
 
 	}
 
-	SkeletonData(int jointCount, JointData headJoint)
+	SkeletonData(int jointCount, JointData* headJoint)
 	{
 		this->jointCount = jointCount;
 		this->headJoint = headJoint;

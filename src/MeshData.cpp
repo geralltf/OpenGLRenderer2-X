@@ -5,10 +5,10 @@ MeshData::MeshData() : verticiesCount(0), texCoordCount(0), normalsCount(0), ind
 
 }
 
-MeshData::MeshData(std::vector<GLfloat> vertices, int verticiesCount, std::vector<GLfloat> textureCoords, int texCoordCount,
-	std::vector<GLfloat> normals, int normalsCount, std::vector<int> indices, int indiciesCount,
-	std::vector<int> jointIds, int jointIdsCount, std::vector<GLfloat> vertexWeights, int vertexWeightsCount,
-	std::vector<GLfloat> vertexTangents, int vertexTangentsCount, std::vector<GLfloat> vertexBiTangents, int vertexBiTangentsCount)
+MeshData::MeshData(std::vector<GLfloat>* vertices, int verticiesCount, std::vector<GLfloat>* textureCoords, int texCoordCount,
+	std::vector<GLfloat>* normals, int normalsCount, std::vector<unsigned int>* indices, int indiciesCount,
+	std::vector<unsigned int>* jointIds, int jointIdsCount, std::vector<GLfloat>* vertexWeights, int vertexWeightsCount,
+	std::vector<GLfloat>* vertexTangents, int vertexTangentsCount, std::vector<GLfloat>* vertexBiTangents, int vertexBiTangentsCount)
 {
 	this->vertices = vertices;
 	this->textureCoords = textureCoords;
@@ -29,42 +29,42 @@ MeshData::MeshData(std::vector<GLfloat> vertices, int verticiesCount, std::vecto
 	this->vertexBiTangentsCount = vertexBiTangentsCount;
 }
 
-std::vector<GLfloat> MeshData::getVertexBiTangents()
+std::vector<GLfloat>* MeshData::getVertexBiTangents()
 {
 	return vertexBiTangents; 
 }
 
-std::vector<GLfloat> MeshData::getVertexTangents()
+std::vector<GLfloat>* MeshData::getVertexTangents()
 {
 	return vertexTangents;
 }
 
-std::vector<int> MeshData::getJointIds()
+std::vector<unsigned int>* MeshData::getJointIds()
 {
 	return jointIds;
 }
 
-std::vector<GLfloat> MeshData::getVertexWeights()
+std::vector<GLfloat>* MeshData::getVertexWeights()
 {
 	return vertexWeights;
 }
 
-std::vector<GLfloat> MeshData::getVertices()
+std::vector<GLfloat>* MeshData::getVertices()
 {
 	return vertices;
 }
 
-std::vector<GLfloat> MeshData::getTextureCoords()
+std::vector<GLfloat>* MeshData::getTextureCoords()
 {
 	return textureCoords;
 }
 
-std::vector<GLfloat> MeshData::getNormals()
+std::vector<GLfloat>* MeshData::getNormals()
 {
 	return normals;
 }
 
-std::vector<int> MeshData::getIndices()
+std::vector<unsigned int>* MeshData::getIndices()
 {
 	return indices;
 }

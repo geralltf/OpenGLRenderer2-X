@@ -24,26 +24,29 @@ void FileWatcher::stop()
 {
 	// to exit thread gracefully 
 	listening_ = false;
-	update_th0->join();
-	delete update_th0;
+	//update_th0->join();
+	//delete update_th0;
 }
 
 // Monitor "path_to_watch" for changes and in case of a change execute the user supplied "action" function
 void FileWatcher::start()
 {
 	// do other stuff in parallel on main thread while running this file watcher thread.
-	update_th0 = new std::thread(update_thread, std::ref(listening_), update_interval, path_to_watch, std::ref(paths_), action_);
+	//update_th0 = new std::thread(update_thread, std::ref(listening_), update_interval, path_to_watch, std::ref(paths_), action_);
+	
+	std::atomic<bool> program_is_running = true;
+	update_thread(program_is_running, 5000, path_to_watch, paths_, action_);
 }
 
 void update_thread(std::atomic<bool>& program_is_running, unsigned int update_interval_millisecs,
 	std::string path_to_watch, std::unordered_map<std::string, std::filesystem::file_time_type>& paths_, std::function<void(std::string, FileStatus)> action_)
 {
 	const auto wait_duration = std::chrono::milliseconds(update_interval_millisecs);
-	while (program_is_running)
+	//while (program_is_running)
 	{
 		watch(path_to_watch, paths_, action_);
 
-		std::this_thread::sleep_for(wait_duration);
+		//std::this_thread::sleep_for(wait_duration);
 	}
 }
 

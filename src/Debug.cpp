@@ -4,12 +4,12 @@
 typedef struct LineRenderable
 {
 public:
-	Vector3 start;
-	Vector3 end;
-	ColourRGBA colour;
+	Vector3f* start;
+	Vector3f* end;
+	ColourRGBA* colour;
 } LineRenderable_T;
 
-std::queue<LineRenderable_T> Debug::renderQueue;
+std::queue<LineRenderable_T*>* Debug::renderQueue = new std::queue<LineRenderable_T*>();
 ShaderProgram* Debug::program = nullptr;
 
 //void clearQueue(std::queue<LineRenderable_T>& q)
@@ -18,15 +18,15 @@ ShaderProgram* Debug::program = nullptr;
 //	std::swap(q, empty);
 //}
 
-void Debug::DrawLine(Vector3 start, Vector3 end, ColourRGBA colour)
+void Debug::DrawLine(Vector3f* start, Vector3f* end, ColourRGBA* colour)
 {
 	// Append line to queue for later rendering.
-	LineRenderable_T line;
-	line.start = start;
-	line.end = end;
-	line.colour = colour;
+	LineRenderable_T* line = new LineRenderable_T();
+	line->start = start;
+	line->end = end;
+	line->colour = colour;
 
-	renderQueue.push(line);
+	renderQueue->push(line);
 }
 
 void Debug::DrawLines_Init()
@@ -34,55 +34,55 @@ void Debug::DrawLines_Init()
 	program = new ShaderProgram("Shaders/line_vs.glsl", "Shaders/line_fs.glsl");
 }
 
-void Debug::DrawLines_RenderDispatch(sf::RenderWindow* window, Transform cameraTransform, Matrix4 projectionMatrix, Matrix4 modelview)
+void Debug::DrawLines_RenderDispatch(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview)
 {
 	// Get the lines and buffer them to the GPU.
-	std::vector<GLfloat> verticies;
-	std::vector<GLfloat> colours;
+	std::vector<GLfloat*>* verticies = new std::vector<GLfloat*>();
+	std::vector<GLfloat*>* colours = new std::vector<GLfloat*>();
 	bool hasLines = false;
 
-	while (!renderQueue.empty())
+	while (!renderQueue->empty())
 	{
-		LineRenderable_T line = renderQueue.front();
-		renderQueue.pop();
+		LineRenderable_T* line = renderQueue->front();
+		renderQueue->pop();
 		
 		// Vertex 1.
-		verticies.push_back(line.start.x);
-		verticies.push_back(line.start.y);
-		verticies.push_back(line.start.z);
+		verticies->push_back(&line->start->x);
+		verticies->push_back(&line->start->y);
+		verticies->push_back(&line->start->z);
 
 		// Vertex 2.
-		verticies.push_back(line.end.x);
-		verticies.push_back(line.end.y);
-		verticies.push_back(line.end.z);
+		verticies->push_back(&line->end->x);
+		verticies->push_back(&line->end->y);
+		verticies->push_back(&line->end->z);
 
 		// Vertex 1.
-		colours.push_back(line.colour.r);
-		colours.push_back(line.colour.g);
-		colours.push_back(line.colour.b);
+		colours->push_back(&line->colour->r);
+		colours->push_back(&line->colour->g);
+		colours->push_back(&line->colour->b);
 
 		// Vertex 2.
-		colours.push_back(line.colour.r);
-		colours.push_back(line.colour.g);
-		colours.push_back(line.colour.b);
+		colours->push_back(&line->colour->r);
+		colours->push_back(&line->colour->g);
+		colours->push_back(&line->colour->b);
 
 		hasLines = true;
 	}
 
 	if (hasLines)
 	{
-		int verticiesCount = verticies.size() / 3;
+		int verticiesCount = verticies->size() / 3;
 		GLuint vao = 0;
 
 		GLuint points_vbo;
 		glGenBuffers(1, &points_vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * verticies.size(), verticies.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * verticies->size(), verticies->data(), GL_STATIC_DRAW);
 		
 		GLuint colours_vbo;
 		glGenBuffers(1, &colours_vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * colours.size(), colours.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * colours->size(), colours->data(), GL_STATIC_DRAW);
 
 		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
@@ -106,9 +106,9 @@ void Debug::DrawLines_RenderDispatch(sf::RenderWindow* window, Transform cameraT
 		// Draw object with current shader.
 		glUseProgram(program->programID);
 
-		float* arrProjectionMat = projectionMatrix.ToArray();
-		float* arrModelviewMat = modelview.ToArray();
-		float* arrViewMat = cameraTransform.localMatrix.ToArray();
+		float* arrProjectionMat = projectionMatrix->ToArray();
+		float* arrModelviewMat = modelview->ToArray();
+		float* arrViewMat = cameraTransform->localMatrix->ToArray();
 
 		int projectionMatrixLocation = glGetUniformLocation(program->programID, "projectionMatrix");
 		int modelviewMatrixLocation = glGetUniformLocation(program->programID, "modelviewMatrix");

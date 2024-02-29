@@ -9,17 +9,17 @@
 class SkinningData 
 {
 public:
-	std::vector<std::string> jointOrder;
-	std::vector<std::string> jointSIDList;
-	std::vector<VertexSkinData> verticesSkinData;
-	std::vector<Matrix4> bindPoses;
+	std::vector<std::string*>* jointOrder;
+	std::vector<std::string*>* jointSIDList;
+	std::vector<VertexSkinData*>* verticesSkinData;
+	std::vector<Matrix4*>* bindPoses;
 
 	SkinningData() 
 	{
 
 	}
 
-	SkinningData(std::vector<std::string> jointOrder, std::vector<std::string> jointSIDList, std::vector<VertexSkinData> verticesSkinData, std::vector<Matrix4> bindPoses)
+	SkinningData(std::vector<std::string*>* jointOrder, std::vector<std::string*>* jointSIDList, std::vector<VertexSkinData*>* verticesSkinData, std::vector<Matrix4*>* bindPoses)
 	{
 		this->jointOrder = jointOrder;
 		this->jointSIDList = jointSIDList;

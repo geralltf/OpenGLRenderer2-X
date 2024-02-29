@@ -19,12 +19,12 @@ public:
 	~TextureData();
 	int getWidth();
 	int getHeight();
-	Vector2i getSize();
+	Vector2i* getSize();
 	byte* getBuffer();
-	ColourRGBA get(int x, int y);
-	ColourRGBA get(float u, float v);
+	ColourRGBA* get(int x, int y);
+	ColourRGBA* get(float u, float v);
 	int getBytesPerPixel();
-	Vector3 normal(Vector2 uvf);
+	Vector3f* normal(Vector2f* uvf);
 };
 
 #endif

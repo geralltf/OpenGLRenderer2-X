@@ -28,9 +28,9 @@ void WavefrontOBJMeshImporter::ImportWOBJMesh(std::string fileName, WOBJ_Mesh** 
 	state->file->open(fileName, std::ios::in);
 
 	state->mesh = new WOBJ_Mesh();
-	state->group->GroupName = "Default";
+	state->group->GroupName = new std::string("Default");
 	state->objName = "";
-	state->groupName = "";
+	state->groupName = new std::string("");
 
 	if (state->file->is_open())
 	{
@@ -67,7 +67,7 @@ void WavefrontOBJMeshImporter::ImportWOBJMesh(std::string fileName, WOBJ_Mesh** 
 		g->Indicies = state->indicies;
 		g->BeginIndex = 0;
 		g->EndIndex = g->Indicies->size() - 1;
-		g->GroupName = "Default";
+		g->GroupName = new std::string("Default");
 		g->Polygon = state->polyType;
 
 		state->mesh->Groups->push_back(g);
@@ -84,7 +84,7 @@ void WavefrontOBJMeshImporter::processLineToken(ParserState state, OBJToken toke
 		state.objName = ParseName(state.line);
     }
 	if(token == OBJToken::WF_Group){
-		state.groupName = ParseName(state.line);
+		state.groupName = new std::string(ParseName(state.line));
 
 		// Create next group.
 		state.group = new WOBJ_Group();
@@ -132,10 +132,11 @@ void WavefrontOBJMeshImporter::processLineToken(ParserState state, OBJToken toke
         }
 
 		state.indicies->insert(state.indicies->end(), state.face->VertexCoordIndicies->begin(), state.face->VertexCoordIndicies->end()); //state.indicies.AddRange(state.face.VertexCoordIndicies);
+		
 		//state.normalIndicies->insert(state.normalIndicies->end(), state.face->VertexNormalIndicies->begin(), state.face->VertexNormalIndicies->end()); //state.normalIndicies.AddRange(state.face->VertexNormalIndicies);\
 		state.texCoordIndicies->insert(state.texCoordIndicies->end(), state.face->VertexTexCoordIndicies->begin(), state.face->VertexTexCoordIndicies->end()); //state.texCoordIndicies.AddRange(state.face->VertexTexCoordIndicies);
 
-		ColourRGBA colour = Colour::Randomise();
+		ColourRGBA* colour = Colour::Randomise();
 		state.colours->push_back(colour);
 
 		++faceIDx;
@@ -191,7 +192,7 @@ void WavefrontOBJMeshImporter::handleNewFaceGroup(ParserState state)
 				// Add previous group (if any) to list.
 				state.mesh->Groups->push_back(state.group);
 
-				state.indicies = new std::vector<int>();
+				state.indicies = new std::vector<int*>();
 			}
 		}
 
@@ -318,7 +319,7 @@ std::string WavefrontOBJMeshImporter::ParseName(std::string line)
 	return objName;
 }
 
-bool WavefrontOBJMeshImporter::try_parse_vector3(std::string line, Vector3** outVector)
+bool WavefrontOBJMeshImporter::try_parse_vector3(std::string line, Vector3f** outVector)
 {
 	std::vector<std::string>* coordsList;
 
@@ -337,18 +338,18 @@ bool WavefrontOBJMeshImporter::try_parse_vector3(std::string line, Vector3** out
 
 	if(has_x && has_y && has_z)
 	{
-        Vector3* v = new Vector3(x, y, z);
+        Vector3f* v = new Vector3f(x, y, z);
 		*outVector = v;
 		return true;
 	}
 	else
 	{
-		*outVector = new Vector3(0,0,0);
+		*outVector = new Vector3f(0,0,0);
 	}
 	return false;
 }
 
-bool WavefrontOBJMeshImporter::try_parse_vector2(std::string line, Vector2** outVector)
+bool WavefrontOBJMeshImporter::try_parse_vector2(std::string line, Vector2f** outVector)
 {
 	std::vector<std::string>* coordsList;
 
@@ -362,20 +363,20 @@ bool WavefrontOBJMeshImporter::try_parse_vector2(std::string line, Vector2** out
 
 	if (has_x && has_y)
 	{
-		*outVector = new Vector2(x, y);
+		*outVector = new Vector2f(x, y);
 		return true;
 	}
 	else
 	{
-		*outVector = new Vector2(0,0);
+		*outVector = new Vector2f(0,0);
 	}
 	return false;
 }
 
-Vector3 WavefrontOBJMeshImporter::ParseVertexCoord(std::string line)
+Vector3f* WavefrontOBJMeshImporter::ParseVertexCoord(std::string line)
 {
-	Vector3 out;
-	Vector3* v;
+	Vector3f* out;
+	Vector3f* v;
 
 	// v -1.380437 -0.624475 0.886924
 	std::string vert = line;
@@ -388,11 +389,11 @@ Vector3 WavefrontOBJMeshImporter::ParseVertexCoord(std::string line)
 
 	if(try_parse_vector3(vert, &v))
 	{
-		out = *v;
+		out = v;
 	}
 	else
 	{
-		out = Vector3::Zero;
+		out = Vector3f::ZERO;
 	}
 
     //std::cout << "x: " << out.x << " y: " << out.y << " z: " << out.z << std::endl;
@@ -400,10 +401,10 @@ Vector3 WavefrontOBJMeshImporter::ParseVertexCoord(std::string line)
 	return out;
 }
 
-Vector2 WavefrontOBJMeshImporter::ParseVertexTextureCoordinate(std::string line)
+Vector2f* WavefrontOBJMeshImporter::ParseVertexTextureCoordinate(std::string line)
 {
-	Vector2 out;
-	Vector2* v;
+	Vector2f* out;
+	Vector2f* v;
 
 	// vt 0.920424 0.491081
 	std::string tex = line;
@@ -416,11 +417,11 @@ Vector2 WavefrontOBJMeshImporter::ParseVertexTextureCoordinate(std::string line)
 
 	if(try_parse_vector2(tex, &v))
 	{
-		out = *v;
+		out = v;
 	}
 	else
 	{
-		out = Vector2::Zero;
+		out = new Vector2f(0.0f,0.0f);
 	}
 
     //std::cout << "x: " << out.x << " y: " << out.y << std::endl;
@@ -428,10 +429,10 @@ Vector2 WavefrontOBJMeshImporter::ParseVertexTextureCoordinate(std::string line)
 	return out;
 }
 
-Vector3 WavefrontOBJMeshImporter::ParseVertexNormal(std::string line)
+Vector3f* WavefrontOBJMeshImporter::ParseVertexNormal(std::string line)
 {
-	Vector3 out;
-	Vector3* v;
+	Vector3f* out;
+	Vector3f* v;
 
 	// vn -0.464500 -0.402700 -0.788700
 	std::string norm = line;
@@ -444,11 +445,11 @@ Vector3 WavefrontOBJMeshImporter::ParseVertexNormal(std::string line)
 
 	if (try_parse_vector3(norm, &v))
 	{
-		out = *v;
+		out = v;
 	}
 	else
 	{
-		out = Vector3::Zero;
+		out = Vector3f::ZERO;
 	}
 
     //std::cout << "x: " << out.x << " y: " << out.y << " z: " << out.z << std::endl;
@@ -539,7 +540,7 @@ WOBJ_Face* WavefrontOBJMeshImporter::ParseFace(std::string line)
 					if (coordIndex > face->MaxVertIndex)
 						face->MaxVertIndex = coordIndex;
 
-					face->VertexCoordIndicies->push_back(coordIndex);
+					face->VertexCoordIndicies->push_back(&coordIndex);
 
 					if (indicies->size() > 1)
 					{
@@ -556,7 +557,7 @@ WOBJ_Face* WavefrontOBJMeshImporter::ParseFace(std::string line)
 							{
 								texCoordIndex = texCoordIndex - 1; // Index is not zero based
 
-								face->VertexTexCoordIndicies->push_back(texCoordIndex);
+								face->VertexTexCoordIndicies->push_back(&texCoordIndex);
 							}
 							else
 							{
@@ -581,7 +582,7 @@ WOBJ_Face* WavefrontOBJMeshImporter::ParseFace(std::string line)
 							{
 								normCoordIndex = normCoordIndex - 1; // Index is not zero based
 
-								face->VertexNormalIndicies->push_back(normCoordIndex);
+								face->VertexNormalIndicies->push_back(&normCoordIndex);
 							}
 							else
 							{

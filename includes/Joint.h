@@ -34,17 +34,17 @@
 class Joint 
 {
 private:
-	Matrix4 animatedTransform = Matrix4::GetIdentity();
-	Matrix4 localBindTransform = Matrix4::GetIdentity();
-	Matrix4 inverseBindTransform = Matrix4::GetIdentity();
-	Matrix4 inverseBindTransformCalc = Matrix4::GetIdentity();
+	Matrix4* animatedTransform = Matrix4::Identity();
+	Matrix4* localBindTransform = Matrix4::Identity();
+	Matrix4* inverseBindTransform = Matrix4::Identity();
+	Matrix4* inverseBindTransformCalc = Matrix4::Identity();
 
 public:
 	int index; // ID
-	std::string id;
-	std::string name;
-	std::string sid;
-	std::vector<Joint*> children;
+	std::string* id;
+	std::string* name;
+	std::string* sid;
+	std::vector<Joint*>* children = new std::vector<Joint*>();
 	Joint* parent;
 
 	Joint() : index(-1), parent(nullptr)
@@ -59,7 +59,7 @@ public:
 			delete parent;
 		}
 
-		for (Joint* child : children)
+		for (Joint* child : *children)
 		{
 			delete child;
 		}
@@ -75,7 +75,7 @@ public:
 	 * @param bindLocalTransform
 	 *            - the bone-space transform of the joint in the bind position.
 	 */
-	Joint(int index, std::string id, std::string name, std::string sid, Matrix4 bindLocalTransform, Matrix4 inverseBindTransform)
+	Joint(int index, std::string* id, std::string* name, std::string* sid, Matrix4* bindLocalTransform, Matrix4* inverseBindTransform)
 	{
 		this->index = index;
 		this->id = id;
@@ -97,7 +97,7 @@ public:
 	 */
 	void addChild(Joint* child);
 
-	Matrix4 getLocalBindTransform();
+	Matrix4* getLocalBindTransform();
 
 	/**
 	 * The animated transform is the transform that gets loaded up to the shader
@@ -111,7 +111,7 @@ public:
 	 * @return The transformation matrix of the joint which is used to deform
 	 *         associated vertices of the skin in the shaders.
 	 */
-	Matrix4 getAnimatedTransform();
+	Matrix4* getAnimatedTransform();
 
 	/**
 	 * This method allows those all important "joint transforms" (as I referred
@@ -120,7 +120,7 @@ public:
 	 *
 	 * @param animationTransform - the new joint transform.
 	 */
-	void setAnimationTransform(Matrix4 animationTransform);
+	void setAnimationTransform(Matrix4* animationTransform);
 
 	/**
 	 * This returns the inverted model-space bind transform. The bind transform
@@ -131,7 +131,7 @@ public:
 	 *
 	 * @return The inverse of the joint's bind transform (in model-space).
 	 */
-	Matrix4 getInverseBindTransform();
+	Matrix4* getInverseBindTransform();
 
 	/**
 	 * This is called during set-up, after the joints hierarchy has been
@@ -152,7 +152,7 @@ public:
 	 * @param parentBindTransform
 	 *            - the model-space bind transform of the parent joint.
 	 */
-	void calcInverseBindTransform(Matrix4 parentBindTransform);
+	void calcInverseBindTransform(Matrix4* parentBindTransform);
 
 };
 

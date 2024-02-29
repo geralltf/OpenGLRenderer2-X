@@ -16,20 +16,20 @@ class JointData
 {
 public:
 	int index;
-	std::string id;
-	std::string name;
-	std::string sid;
-	Matrix4 bindLocalTransform;
-	Matrix4 inverseBindPoseTransform;
+	std::string* id;
+	std::string* name;
+	std::string* sid;
+	Matrix4* bindLocalTransform;
+	Matrix4* inverseBindPoseTransform;
 
-	std::vector<JointData> children = std::vector<JointData>();
+	std::vector<JointData*>* children = new std::vector<JointData*>();
 
 	JointData() : index(0)
 	{
 
 	}
 
-	JointData(int index, std::string id, std::string name, std::string sid, Matrix4 bindLocalTransform, Matrix4 inverseBindPoseTransform)
+	JointData(int index, std::string* id, std::string* name, std::string* sid, Matrix4* bindLocalTransform, Matrix4* inverseBindPoseTransform)
 	{
 		this->index = index;
 		this->id = id;
@@ -39,7 +39,7 @@ public:
 		this->inverseBindPoseTransform = inverseBindPoseTransform;
 	}
 
-	void addChild(JointData child);
+	void addChild(JointData* child);
 
 };
 

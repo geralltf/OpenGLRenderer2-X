@@ -28,4 +28,6 @@ void main()
 	//result = bloomColor;
 	//result = hdrColor;
     frag_colour = vec4(result, 1.0);
+	
+	//frag_colour = vec4(1,0,0,1);
 }

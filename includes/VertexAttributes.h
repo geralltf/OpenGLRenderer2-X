@@ -2,24 +2,24 @@
 #define VERTEXATTRIBUTES_H
 
 #include "Nullable.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
+#include "Vector2f.h"
+#include "Vector3f.h"
+#include "Vector4f.h"
 
 class VertexAttributes
 {
 public:
-	Vector3 Vertex;
+	Vector3f* Vertex;
 
-	Nullable<Vector3> Normal;
-	Nullable<Vector4> Colour;
-	Nullable<Vector2> TextureCoordinate;
+	Nullable<Vector3f*> Normal;
+	Nullable<Vector4f*> Colour;
+	Nullable<Vector2f*> TextureCoordinate;
 
 	VertexAttributes():
-		Normal(Nullable<Vector3>()),
-		Colour(Nullable<Vector4>()),
-		TextureCoordinate(Nullable<Vector2>()),
-		Vertex(Vector3::Zero)
+		Normal(Nullable<Vector3f*>()),
+		Colour(Nullable<Vector4f*>()),
+		TextureCoordinate(Nullable<Vector2f*>()),
+		Vertex(Vector3f::ZERO)
 	{
 		
 	}

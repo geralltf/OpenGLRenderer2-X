@@ -14,7 +14,7 @@ float KeyFrame::getTimeStamp()
  *         they correspond to. This basically represents the "pose" at this
  *         keyframe.
  */
-std::map<std::string, JointTransform*>* KeyFrame::getJointKeyFrames()
+std::map<std::string*, JointTransform*>* KeyFrame::getJointKeyFrames()
 {
 	return pose;
 }

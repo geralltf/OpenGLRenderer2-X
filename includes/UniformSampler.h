@@ -10,7 +10,7 @@ private:
 	bool used = false;
 
 public:
-	UniformSampler(std::string name): Uniform(name), currentValue(-1)
+	UniformSampler(std::string* name): Uniform(name), currentValue(-1)
 	{
 		
 	}

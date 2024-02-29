@@ -12,14 +12,14 @@ public:
 		
 	}
 
-	UniformMatrix(std::string name): Uniform(name) 
+	UniformMatrix(std::string* name): Uniform(name) 
 	{
 
 	}
 
-	void loadMatrix(GLuint programID, Matrix4 matrix) 
+	void loadMatrix(GLuint programID, Matrix4* matrix) 
 	{
-		glUniformMatrix4fv(getLocation(programID), 1, GL_FALSE, matrix.ToArray());
+		glUniformMatrix4fv(getLocation(programID), 1, GL_FALSE, matrix->ToArray());
 	}
 };
 

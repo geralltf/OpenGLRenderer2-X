@@ -2,7 +2,7 @@
 #include "TGADecoder.h"
 #include <vector>
 
-TextureData* TextureUtils::decodeTextureFile(std::string file)
+TextureData* TextureUtils::decodeTextureFile(std::string* file)
 {
 	int width = 0;
 	int height = 0;
@@ -18,7 +18,7 @@ TextureData* TextureUtils::decodeTextureFile(std::string file)
 	bytesPerPixel = tgaDecoder->get_bytesPerPixel();
 	buffer = tgaDecoder->buffer(); // in BRGA format
 
-	std::cout << "Texture file " << file << " loading " << (loaded ? "ok" : "failed") << std::endl;
+	std::cout << "Texture file " << *file << " loading " << (loaded ? "ok" : "failed") << std::endl;
 
 	//TODO: handle PNG decoding
 

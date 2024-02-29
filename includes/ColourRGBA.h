@@ -1,92 +1,89 @@
 ﻿#ifndef COLOURRGBA_H
 #define COLOURRGBA_H
 
-#include "Vector4.h"
-#include "Vector3.h"
+#include "Vector4f.h"
+#include "Vector3f.h"
 #include "Colour.h"
 
 #ifndef BYTE_T
 #include "Byte.h"
 #endif
 
-//namespace ath
-//{
+class ColourRGBA;
 
-	class ColourRGBA;
+class ColourRGBA
+{
+public:
+	float r;
+	float g;
+	float b;
+	float a;
 
-	class ColourRGBA
+	ColourRGBA();
+	ColourRGBA(Vector3f* v);
+	ColourRGBA(Vector4f* v);
+	ColourRGBA(byte alpha, byte red, byte green, byte blue);
+	ColourRGBA(float alpha, float red, float green, float blue);
+
+	Vector3f* GetHSV();
+	void FromHSV(Vector3f* colour);
+	byte* ToBytes();
+	Vector4f* ToVec4();
+	byte* ToBGRA() const;
+
+	static ColourRGBA* FromBytes(byte a, byte r, byte g, byte b);
+	static ColourRGBA* FromFloats(float a, float r, float g, float b);
+	static Vector3f* ConvertToHSV(ColourRGBA* colour);
+	static ColourRGBA* ConvertFromHSV(Vector3f* hsv);
+	static ColourRGBA* Divide(ColourRGBA* c, float denominator);
+	static ColourRGBA* Scale(ColourRGBA* c, float scalar);
+	static ColourRGBA* Add(ColourRGBA* left, float right);
+	static ColourRGBA* Subtract(ColourRGBA* left, float right);
+
+	// Operators
+
+	/// Get a colour component given the specified index.
+	float operator () (int i) const
 	{
-	public:
-		float r;
-		float g;
-		float b;
-		float a;
+		return (&r)[i];
+	}
 
-		ColourRGBA();
-		ColourRGBA(Vector3 v);
-		ColourRGBA(Vector4 v);
-		ColourRGBA(byte alpha, byte red, byte green, byte blue);
-		ColourRGBA(float alpha, float red, float green, float blue);
+	//operator Vector3()
+	//{
+	//	Vector3 result(r, g, b);
+	//	return result;
+	//}
 
-		Vector3 GetHSV();
-		void FromHSV(Vector3 colour);
-		byte* ToBytes();
-		Vector4 ToVec4();
-		byte* ToBGRA() const;
+	//operator Vector4()
+	//{
+	//	Vector4 result(r, g, b, a);
+	//	return result;
+	//}
 
-		static ColourRGBA FromBytes(byte a, byte r, byte g, byte b);
-		static ColourRGBA FromFloats(float a, float r, float g, float b);
-		static Vector3 ConvertToHSV(ColourRGBA colour);
-		static ColourRGBA ConvertFromHSV(Vector3 hsv);
-		static ColourRGBA Divide(ColourRGBA c, float denominator);
-		static ColourRGBA Scale(ColourRGBA c, float scalar);
-		static ColourRGBA Add(ColourRGBA left, float right);
-		static ColourRGBA Subtract(ColourRGBA left, float right);
+	ColourRGBA* operator *(float scalar)
+	{
+		ColourRGBA* c = this;
+		return Scale(c, scalar);
+	}
 
-		// Operators
+	ColourRGBA* operator /(float denominator)
+	{
+		ColourRGBA* c = this;
+		return Divide(c, denominator);
+	}
 
-		/// Get a colour component given the specified index.
-		float operator () (int i) const
-		{
-			return (&r)[i];
-		}
+    ColourRGBA* operator +(float scalar)
+	{
+		ColourRGBA* c = this;
+		return Add(c, scalar);
+	}
 
-		//operator Vector3()
-		//{
-		//	Vector3 result(r, g, b);
-		//	return result;
-		//}
-
-		//operator Vector4()
-		//{
-		//	Vector4 result(r, g, b, a);
-		//	return result;
-		//}
-
-		ColourRGBA operator *(float scalar)
-		{
-			ColourRGBA c = *this;
-			return Scale(c, scalar);
-		}
-
-		ColourRGBA operator /(float denominator)
-		{
-			ColourRGBA c = *this;
-			return Divide(c, denominator);
-		}
-
-        ColourRGBA operator +(float scalar)
-		{
-			ColourRGBA c = *this;
-			return Add(c, scalar);
-		}
-
-        ColourRGBA operator -(float scalar)
-		{
-			ColourRGBA c = *this;
-			return Subtract(c, scalar);
-		}
-	};
+    ColourRGBA* operator -(float scalar)
+	{
+		ColourRGBA* c = this;
+		return Subtract(c, scalar);
+	}
+};
 
 //inline ColourRGBA operator +=(ColourRGBA left, Vector3 right)
 //{
@@ -97,8 +94,6 @@
 //	return result;
 //}
 
-	// ColourRGBA Operators
-	ColourRGBA operator +=(ColourRGBA left, Vector3 right);
-
-//}
+// ColourRGBA Operators
+ColourRGBA* operator +=(ColourRGBA left, Vector3f* right);
 #endif

@@ -1,7 +1,7 @@
 #ifndef JOINT_TRANSFORM_H
 #define JOINT_TRANSFORM_H
 
-#include "Vector3.h"
+#include "Vector3f.h"
 #include "Quaternion.h"
 
 /**
@@ -22,8 +22,8 @@ class JointTransform
 
 private:
 	// remember, this position and rotation are relative to the parent bone!
-	Vector3 position;
-	Quaternion rotation;
+	Vector3f* position;
+	Quaternion* rotation;
 
 public:
 	/**
@@ -38,7 +38,7 @@ public:
 	 *            - the rotation of the joint relative to the parent joint
 	 *            (bone-space) at a certain keyframe.
 	 */
-	JointTransform(Vector3 position, Quaternion rotation) 
+	JointTransform(Vector3f* position, Quaternion* rotation) 
 	{
 		this->position = position;
 		this->rotation = rotation;
@@ -60,7 +60,7 @@ public:
 	 *         transform as represented by the position and rotation in this
 	 *         instance, just in matrix form.
 	 */
-	Matrix4 getLocalTransform();
+	Matrix4* getLocalTransform();
 
 	/**
 	 * Interpolates between two transforms based on the progression value. The
@@ -83,7 +83,7 @@ public:
 	 *            transform somewhere in-between the two.
 	 * @return
 	 */
-	static JointTransform interpolate(JointTransform frameA, JointTransform frameB, float progression);
+	static JointTransform* interpolate(JointTransform* frameA, JointTransform* frameB, float progression);
 };
 
 #endif

@@ -20,33 +20,33 @@ void OctreeRenderer::AddOBJToOctree(MeshBufferVAO* meshBufferVAO)
 	octreeInput->Add(meshBufferVAO);
 }
 
-bool OctreeRenderer::SaveToBinaryFile(std::string fileName, Octree* octree)
+bool OctreeRenderer::SaveToBinaryFile(std::string* fileName, Octree* octree)
 {
 	return true;
 }
 
-bool OctreeRenderer::LoadFromBinaryFile(std::string fileName, Octree* octree)
+bool OctreeRenderer::LoadFromBinaryFile(std::string* fileName, Octree* octree)
 {
 	return true;
 }
 
 void OctreeRenderer::Initilise()
 {
-	AABB* sceneBounds = new AABB(Vector3::Zero, Vector3::One * 10);
+	AABB* sceneBounds = new AABB(Vector3f::ZERO, Vector3f::Scale(Vector3f::ONE, 10));
 	octreeInput = new Octree();
 	octreeInput->BBox = sceneBounds;
 }
 
-void OctreeRenderer::Render(sf::RenderWindow* window, Transform cameraTransform, Matrix4 projectionMatrix, Matrix4 modelview, Vector3 light_dir, Matrix4 lightModelView)
+void OctreeRenderer::Render(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview, Vector3f* light_dir, Matrix4* lightModelView)
 {
 	bool outlinePass = false;
 
 	// Which objects in the frustum need to be rendered?
-	Vector3 eyePosition = cameraTransform.GetLocalPosition();
-	AABB currentArea = AABB(eyePosition, Vector3::One * 10); // TODO: use frustum intersection for current area
+	Vector3f* eyePosition = cameraTransform->GetLocalPosition();
+	AABB* currentArea = new AABB(eyePosition, Vector3f::Scale(Vector3f::ONE, 10)); // TODO: use frustum intersection for current area
 
-	std::vector<MeshBufferVAO*> nearestList = std::vector<MeshBufferVAO*>();
-	octreeInput->FindNearestObjects(currentArea, nearestList);
+	std::vector<MeshBufferVAO*>* nearestList = new std::vector<MeshBufferVAO*>();
+	octreeInput->FindNearestObjects(currentArea, &nearestList);
 
 
 	// Render dispatch.
@@ -76,12 +76,12 @@ void OctreeRenderer::Render(sf::RenderWindow* window, Transform cameraTransform,
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
 
-	float* arrProjectionMat = projectionMatrix.ToArray();
-	float* arrModelviewMat = modelview.ToArray();
-	float* arrViewMat = cameraTransform.localMatrix.ToArray();
+	float* arrProjectionMat = projectionMatrix->ToArray();
+	float* arrModelviewMat = modelview->ToArray();
+	float* arrViewMat = cameraTransform->localMatrix->ToArray();
 
-	float* ldir = light_dir.ToArray();
-	float* eyePos = cameraTransform.localMatrix.GetTranslation().ToArray();
+	float* ldir = light_dir->ToArray();
+	float* eyePos = cameraTransform->localMatrix->GetTranslation()->ToArray();
 
 	int projectionMatrixLocation = glGetUniformLocation(program->programID, "projectionMatrix");
 	int modelviewMatrixLocation = glGetUniformLocation(program->programID, "modelviewMatrix");
@@ -95,7 +95,7 @@ void OctreeRenderer::Render(sf::RenderWindow* window, Transform cameraTransform,
 	int glowTextureLocation = glGetUniformLocation(program->programID, "glowTexture");
 	int outlinePassLocation = glGetUniformLocation(program->programID, "outlinePass");
 
-	float* arrDepthMVP = depthMVP.ToArray();
+	float* arrDepthMVP = depthMVP->ToArray();
 	glUniformMatrix4fv(glGetUniformLocation(program->programID, "depthMVP"), 1, GL_FALSE, arrDepthMVP);
 
 	glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, arrProjectionMat);
@@ -118,7 +118,7 @@ void OctreeRenderer::Render(sf::RenderWindow* window, Transform cameraTransform,
 	if (lutTexture04 != nullptr) lutTexture04->bindToUnit(9);
 
 	// For each mesh, initilise if not already and then render.
-	for (auto mesh : nearestList)
+	for (auto mesh : *nearestList)
 	{
 		mesh->BindTextures();
 		mesh->Render();

@@ -159,7 +159,7 @@
     <ClCompile Include="src\Matrix4.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\model.cpp">
+    <ClCompile Include="src\Model.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Nullable.cpp">
@@ -186,16 +186,16 @@
     <ClCompile Include="src\Triangle.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vector2.cpp">
+    <ClCompile Include="src\Vector2f.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Vector2i.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vector3.cpp">
+    <ClCompile Include="src\Vector3f.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vector4.cpp">
+    <ClCompile Include="src\Vector4f.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\WavefrontOBJMeshImporter.cpp">
@@ -369,6 +369,9 @@
     <ClCompile Include="src\SFMLCanvas.cpp">
       <Filter>Source Files\LevelEditor</Filter>
     </ClCompile>
+    <ClCompile Include="src\VectorLib.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\IOHelpers.h">
@@ -428,7 +431,7 @@
     <ClInclude Include="includes\MeshBuffer.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="includes\model.h">
+    <ClInclude Include="includes\Model.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="includes\Nullable.h">
@@ -458,16 +461,16 @@
     <ClInclude Include="includes\Triangle.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="includes\Vector2.h">
+    <ClInclude Include="includes\Vector2f.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="includes\Vector2i.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="includes\Vector3.h">
+    <ClInclude Include="includes\Vector3f.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="includes\Vector4.h">
+    <ClInclude Include="includes\Vector4f.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="includes\VertexAttributes.h">
@@ -700,6 +703,12 @@
     </ClInclude>
     <ClInclude Include="includes\SFMLCanvas.h">
       <Filter>Header Files\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\VectorLib.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\MathLib.h">
+      <Filter>Header Files\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

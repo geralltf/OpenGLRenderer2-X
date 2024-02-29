@@ -6,9 +6,9 @@
 
 #include <assert.h>
 #include <iostream>
-#include "Vector4.h"
-#include "Vector3.h"
-#include "Vector2.h"
+#include "Vector4f.h"
+#include "Vector3f.h"
+#include "Vector2f.h"
 #include "Vector2i.h"
 #include "Colour.h"
 #include "ColourRGBA.h"

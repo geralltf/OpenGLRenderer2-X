@@ -13,7 +13,7 @@
 class AnimatedModelData 
 {
 private:
-	SkeletonData joints;
+	SkeletonData* joints;
 	MeshData* mesh;
 	AnimationData* animData;
 public:
@@ -23,7 +23,7 @@ public:
 
 	}
 
-	AnimatedModelData(MeshData* mesh, SkeletonData joints, AnimationData* animData)
+	AnimatedModelData(MeshData* mesh, SkeletonData* joints, AnimationData* animData)
 	{
 		this->joints = joints;
 		this->mesh = mesh;
@@ -35,7 +35,7 @@ public:
 		delete mesh;
 	}
 
-	SkeletonData getJointsData();
+	SkeletonData* getJointsData();
 	MeshData* getMeshData();
 	AnimationData* getAnimationData();
 };

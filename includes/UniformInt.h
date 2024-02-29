@@ -10,7 +10,7 @@ private:
 	bool used = false;
 
 public:
-	UniformInt(std::string name) : Uniform(name), value(0)
+	UniformInt(std::string* name) : Uniform(name), value(0)
 	{
 		
 	}

@@ -2,43 +2,43 @@
 #define TRIANGLE_H
 
 #include "Nullable.h"
-#include "Vector3.h"
+#include "Vector3f.h"
 #include "ColourRGBA.h"
 
 class Triangle // TODO: This is a TEST for just one type of polygon.
 {
 public:
-	Vector3 positionXStep;
-	Vector3 positionYStep;
+	Vector3f* positionXStep;
+	Vector3f* positionYStep;
 
-	Vector4 colourXStep;
-	Vector4 colourYStep;
+	Vector4f* colourXStep;
+	Vector4f* colourYStep;
 
-	Vector3 normalXStep;
-	Vector3 normalYStep;
+	Vector3f* normalXStep;
+	Vector3f* normalYStep;
 
-	Vector2 texCoordXStep;
-	Vector2 texCoordYStep;
+	Vector2f* texCoordXStep;
+	Vector2f* texCoordYStep;
 
-	Vector3 Origin;
+	Vector3f* Origin;
 
-	Vector3 vertex00;
-	Vector3 vertex01;
-	Vector3 vertex10;
+	Vector3f* vertex00;
+	Vector3f* vertex01;
+	Vector3f* vertex10;
 
-	Nullable<Vector3> normal00;
-	Nullable<Vector3> normal01;
-	Nullable<Vector3> normal10;
+	Nullable<Vector3f*> normal00;
+	Nullable<Vector3f*> normal01;
+	Nullable<Vector3f*> normal10;
 
-	Nullable<Vector4> colour00;
-	Nullable<Vector4> colour01;
-	Nullable<Vector4> colour10;
+	Nullable<Vector4f*> colour00;
+	Nullable<Vector4f*> colour01;
+	Nullable<Vector4f*> colour10;
 
-	Nullable<Vector2> texCoord00;
-	Nullable<Vector2> texCoord01;
-	Nullable<Vector2> texCoord10;
+	Nullable<Vector2f*> texCoord00;
+	Nullable<Vector2f*> texCoord01;
+	Nullable<Vector2f*> texCoord10;
 
-	Nullable<ColourRGBA> faceColour;
+	Nullable<ColourRGBA*> faceColour;
 
 	bool HasNormalPerVertex = false;
 	bool HasColourPerVertex = false;
@@ -48,7 +48,7 @@ public:
 
 	Triangle();
 
-	Triangle(Vector3 t0, Vector3 t1, Vector3 t2);
+	Triangle(Vector3f* t0, Vector3f* t1, Vector3f* t2);
 
 	~Triangle();
 
@@ -57,13 +57,13 @@ public:
 
 	void Grad();
 
-	Vector3 TriangleLerp(Vector2 uv);
+	Vector3f* TriangleLerp(Vector2f* uv);
 
-	Vector3 TriangleVertexLerp(Vector2 uv);
+	Vector3f* TriangleVertexLerp(Vector2f* uv);
 
-	Vector3 TriangleNormalLerp(Vector2 uv); // if only!
+	Vector3f* TriangleNormalLerp(Vector2f* uv); // if only!
 
-	Vector4 TriangleColourLerp(Vector2 uv); // if only!
+	Vector4f* TriangleColourLerp(Vector2f* uv); // if only!
 
 	bool HasVertexNormals();
 
@@ -71,14 +71,14 @@ public:
 
 	bool HasVertexTexCoords();
 
-	Vector3 CenterOfTriangle();
+	Vector3f* CenterOfTriangle();
 
-	Vector3 GetNormal(Vector3 vertexPosition);
+	Vector3f* GetNormal(Vector3f* vertexPosition);
 
-	Vector3 SurfaceNormal();
+	Vector3f* SurfaceNormal();
 
-	Vector3 SurfaceNormalFront(); // Front face normal.
-	Vector3 SurfaceNormalBack(); // Back face normal. (pointing in opposite direction)
+	Vector3f* SurfaceNormalFront(); // Front face normal.
+	Vector3f* SurfaceNormalBack(); // Back face normal. (pointing in opposite direction)
 
 	void SwapVectors();
 
@@ -86,9 +86,9 @@ public:
 	int GetHandednessI();
 	bool GetHandedness();
 
-	static float TriangleAreaTimesTwo(Vector3 b, Vector3 c, Vector3 m);
+	static float TriangleAreaTimesTwo(Vector3f* b, Vector3f* c, Vector3f* m);
 
-	static float TriangleAreaTimesTwo(Vector2 b, Vector2 c, Vector2 m);
+	static float TriangleAreaTimesTwo(Vector2f* b, Vector2f* c, Vector2f* m);
 };
 
 

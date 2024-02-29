@@ -1,129 +1,130 @@
 #include "Rigidbody.h"
 
-void Rigidbody::AddRelativeForce(Vector3 force, ForceType forceType)
+void Rigidbody::AddRelativeForce(Vector3f* force, ForceType forceType)
 {
-    Vector3 acceleration;
-    Vector3 F;
+    Vector3f* acceleration = new Vector3f(0.0f, 0.0f, 0.0f);
+    Vector3f* F;
 
     switch (forceType)
     {
     case ForceType::Force:
-        _netRelativeForce += force;
+        _netRelativeForce = Vector3f::Multiply(_netRelativeForce, force);
         break;
     case ForceType::Acceleration:
         // Newton's 2nd Law of motion, F = ma
         acceleration = force;
-        F = acceleration * mass; // 'force' in this case is a property of acceleration.
+        F = Vector3f::Scale(acceleration, mass); // 'force' in this case is a property of acceleration.
 
         // Is this How you Apply an Acceleration?
-        _netRelativeForce += F;
+        _netRelativeForce = Vector3f::Add(_netRelativeForce, F);
 
         break;
     case ForceType::Impulse:
 
         break;
     case ForceType::VelocityChange:
-        velocity += force; // 'force' in this case is a change in velocity.
+        velocity = Vector3f::Add(velocity, force); // 'force' in this case is a change in velocity.
+
+
         break;
     }
 }
 
-void Rigidbody::AddForce(Vector3 force, ForceType forceType)
+void Rigidbody::AddForce(Vector3f* force, ForceType forceType)
 {
-    Vector3 acceleration;
-    Vector3 F;
+    Vector3f* acceleration = new Vector3f(0.0f, 0.0f, 0.0f);
+    Vector3f* F;
 
     switch (forceType)
     {
     case ForceType::Force:
-        _netWorldForce += force;
+        _netWorldForce = Vector3f::Add(_netWorldForce, force);
         break;
     case ForceType::Acceleration:
         // Newton's 2nd Law of motion, F = ma
         acceleration = force;
-        F = acceleration * mass; // 'force' in this case is a property of acceleration.
+        F = Vector3f::Scale(acceleration, mass); // 'force' in this case is a property of acceleration.
 
         // Is this How you Apply an Acceleration?
-        _netWorldForce += F;
+        _netWorldForce = Vector3f::Add(_netWorldForce, F);
 
         break;
     case ForceType::Impulse:
         // A one time force for a short time period (which is why it has to be big)
         break;
     case ForceType::VelocityChange:
-        velocity += force; // 'force' in this case is a change in velocity.
+        velocity = Vector3f::Add(velocity, force);  // 'force' in this case is a change in velocity.
         break;
     }
 
 
 }
 
-void Rigidbody::AddRelativeTorque(Vector3 torque, ForceType forceType)
+void Rigidbody::AddRelativeTorque(Vector3f* torque, ForceType forceType)
 {
-    Vector3 acceleration;
-    Vector3 F;
+    Vector3f* acceleration = new Vector3f(0.0f, 0.0f, 0.0f);
+    Vector3f* F;
 
     switch (forceType)
     {
     case ForceType::Force:
-        _netRelativeTorque += torque;
+        _netRelativeTorque = Vector3f::Add(_netRelativeTorque, torque);
         break;
     case ForceType::Acceleration:
         // Newton's 2nd Law of motion, F = ma
         acceleration = torque;
-        F = acceleration * mass; // 'force' in this case is a property of acceleration.
+        F = Vector3f::Scale(acceleration, mass); // 'force' in this case is a property of acceleration.
 
         // Is this How you Apply an Acceleration?
-        _netRelativeTorque += F;
+        _netRelativeTorque = Vector3f::Add(_netRelativeTorque,  F);
 
         break;
     case ForceType::Impulse:
         // A one time force for a short time period (which is why it has to be big)
         break;
     case ForceType::VelocityChange:
-        angularVelocity += torque; // 'force' in this case is a change in velocity.
+        angularVelocity = Vector3f::Add(angularVelocity, torque); // 'force' in this case is a change in velocity.
         break;
     }
-
 }
 
-void Rigidbody::AddTorque(Vector3 torque, ForceType forceType)
+void Rigidbody::AddTorque(Vector3f* torque, ForceType forceType)
 {
-    Vector3 acceleration;
-    Vector3 F;
+    Vector3f* acceleration = new Vector3f(0.0f, 0.0f, 0.0f);
+    Vector3f* F;
 
     switch (forceType)
     {
     case ForceType::Force:
-        _netWorldTorque += torque;
+        _netWorldTorque = Vector3f::Add(_netWorldTorque, torque);
         break;
     case ForceType::Acceleration:
         // Newton's 2nd Law of motion, F = ma
         acceleration = torque;
-        F = acceleration * mass; // 'force' in this case is a property of acceleration.
+        F = Vector3f::Scale(acceleration, mass); // 'force' in this case is a property of acceleration.
 
         // Is this How you Apply an Acceleration?
-        _netWorldTorque += F;
+        _netWorldTorque = Vector3f::Add(_netWorldTorque, F);
 
         break;
     case ForceType::Impulse:
         // A one time force for a short time period (which is why it has to be big)
         break;
     case ForceType::VelocityChange:
-        angularVelocity += torque; // 'force' in this case is a change in velocity.
+        angularVelocity = Vector3f::Add(angularVelocity, torque); // 'force' in this case is a change in velocity.
         break;
     }
 }
 
 void Rigidbody::ApplyWorldTranslation()
 {
-    if (_netWorldForce == Vector3::Zero) return;
+    if (_netWorldForce == Vector3f::ZERO) return;
 
     // Get the current acceleration
-    Acceleration = _netWorldForce / mass;
+    Acceleration = Vector3f::Divide(_netWorldForce, mass);
 
 
-    velocity += _netWorldForce * VelocityDampening;
+    velocity = Vector3f::Add(velocity, Vector3f::Scale(_netWorldForce, VelocityDampening));
 
     // Apply the new velocity to the current position
     //_transform.position += velocity;
@@ -131,13 +132,13 @@ void Rigidbody::ApplyWorldTranslation()
 
 void Rigidbody::ApplyLocalTranslation()
 {
-    if (_netRelativeForce == Vector3::Zero) return;
+    if (_netRelativeForce == Vector3f::ZERO) return;
 
     // Get the current acceleration
-    Acceleration = _netRelativeForce / mass;
+    Acceleration = Vector3f::Divide(_netRelativeForce, mass);
 
 
-    velocity += _netRelativeForce * VelocityDampening;
+    velocity = Vector3f::Add(velocity, Vector3f::Scale(_netRelativeForce, VelocityDampening));
 
     // Apply a local transformation (maintaining integrity of the Transformation Hierarchy )
 
@@ -147,15 +148,15 @@ void Rigidbody::ApplyLocalTranslation()
 
 void Rigidbody::ApplyLocalRotation()
 {
-    if (_netRelativeTorque == Vector3::Zero) return;
+    if (_netRelativeTorque == Vector3f::ZERO) return;
 
-    angularVelocity += _netRelativeTorque * AngularDampening;
+    angularVelocity = Vector3f::Add(angularVelocity, Vector3f::Scale(_netRelativeTorque, AngularDampening));
 
 
     // angularVelocity is measured in this case as radians per second.
-    Vector3 eulerAngles = Vector3(Rad2Deg * angularVelocity.x, Rad2Deg * angularVelocity.y, Rad2Deg * angularVelocity.z);
+    Vector3f* eulerAngles = new Vector3f(Rad2Deg * angularVelocity->x, Rad2Deg * angularVelocity->y, Rad2Deg * angularVelocity->z);
 
-    Quaternion newRotationQ = Quaternion::Euler(eulerAngles.x, eulerAngles.y, eulerAngles.z);
+    Quaternion* newRotationQ = Quaternion::Euler(eulerAngles->x, eulerAngles->y, eulerAngles->z);
 
 
     //_transform.localRotation *= newRotationQ;
@@ -170,10 +171,10 @@ void Rigidbody::ApplyLocalPhysics()
 
 void Rigidbody::ApplyGravity()
 {
-    Vector3 up = Vector3::Up;
+    Vector3f* up = Vector3f::Up;
 
     // Gravity is a type of acceleration so must be multiplied by mass.
-    Vector3 forceGravity = up * -(mass * Gravity);
+    Vector3f* forceGravity = Vector3f::Scale(up , -(Gravity * mass));
 
     //Acceleration = forceGravity;
 

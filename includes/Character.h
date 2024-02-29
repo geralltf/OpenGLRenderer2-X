@@ -23,21 +23,21 @@ class PointLight
 private: 
 	inline static Random* random = nullptr;
 public:
-	Vector3 position;
+	Vector3f* position;
 
 	float constant;
 	float linear;
 	float quadratic;
 
-	Vector3 ambient;
-	Vector3 diffuse;
-	Vector3 specular;
+	Vector3f* ambient;
+	Vector3f* diffuse;
+	Vector3f* specular;
 	float intensity;
 
 	int isActive; // If the light is active
 
-	AABB aabb;
-	Matrix4 transform;
+	AABB* aabb;
+	Matrix4* transform;
 
 	inline static float RandomFloat()
 	{
@@ -53,14 +53,14 @@ public:
 		return random->RandomFloat(0, 1);
 	}
 
-	inline static Vector3 RandomVector()
+	inline static Vector3f* RandomVector()
 	{
-		return  Vector3(RandomFloat(), RandomFloat(), RandomFloat());
+		return  new Vector3f(RandomFloat(), RandomFloat(), RandomFloat());
 	}
 
-	inline static Vector3 RandomVector01()
+	inline static Vector3f* RandomVector01()
 	{
-		return  Vector3(RandomFloat01(), RandomFloat01(), RandomFloat01());
+		return  new Vector3f(RandomFloat01(), RandomFloat01(), RandomFloat01());
 	}
 };
 
@@ -72,13 +72,13 @@ private:
 	GLuint FramebufferName = 0;
 
 	int numPointLights = 40;
-	std::vector<PointLight*> pointLights;
+	std::vector<PointLight*>* pointLights = new std::vector<PointLight*>();
 
 public:
 	MeshBufferVAO* meshBuffer = nullptr;
 	GLuint depthTexture = 0;
 	GLuint aoTexture = 0;
-	Matrix4 depthMVP;
+	Matrix4* depthMVP;
 
 	Texture* lutTexture00;
 	Texture* lutTexture01;
@@ -96,19 +96,19 @@ public:
 		delete meshBuffer;
 	}
 
-	void LoadModel(std::string fileNameModel);
+	void LoadModel(std::string* fileNameModel);
 	void LoadShaders();
 	void LoadTextures();
 
 	void Initilise();
-	void Render(sf::RenderWindow* window, Transform cameraTransform, Matrix4 projectionMatrix, Matrix4 modelview, Vector3 light_dir, Matrix4 lightModelView);
-	void RenderModel(sf::RenderWindow* window, Transform cameraTransform, Matrix4 projectionMatrix, Matrix4 modelview, Vector3 light_dir, bool outlinePass);
+	void Render(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview, Vector3f* light_dir, Matrix4* lightModelView);
+	void RenderModel(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview, Vector3f* light_dir, bool outlinePass);
 
 	void InitShadowMap();
-	void RenderShadowMap(sf::RenderWindow* window, Transform cameraTransform, Matrix4 modelview, Vector3 light_dir, Matrix4 lightModelView);
+	void RenderShadowMap(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* modelview, Vector3f* light_dir, Matrix4* lightModelView);
 
 	void InitAOMap();
-	void RenderAOMap(sf::RenderWindow* window, Transform cameraTransform, Matrix4 modelview, Vector3 light_dir, Matrix4 lightModelView);
+	void RenderAOMap(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* modelview, Vector3f* light_dir, Matrix4* lightModelView);
 };
 
 #endif

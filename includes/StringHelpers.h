@@ -11,8 +11,9 @@ std::string Trim(std::string s);
 std::vector<std::string> StringSplit(std::string data, std::string delimiter);
 void StringSplit(std::string data, std::string delimiter, std::vector<std::string>& tokens);
 void Split(std::string data, std::string delimiter, std::vector<std::string>& tokens, bool removeWhitespace);
-Matrix4 ConvertDataToMatrix(std::string data);
-Matrix4 ConvertDataToMatrix(std::vector<std::string> data, int matrixIndex);
+//Matrix4* ConvertDataToMatrix(std::string data);
+//Matrix4* ConvertDataToMatrix(std::vector<std::string> data, int matrixIndex);
+
 
 
 #endif

@@ -13,13 +13,13 @@ class Vao
 private:
 	int BYTES_PER_FLOAT = sizeof(float);
 	int BYTES_PER_INT = sizeof(int);
-	std::vector<Vbo*> dataVbos = std::vector<Vbo*>();
+	std::vector<Vbo*>* dataVbos = new std::vector<Vbo*>();
 	Vbo* indexVbo;
 	int indexCount;
 
 public:
 	GLuint id;
-
+	std::vector<unsigned int>* indicies_data;
 	Vao();
 	Vao(GLuint id);
 	~Vao();
@@ -27,15 +27,17 @@ public:
 	static Vao* create();
 
 	int getIndexCount();
-	void createIndexBuffer(std::vector<int> indices);
-	void createAttribute(int attribute, std::vector<Matrix4> data);
-	void createAttribute(int attribute, std::vector<float> data, int attrSize);
-	void createIntAttribute(int attribute, std::vector<int> data, int attrSize);
+	//void createIndexBuffer(std::vector<unsigned int*>* indices);
+	void createIndexBuffer(std::vector<unsigned int>* indices);
+	//void createIndexBuffer(std::vector<int*>* indices);
+	//void createIndexBuffer(std::vector<int>* indices);
+	void createAttribute(int attribute, std::vector<Matrix4*>* data);
+	void createAttribute(int attribute, std::vector<float>* data, int attrSize);
+	void createIntAttribute(int attribute, std::vector<unsigned int>* data, int attrSize);
 	void bind();
 	void unbind();
-	void bind(GLuint startAttributeIndex, GLuint endAttributeIndex);
-	void unbind(GLuint startAttributeIndex, GLuint endAttributeIndex);
-
+	void binder(GLuint start, GLuint end);
+	void unbinder(GLuint start, GLuint end);
 };
 
 #endif

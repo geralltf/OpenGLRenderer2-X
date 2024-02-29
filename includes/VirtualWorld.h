@@ -5,10 +5,11 @@
 
 #include "Transform.h"
 #include "Matrix4.h"
-#include "Vector3.h"
+#include "Vector3f.h"
 #include "Character.h"
 #include "AnimatedModel.h"
 #include "AnimatedModelRenderer.h"
+#include "AnimatedModelLoader.h"
 #include "Skybox.h"
 #include "Terrain.h"
 #include "OctreeRenderer.h"
@@ -38,12 +39,12 @@ public:
 	Terrain* terrain;
 	OctreeRenderer* octreeRenderer;
 	Random* random;
-	Vector3 worldPosition = Vector3::Zero;
+	Vector3f* worldPosition = new Vector3f(0.0f, 0.0f, 0.0f);
 public:
 	VirtualWorld();
 	~VirtualWorld();
 	void Initilise();
-	void Render(sf::RenderWindow* window, Transform cameraTransform, Matrix4 projectionMatrix, Matrix4 modelview, Vector3 light_dir, Matrix4 lightModelView);
+	void Render(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview, Vector3f* light_dir, Matrix4* lightModelView);
 };
 
 #endif

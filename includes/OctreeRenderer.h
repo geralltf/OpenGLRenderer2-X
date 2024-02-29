@@ -22,7 +22,7 @@
 #include "Octree.h"
 #include "Transform.h"
 #include "Matrix4.h"
-#include "Vector3.h"
+#include "Vector3f.h"
 #include "MeshBufferVAO.h"
 #include "ShaderHelpers.h"
 
@@ -33,7 +33,7 @@ private:
 
 	ShaderProgram* program = nullptr;
 	GLuint depthTexture = 0;
-	Matrix4 depthMVP;
+	Matrix4* depthMVP;
 
 public:
 	Texture* lutTexture00;
@@ -70,7 +70,7 @@ public:
 	/// <returns>
 	/// True, if saved sucessfully. Otherwise false if could not save.
 	/// </returns>
-	bool SaveToBinaryFile(std::string fileName, Octree* octree);
+	bool SaveToBinaryFile(std::string* fileName, Octree* octree);
 
 	/// <summary>
 	/// Loads the specified octree from a binary file.
@@ -84,10 +84,10 @@ public:
 	/// <returns>
 	/// True, if loaded sucessfully. Otherwise false if could not load.
 	/// </returns>
-	bool LoadFromBinaryFile(std::string fileName, Octree* octree);
+	bool LoadFromBinaryFile(std::string* fileName, Octree* octree);
 
 	void Initilise();
-	void Render(sf::RenderWindow* window, Transform cameraTransform, Matrix4 projectionMatrix, Matrix4 modelview, Vector3 light_dir, Matrix4 lightModelView);
+	void Render(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview, Vector3f* light_dir, Matrix4* lightModelView);
 	void RenderAABB();
 };
 

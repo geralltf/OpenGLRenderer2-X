@@ -1,6 +1,6 @@
 #include "AnimatedModelData.h"
 
-SkeletonData AnimatedModelData::getJointsData()
+SkeletonData* AnimatedModelData::getJointsData()
 {
 	return joints;
 }

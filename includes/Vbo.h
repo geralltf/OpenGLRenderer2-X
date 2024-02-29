@@ -9,18 +9,24 @@ class Vbo
 {
 private:
 	GLuint vboId;
-	int type;
+	GLuint type;
 
 public:
 	Vbo();
-	Vbo(int vboId, int type);
+	Vbo(GLuint vboId, GLuint type);
 	~Vbo();
-	static Vbo* create(int type);
+	static Vbo* create(GLuint type);
 
 	void bind();
 	void unbind();
-	void storeData(std::vector<int> data);
-	void storeData(std::vector<float> data);
+
+	void storeData(std::vector<unsigned int>* data);
+	void storeData(std::vector<unsigned int*>* data);
+	
+	void storeData(std::vector<int>* data);
+	void storeData(std::vector<float>* data);
+	void storeData(std::vector<int*>* data);
+	void storeData(std::vector<float*>* data);
 };
 
 #endif

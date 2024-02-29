@@ -1,36 +1,28 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "Vector3.h"
+#include "Vector3f.h"
 
-//namespace ath
-//{
-	//namespace physics 
-	//{
-		//using namespace math;
+class Ray
+{
+public:
+	Vector3f* Origin;
+	Vector3f* Direction;
+	float Length;
 
-		class Ray
-		{
-		public:
-			Vector3 Origin;
-			Vector3 Direction;
-			float Length;
+	Ray();
 
-			Ray();
+	Ray(Vector3f* origin, Vector3f* direction);
 
-			Ray(Vector3 origin, Vector3 direction);
+	Ray(Vector3f* origin, Vector3f* direction, float length);
 
-			Ray(Vector3 origin, Vector3 direction, float length);
+	Ray* operator *(Matrix4* right) const
+	{
+		const Ray* lhs = this;
+		return TransformRay((Ray*)lhs, right);
+	}
 
-			Ray operator *(Matrix4 right) const
-			{
-				Ray lhs = *this;
-				return TransformRay(lhs, right);
-			}
-
-			static Ray TransformRay(Ray ray, Matrix4 transformMatrix);
-		};
-	//}
-//}
+	static Ray* TransformRay(Ray* ray, Matrix4* transformMatrix);
+};
 
 #endif

@@ -14,6 +14,7 @@
 #include "Transform.h"
 #include "OpenGlUtils.h"
 #include "Light.h"
+#include "MathHelpers.h"
 
 class Terrain 
 {
@@ -36,15 +37,15 @@ public:
 private:
 	ShaderProgram* shader;
 
-	UniformMatrix* projectionMatrix = new UniformMatrix("projectionMatrix");
-	UniformMatrix* viewMatrix = new UniformMatrix("viewMatrix");
-	UniformMatrix* modelMatrix = new UniformMatrix("modelMatrix");
-	UniformSampler* cubeMap = new UniformSampler("cubemap");
-	UniformVec3* lightDirection = new UniformVec3("lightDirection");
+	UniformMatrix* projectionMatrix = new UniformMatrix(new std::string("projectionMatrix"));
+	UniformMatrix* viewMatrix = new UniformMatrix(new std::string("viewMatrix"));
+	UniformMatrix* modelMatrix = new UniformMatrix(new std::string("modelMatrix"));
+	UniformSampler* cubeMap = new UniformSampler(new std::string("cubemap"));
+	UniformVec3* lightDirection = new UniformVec3(new std::string("lightDirection"));
 
-	Matrix4 model;
-	std::vector<Matrix4> transforms;
-	std::vector<Light> lights;
+	Matrix4* model;
+	std::vector<Matrix4*>* transforms;
+	std::vector<Light*>* lights;
 
 public:
 
@@ -55,10 +56,10 @@ public:
 	void Initilise();
 	void InitiliseLights();
 
-	void Render(Transform cameraTransform, Matrix4 projection, Vector3 lightDir);
-	void renderCube(Transform cameraTransform, Matrix4 projection, Matrix4 model);
-	void renderCubes_slow(Transform cameraTransform, Matrix4 projection, Matrix4 model);
-	void renderCubes_instanced(Transform cameraTransform, Matrix4 projection, Matrix4 model, Vector3 lightDir);
+	void Render(Transform* cameraTransform, Matrix4* projection, Vector3f* lightDir);
+	void renderCube(Transform* cameraTransform, Matrix4* projection, Matrix4* model);
+	void renderCubes_slow(Transform* cameraTransform, Matrix4* projection, Matrix4* model);
+	void renderCubes_instanced(Transform* cameraTransform, Matrix4* projection, Matrix4* model, Vector3f* lightDir);
 };
 
 #endif

@@ -3,25 +3,22 @@
 #include <iostream>
 //#include <mmsystem.h>
 
-//namespace ath
-//{
-
 
 //Nullable<Transform> Transform::rootTransform = Nullable<Transform>(); //TEST:HACK:
 
 Transform::Transform() :
-	ParentTransform(Nullable<Transform*>()),
-	localMatrix(Matrix4::GetIdentity()),
-	worldMatrix(Matrix4::GetIdentity()),
-	QOrientationLocal(Quaternion::GetIdentity()),
-	QOrientationWorld(Quaternion::GetIdentity()),
-	upVector(Vector3::Up),
-	forwardVector(Vector3::Forward),
-	viewRotation(Matrix4::GetIdentity()),
-	qRotWorld(Quaternion::GetIdentity())
+	ParentTransform(new Nullable<Transform*>()),
+	localMatrix(Matrix4::Identity()),
+	worldMatrix(Matrix4::Identity()),
+	QOrientationLocal(Quaternion::Identity()),
+	QOrientationWorld(Quaternion::Identity()),
+	upVector(Vector3f::Up),
+	forwardVector(Vector3f::Forward),
+	viewRotation(Matrix4::Identity()),
+	qRotWorld(Quaternion::Identity())
 {
 
-	Children = new std::vector<Transform>();
+	Children = new std::vector<Transform*>();
 	//rootTransform = Nullable<Transform>(); //TEST:HACK:
 }
 
@@ -30,31 +27,31 @@ Transform::~Transform()
 	//delete Children;
 }
 
-Vector3 Transform::GetLocalPosition()
+Vector3f* Transform::GetLocalPosition()
 {
-	return localMatrix.GetTranslation();
+	return localMatrix->GetTranslation();
 }
 
-Vector3 Transform::GetLocalScale()
+Vector3f* Transform::GetLocalScale()
 {
-	return localMatrix.GetScale();
+	return localMatrix->GetScale();
 }
 
-Vector3 Transform::GetPosition()
+Vector3f* Transform::GetPosition()
 {
 	return Matrix4::TransformVector(localMatrix, GetLocalPosition());
 }
 
-Vector3 Transform::GetForwardVector()
+Vector3f* Transform::GetForwardVector()
 {
-	Quaternion::DeconstructQuaternion(QOrientationLocal, forwardVector, upVector);
+	Quaternion::DeconstructQuaternion(QOrientationLocal, &forwardVector, &upVector);
 
 	return forwardVector;
 }
 
-Vector3 Transform::GetUpVector()
+Vector3f* Transform::GetUpVector()
 {
-	Quaternion::DeconstructQuaternion(QOrientationLocal, forwardVector, upVector);
+	Quaternion::DeconstructQuaternion(QOrientationLocal, &forwardVector, &upVector);
 
 	return upVector;
 }
@@ -87,49 +84,49 @@ float Transform::GetRoll()
 	return roll;
 }
 
-Vector3 Transform::GetRotation()
+Vector3f* Transform::GetRotation()
 {
-    Vector3 result = Vector3(GetYaw(), GetPitch(), GetRoll());
+    Vector3f* result = new Vector3f(GetYaw(), GetPitch(), GetRoll());
 
     return result;
 }
 
-Vector3 Transform::GetWorldPosition()
+Vector3f* Transform::GetWorldPosition()
 {
 	return GetPosition();
 }
 
-void Transform::SetWorldPosition(Vector3 position)
+void Transform::SetWorldPosition(Vector3f* position)
 {
 	SetPosition(position);
 }
 
-void Transform::SetLocalPosition(Vector3 value)
+void Transform::SetLocalPosition(Vector3f* value)
 {
 	Translate(value);
 }
 
-void Transform::SetLocalScale(Vector3 value)
+void Transform::SetLocalScale(Vector3f* value)
 {
 	Scale(value);
 }
 
-void Transform::SetPosition(Vector3 value)
+void Transform::SetPosition(Vector3f* value)
 {
 	// TODO: TEST: World position to local position translation
-	Vector3 local = Matrix4::TransformVector(worldMatrix, value);
+	Vector3f* local = Matrix4::TransformVector(worldMatrix, value);
 
 	SetLocalPosition(local);
 }
 
-void Transform::SetForwardVector(Vector3 value)
+void Transform::SetForwardVector(Vector3f* value)
 {
 	forwardVector = value;
 
 	updatelocalVectorRotation();
 }
 
-void Transform::SetUpVector(Vector3 value)
+void Transform::SetUpVector(Vector3f* value)
 {
 	upVector = value;
 
@@ -191,30 +188,30 @@ void Transform::updateworldQuaternionRotation()
 /// </summary>
 void Transform::Scale(float scalar)
 {
-	localMatrix.Scale(Vector3::Multiply(Vector3::One, scalar));
+	localMatrix->Scale(Vector3f::Scale(Vector3f::ONE, scalar));
 }
-void Transform::Scale(Vector3 scale)
+void Transform::Scale(Vector3f* scale)
 {
-	localMatrix.Scale(scale);
+	localMatrix->Scale(scale);
 }
 
 void Transform::RotateX(float angleInDegrees)
 {
-	localMatrix.RotateX(angleInDegrees);
+	localMatrix->RotateX(angleInDegrees);
 }
 void Transform::RotateY(float angleInDegrees)
 {
-	localMatrix.RotateY(angleInDegrees);
+	localMatrix->RotateY(angleInDegrees);
 }
 void Transform::RotateZ(float angleInDegrees)
 {
-	localMatrix.RotateZ(angleInDegrees);
+	localMatrix->RotateZ(angleInDegrees);
 }
 
 void Transform::Rotate(float rotationXPitchInDegrees, float rotationYYawInDegrees, float rotationZRollInDegrees)
 {
-	Quaternion rotation = Quaternion::Euler(rotationXPitchInDegrees, rotationYYawInDegrees, rotationZRollInDegrees);
-	localMatrix = rotation.RotationMatrix() * localMatrix;
+	Quaternion* rotation = Quaternion::Euler(rotationXPitchInDegrees, rotationYYawInDegrees, rotationZRollInDegrees);
+	localMatrix = Matrix4::Multiply(rotation->RotationMatrix(), localMatrix);
 }
 
 
@@ -226,7 +223,7 @@ void Transform::Rotate(float rotationXPitchInDegrees, float rotationYYawInDegree
 /// <returns></returns>
 void Transform::Translate(float x, float y, float z)
 {
-	Vector3 transl = Vector3(x, y, z);
+	Vector3f* transl = new Vector3f(x, y, z);
 	Translate(transl);
 }
 
@@ -236,21 +233,21 @@ void Transform::Translate(float x, float y, float z)
 /// <param name="vector"></param>
 /// <param name="translation"></param>
 /// <returns></returns>
-void Transform::Translate(Vector3 translation)
+void Transform::Translate(Vector3f* translation)
 {
-	localMatrix.Translate(translation);
+	localMatrix->Translate(translation);
 }
 
-Matrix4 Transform::LocalMatrix() // LocalToWorldMatrix
+Matrix4* Transform::LocalMatrix() // LocalToWorldMatrix
 {
 	return localMatrix;
 }
 
 void Transform::ScaleFieldOfView(float scaleFactor)
 {
-	if (scaleFactor > 1)
+	if (scaleFactor > 1.0f)
 	{
-		_fovScale = (1 / _fovScale) * (1 / scaleFactor);
+		_fovScale = (1.0f / _fovScale) * (1.0f / scaleFactor);
 	}
 	else
 	{
@@ -258,42 +255,44 @@ void Transform::ScaleFieldOfView(float scaleFactor)
 	}
 }
 
-Vector4 Transform::TransformSRT(Vector4 vector, Vector3 scale, Vector3 rotationYPR, Vector3 translation)
+Vector4f* Transform::TransformSRT(Vector4f* vector, Vector3f* scale, Vector3f* rotationYPR, Vector3f* translation)
 {
 	// Manual SRT 4x4 Matrix
 
-	Vector4 result;
+	Vector4f* result = new Vector4f();
 
 
-	Matrix4 matrixSRT = Matrix4::GetIdentity();
+	Matrix4* matrixSRT = Matrix4::Identity();
 
-	matrixSRT.Scale(scale);
-	matrixSRT *= Matrix4::RotationYawPitchRoll(rotationYPR.y, rotationYPR.x, rotationYPR.z);
-	matrixSRT.Translate(translation);
+	matrixSRT->Scale(scale);
+	matrixSRT = Matrix4::Multiply(matrixSRT, Matrix4::RotationYawPitchRoll(rotationYPR->y, rotationYPR->x, rotationYPR->z));
+	matrixSRT->Translate(translation);
 
 	result = Matrix4::TransformVector(matrixSRT, vector);
 
 	return result;
 }
 
-Matrix4 Transform::RecalculateWorldTransformations()
+Matrix4* Transform::RecalculateWorldTransformations()
 {
-	Matrix4 combinedTransformationMatrix = Matrix4::CreateSQTMatrix(GetLocalScale(), QOrientationLocal, GetLocalPosition());
+	Matrix4* combinedTransformationMatrix = Matrix4::CreateSQTMatrix(GetLocalScale(), QOrientationLocal, GetLocalPosition());
 
-	if (ParentTransform.is_set())
+	if (ParentTransform->is_set())
 	{
 		// Recalculate prior transformations
-		Transform* p = ParentTransform.get();
+		Transform* p = ParentTransform->get();
 
 		while (p != nullptr)
 		{
-			combinedTransformationMatrix *= Matrix4::CreateSQTMatrix(p->GetLocalScale(), p->QOrientationLocal, p->GetLocalPosition());
+			Matrix4* current_transform_matrix = Matrix4::CreateSQTMatrix(p->GetLocalScale(), p->QOrientationLocal, p->GetLocalPosition());
+
+			combinedTransformationMatrix = Matrix4::Multiply(combinedTransformationMatrix, current_transform_matrix);
 
 			p->worldMatrix = combinedTransformationMatrix;
 
-			if (p->ParentTransform.is_set())
+			if (p->ParentTransform->is_set())
 			{
-				p = p->ParentTransform.get();
+				p = p->ParentTransform->get();
 			}
 			else
 			{
@@ -307,28 +306,26 @@ Matrix4 Transform::RecalculateWorldTransformations()
 	return combinedTransformationMatrix;
 }
 
-Matrix4 Transform::RecalculateLocalToWorldMatrix()
+Matrix4* Transform::RecalculateLocalToWorldMatrix()
 {
-	Matrix4 localToWorld = localMatrix;
+	Matrix4* localToWorld = localMatrix;
 
 	return localToWorld;
 }
 
-Vector4 Transform::TransformLocalToWorldspace(Vector3 localPosition)
+Vector4f* Transform::TransformLocalToWorldspace(Vector3f* localPosition)
 {
 	// Transform the local position to world space
 	// applying transformations from the object and its parents to derive a world position
 
-	Vector4 inputLocal(localPosition, 1.0f);
+	Vector4f* inputLocal = new Vector4f(localPosition, 1.0f);
 
 	//Vector4 result = RecalculateLocalToWorldMatrix() * inputLocal;
 	RecalculateWorldTransformations();
 
-	Vector4 result = worldMatrix.TransformVector(inputLocal);
+	Vector4f* result = worldMatrix->TransformVector(worldMatrix, inputLocal);
 
-	result.w = 1.0f;
+	result->w = 1.0f;
 
 	return result;
 }
-
-//}

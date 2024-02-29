@@ -3,8 +3,8 @@
 
 #include <vector>
 #include "Vector2i.h"
-#include "Vector2.h"
-#include "Vector3.h"
+#include "Vector2f.h"
+#include "Vector3f.h"
 #include "MathHelpers.h"
 #include "Byte.h"
 
@@ -65,13 +65,13 @@
 // new perlin noise
 
 	float Noise(float x, float y, float z);
-	float Noise(Vector3 p);
+	float Noise(Vector3f* p);
 
 	// INTERPOLATORS
 	float Lerp(float from, float to, float ratio); // Linear Interpolator
 	float Coserp(float from, float to, float ratio); // Cosine Interpolator
 	float BilinearInterpolation(float x, float y, float** sample);
-	float TrilinearInterpolation(Vector3 p, float q0, float q1, float q2, float q3, float q4, float q5, float q6, float q7);
+	float TrilinearInterpolation(Vector3f* p, float q0, float q1, float q2, float q3, float q4, float q5, float q6, float q7);
 
 
 //}

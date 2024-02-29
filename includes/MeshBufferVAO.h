@@ -7,7 +7,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
-#include "model.h"
+#include "Model.h"
 #include "MathHelpers.h"
 #include "AABB.h"
 
@@ -24,7 +24,7 @@ private:
 	GLuint normals_vbo;
 	GLuint tangents_vbo;
 	GLuint bitangents_vbo;
-
+	GLuint _TEST_EBO;
 	GLuint texture = 0;
 	GLuint textureNormalMap = 0;
 	GLuint textureSpecularMap = 0;
@@ -37,10 +37,15 @@ public:
 	MeshBufferVAO();
 	~MeshBufferVAO();
 
-	void LoadModelBuffers(Model* model, std::vector<GLfloat>& verticies, std::vector<GLfloat>& texCoords,
-		std::vector<GLfloat>& normals, std::vector<GLfloat>& tangents, std::vector<GLfloat>& bitangents, int& verticiesCount);
+	void LoadModelBuffers(Model* model, std::vector<GLfloat>** verticies, std::vector<GLfloat>** texCoords,
+		std::vector<GLfloat>** normals, std::vector<GLfloat>** tangents, std::vector<GLfloat>** bitangents, int& verticiesCount);
 
-	void LoadModel(std::string fileNameModel);
+	float* to_float_array(Vector3f** array, size_t size);
+	float* to_float_array(Vector2f** array, size_t size);
+	float* to_float_array(Vector4f** array, size_t size);
+	GLfloat* to_float_array(std::vector<GLfloat>* farray);
+
+	void LoadModel(std::string* fileNameModel);
 
 	void LoadTextures();
 	void BindTextures();

@@ -1,55 +1,55 @@
 #include "Triangle.h"
 
 Triangle::Triangle() : 
-	positionXStep(Vector3::Zero),
-	positionYStep(Vector3::Zero),
-	colourXStep(Vector4::Zero),
-	colourYStep(Vector4::Zero),
-	normalXStep(Vector3::Zero),
-	normalYStep(Vector3::Zero),
-	texCoordXStep(Vector2::Zero),
-	texCoordYStep(Vector2::Zero),
-	Origin(Vector3::Zero),
-	vertex00(Vector3::Zero),
-	vertex01(Vector3::Zero),
-	vertex10(Vector3::Zero),
-	normal00(Nullable<Vector3>()),
-	normal01(Nullable<Vector3>()),
-	normal10(Nullable<Vector3>()),
-	colour00(Nullable<Vector4>()),
-	colour01(Nullable<Vector4>()),
-	colour10(Nullable<Vector4>()),
-	texCoord00(Nullable<Vector2>()),
-	texCoord01(Nullable<Vector2>()),
-	texCoord10(Nullable<Vector2>()),
-	faceColour(Nullable<ColourRGBA>())
+	positionXStep(Vector3f::ZERO),
+	positionYStep(Vector3f::ZERO),
+	colourXStep(Vector4f::ZERO),
+	colourYStep(Vector4f::ZERO),
+	normalXStep(Vector3f::ZERO),
+	normalYStep(Vector3f::ZERO),
+	texCoordXStep(new Vector2f(0.0f, 0.0f)),
+	texCoordYStep(new Vector2f(0.0f, 0.0f)),
+	Origin(Vector3f::ZERO),
+	vertex00(Vector3f::ZERO),
+	vertex01(Vector3f::ZERO),
+	vertex10(Vector3f::ZERO),
+	normal00(Nullable<Vector3f*>()),
+	normal01(Nullable<Vector3f*>()),
+	normal10(Nullable<Vector3f*>()),
+	colour00(Nullable<Vector4f*>()),
+	colour01(Nullable<Vector4f*>()),
+	colour10(Nullable<Vector4f*>()),
+	texCoord00(Nullable<Vector2f*>()),
+	texCoord01(Nullable<Vector2f*>()),
+	texCoord10(Nullable<Vector2f*>()),
+	faceColour(Nullable<ColourRGBA*>())
 {
 	// Nothing to do here.
 }
 
-Triangle::Triangle(Vector3 t0, Vector3 t1, Vector3 t2) :
-	positionXStep(Vector3::Zero),
-	positionYStep(Vector3::Zero),
-	colourXStep(Vector4::Zero),
-	colourYStep(Vector4::Zero),
-	normalXStep(Vector3::Zero),
-	normalYStep(Vector3::Zero),
-	texCoordXStep(Vector2::Zero),
-	texCoordYStep(Vector2::Zero),
-	Origin(Vector3::Zero),
-	vertex00(Vector3::Zero),
-	vertex01(Vector3::Zero),
-	vertex10(Vector3::Zero),
-	normal00(Nullable<Vector3>()),
-	normal01(Nullable<Vector3>()),
-	normal10(Nullable<Vector3>()),
-	colour00(Nullable<Vector4>()),
-	colour01(Nullable<Vector4>()),
-	colour10(Nullable<Vector4>()),
-	texCoord00(Nullable<Vector2>()),
-	texCoord01(Nullable<Vector2>()),
-	texCoord10(Nullable<Vector2>()),
-	faceColour(Nullable<ColourRGBA>())
+Triangle::Triangle(Vector3f* t0, Vector3f* t1, Vector3f* t2) :
+	positionXStep(Vector3f::ZERO),
+	positionYStep(Vector3f::ZERO),
+	colourXStep(Vector4f::ZERO),
+	colourYStep(Vector4f::ZERO),
+	normalXStep(Vector3f::ZERO),
+	normalYStep(Vector3f::ZERO),
+	texCoordXStep(new Vector2f(0.0f, 0.0f)),
+	texCoordYStep(new Vector2f(0.0f, 0.0f)),
+	Origin(Vector3f::ZERO),
+	vertex00(Vector3f::ZERO),
+	vertex01(Vector3f::ZERO),
+	vertex10(Vector3f::ZERO),
+	normal00(Nullable<Vector3f*>()),
+	normal01(Nullable<Vector3f*>()),
+	normal10(Nullable<Vector3f*>()),
+	colour00(Nullable<Vector4f*>()),
+	colour01(Nullable<Vector4f*>()),
+	colour10(Nullable<Vector4f*>()),
+	texCoord00(Nullable<Vector2f*>()),
+	texCoord01(Nullable<Vector2f*>()),
+	texCoord10(Nullable<Vector2f*>()),
+	faceColour(Nullable<ColourRGBA*>())
 {
 	vertex00 = t0;
 	vertex01 = t1;
@@ -63,16 +63,16 @@ Triangle::~Triangle()
 
 Triangle* Triangle::Clone(Triangle* t) // BUG:HACK: Cloning triangle because coordinates seem to be weirdly affected by transformations
 {
-	Triangle* c = new Triangle(Vector3(t->vertex00.x, t->vertex00.y, t->vertex00.z),
-		Vector3(t->vertex01.x, t->vertex01.y, t->vertex01.z),
-		Vector3(t->vertex10.x, t->vertex10.y, t->vertex10.z));
+	Triangle* c = new Triangle(new Vector3f(t->vertex00->x, t->vertex00->y, t->vertex00->z),
+		new Vector3f(t->vertex01->x, t->vertex01->y, t->vertex01->z),
+		new Vector3f(t->vertex10->x, t->vertex10->y, t->vertex10->z));
 
 	if (t->HasVertexNormals())
 	{
 
-		c->normal00 = Vector3(t->normal00.get().x, t->normal00.get().y, t->normal00.get().z);
-		c->normal01 = Vector3(t->normal01.get().x, t->normal01.get().y, t->normal01.get().z);
-		c->normal10 = Vector3(t->normal10.get().x, t->normal10.get().y, t->normal10.get().z);
+		c->normal00 = new Vector3f(t->normal00.get()->x, t->normal00.get()->y, t->normal00.get()->z);
+		c->normal01 = new Vector3f(t->normal01.get()->x, t->normal01.get()->y, t->normal01.get()->z);
+		c->normal10 = new Vector3f(t->normal10.get()->x, t->normal10.get()->y, t->normal10.get()->z);
 	}
 
 
@@ -90,11 +90,11 @@ Triangle* Triangle::Clone(Triangle* t) // BUG:HACK: Cloning triangle because coo
 
 void Triangle::Grad()
 {
-	float minToMaxY = vertex00.y - vertex10.y;
-	float midToMaxY = vertex01.y - vertex10.y;
+	float minToMaxY = vertex00->y - vertex10->y;
+	float midToMaxY = vertex01->y - vertex10->y;
 
-	float minToMaxX = vertex00.x - vertex10.x;
-	float midToMaxX = vertex01.x - vertex10.x;
+	float minToMaxX = vertex00->x - vertex10->x;
+	float midToMaxX = vertex01->x - vertex10->x;
 
 	float oneOverdX = 1.0f / ((midToMaxX * minToMaxY) - (minToMaxX * midToMaxY));
 
@@ -102,78 +102,104 @@ void Triangle::Grad()
 
 	// Setup gradients for vertex attributes
 
-	Vector3 v0 = vertex00;
-	Vector3 v1 = vertex01;
-	Vector3 v2 = vertex10;
+	Vector3f* v0 = vertex00;
+	Vector3f* v1 = vertex01;
+	Vector3f* v2 = vertex10;
 
-	positionXStep =
-		(((v1 - v2) * minToMaxY) - ((v0 - v2) * midToMaxY)) * oneOverdX;
+	Vector3f* left = Vector3f::Scale(Vector3f::Subtract(v1, v2), minToMaxY);
+	Vector3f* right = Vector3f::Scale(Vector3f::Scale(Vector3f::Subtract(v0, v2), midToMaxY), oneOverdX);
+	positionXStep = Vector3f::Subtract(left, right);
 
-	positionYStep =
-		(((v1 - v2) * minToMaxX) - ((v0 - v2) * midToMaxX)) * oneOverdY;
+	Vector3f* left2 = Vector3f::Scale(Vector3f::Subtract(v1, v2), minToMaxX);
+	Vector3f* right2 = Vector3f::Scale(Vector3f::Scale(Vector3f::Subtract(v0, v2), minToMaxX), oneOverdY);
+	positionYStep = Vector3f::Subtract(left2, right2);
 
 
 	if (HasVertexColours())
 	{
-		Vector4 m0 = colour00.get();
-		Vector4 m1 = colour01.get();
-		Vector4 m2 = colour10.get();
+		Vector4f* m0 = colour00.get();
+		Vector4f* m1 = colour01.get();
+		Vector4f* m2 = colour10.get();
 
-		colourXStep =
-			(((m1 - m2) * minToMaxY) - ((m0 - m2) * midToMaxY)) * oneOverdX;
+		Vector4f* left3 = Vector4f::Scale(Vector4f::Subtract(m1, m2), minToMaxY);
+		Vector4f* right3 = Vector4f::Scale(Vector4f::Scale(Vector4f::Subtract(m0, m2), midToMaxY), oneOverdX);
+		colourXStep = Vector4f::Subtract(left3, right3);
 
-		colourYStep =
-			(((m1 - m2) * minToMaxX) - ((m0 - m2) * midToMaxX)) * oneOverdY;
+		Vector4f* left4 = Vector4f::Scale(Vector4f::Subtract(m1, m2), minToMaxX);
+		Vector4f* right4 = Vector4f::Scale(Vector4f::Scale(Vector4f::Subtract(m0, m2), midToMaxX), oneOverdY);
+		colourYStep = Vector4f::Subtract(left4, right4);
+
+		//colourXStep =
+		//	(((m1 - m2) * minToMaxY) - ((m0 - m2) * midToMaxY)) * oneOverdX;
+
+		//colourYStep =
+		//	(((m1 - m2) * minToMaxX) - ((m0 - m2) * midToMaxX)) * oneOverdY;
 	}
 
 	if (HasVertexNormals())
 	{
-		Vector3 m0 = normal00.get();
-		Vector3 m1 = normal01.get();
-		Vector3 m2 = normal10.get();
+		Vector3f* m0 = normal00.get();
+		Vector3f* m1 = normal01.get();
+		Vector3f* m2 = normal10.get();
 
-		normalXStep =
-			(((m1 - m2) * minToMaxY) - ((m0 - m2) * midToMaxY)) * oneOverdX;
+		Vector3f* left3 = Vector3f::Scale(Vector3f::Subtract(m1, m2), minToMaxY);
+		Vector3f* right3 = Vector3f::Scale(Vector3f::Scale(Vector3f::Subtract(m0, m2), midToMaxY), oneOverdX);
+		normalXStep = Vector3f::Subtract(left3, right3);
 
-		normalYStep =
-			(((m1 - m2) * minToMaxX) - ((m0 - m2) * midToMaxX)) * oneOverdY;
+		Vector3f* left4 = Vector3f::Scale(Vector3f::Subtract(m1, m2), minToMaxX);
+		Vector3f* right4 = Vector3f::Scale(Vector3f::Scale(Vector3f::Subtract(m0, m2), midToMaxX), oneOverdY);
+		normalYStep = Vector3f::Subtract(left4, right4);
+
+		//normalXStep =
+		//	(((m1 - m2) * minToMaxY) - ((m0 - m2) * midToMaxY)) * oneOverdX;
+
+		//normalYStep =
+		//	(((m1 - m2) * minToMaxX) - ((m0 - m2) * midToMaxX)) * oneOverdY;
 	}
 
 	if (HasVertexTexCoords())
 	{
-		Vector2 m0 = texCoord00.get();
-		Vector2 m1 = texCoord01.get();
-		Vector2 m2 = texCoord10.get();
+		Vector2f* m0 = texCoord00.get();
+		Vector2f* m1 = texCoord01.get();
+		Vector2f* m2 = texCoord10.get();
 
-		texCoordXStep =
-			(((m1 - m2) * minToMaxY) - ((m0 - m2) * midToMaxY)) * oneOverdX;
+		Vector2f* left3 = Vector2f::Scale(Vector2f::Subtract(m1, m2), minToMaxY);
+		Vector2f* right3 = Vector2f::Scale(Vector2f::Scale(Vector2f::Subtract(m0, m2), midToMaxY), oneOverdX);
+		texCoordXStep = Vector2f::Subtract(left3, right3);
 
-		texCoordYStep =
-			(((m1 - m2) * minToMaxX) - ((m0 - m2) * midToMaxX)) * oneOverdY;
+		Vector2f* left4 = Vector2f::Scale(Vector2f::Subtract(m1, m2), minToMaxX);
+		Vector2f* right4 = Vector2f::Scale(Vector2f::Scale(Vector2f::Subtract(m0, m2), midToMaxX), oneOverdY);
+		texCoordYStep = Vector2f::Subtract(left4, right4);
+
+		//texCoordXStep =
+		//	(((m1 - m2) * minToMaxY) - ((m0 - m2) * midToMaxY)) * oneOverdX;
+
+		//texCoordYStep =
+		//	(((m1 - m2) * minToMaxX) - ((m0 - m2) * midToMaxX)) * oneOverdY;
 	}
 }
 
-Vector3 Triangle::TriangleLerp(Vector2 uv)
+Vector3f* Triangle::TriangleLerp(Vector2f* uv)
 {
-	Vector3 result = Vector3::TriangleLerp(vertex00, vertex01, vertex10, uv.x, uv.y);
+	Vector3f* result = Vector3f::TriangleLerp(vertex00, vertex01, vertex10, uv->x, uv->y);
 	return result;
 }
 
-Vector3 Triangle::TriangleVertexLerp(Vector2 uv)
+Vector3f* Triangle::TriangleVertexLerp(Vector2f* uv)
 {
-	Vector3 result = Vector3::TriangleLerp(vertex00, vertex01, vertex10, uv.x, uv.y);
+	Vector3f* result = Vector3f::TriangleLerp(vertex00, vertex01, vertex10, uv->x, uv->y);
 	return result;
 }
 
-Vector3 Triangle::TriangleNormalLerp(Vector2 uv) // if only!
+Vector3f* Triangle::TriangleNormalLerp(Vector2f* uv) // if only!
 {
-	Vector3 result = Vector3::TriangleLerp(normal00.get(), normal01.get(), normal10.get(), uv.x, uv.y);
+	Vector3f* result = Vector3f::TriangleLerp(normal00.get(), normal01.get(), normal10.get(), uv->x, uv->y);
 	return result;
 }
 
-Vector4 Triangle::TriangleColourLerp(Vector2 uv) // if only!
+Vector4f* Triangle::TriangleColourLerp(Vector2f* uv) // if only!
 {
-	Vector4 result = Vector4::TriangleLerp(colour00.get(), colour01.get(), colour10.get(), uv.x, uv.y);
+	Vector4f* result = Vector4f::TriangleLerp(colour00.get(), colour01.get(), colour10.get(), uv->x, uv->y);
 	return result;
 }
 
@@ -192,55 +218,58 @@ bool Triangle::HasVertexTexCoords()
 	return texCoord00.is_set() && texCoord01.is_set() && texCoord10.is_set();
 }
 
-Vector3 Triangle::CenterOfTriangle()
+Vector3f* Triangle::CenterOfTriangle()
 {
-	return (vertex00 + vertex01 + vertex10) / 3;
+	return Vector3f::Divide(Vector3f::Add(Vector3f::Add(vertex00, vertex01), vertex10), 3);
 }
 
-Vector3 Triangle::GetNormal(Vector3 vertexPosition)
+Vector3f* Triangle::GetNormal(Vector3f* vertexPosition)
 {
-	Vector3 result = (vertexPosition - Origin).Normalised();
+	Vector3f* result = Vector3f::Subtract(vertexPosition, Origin);
+	result = result->Normalised();
 	return result;
 }
 
-Vector3 Triangle::SurfaceNormal()
+Vector3f* Triangle::SurfaceNormal()
 {
-	Vector3 u = vertex01 - vertex00;
-	Vector3 v = vertex10 - vertex00;
-	Vector3 normal = Vector3::Cross(u, v);
-	Vector3 result = normal.Normalised();
+	Vector3f* u = Vector3f::Subtract(vertex01, vertex00);
+	Vector3f* v = Vector3f::Subtract(vertex10, vertex01);
+	Vector3f* normal = Vector3f::Cross(u, v);
+	Vector3f* result = normal->Normalised();
 	return result;
 }
 
-Vector3 Triangle::SurfaceNormalFront() // Front face normal.
+Vector3f* Triangle::SurfaceNormalFront() // Front face normal.
 {
-	Vector3 edge1 = vertex01 - vertex00; //TODO: Refactor using HE_Edge :)
-	Vector3 edge2 = vertex10 - vertex01;
-	Vector3 result = Vector3::Cross(edge1, edge2).Normalised();
+	Vector3f* edge1 = Vector3f::Subtract(vertex01, vertex00); // Opposite winding order, or opposite edge loop.
+	Vector3f* edge2 = Vector3f::Subtract(vertex10, vertex01);
+	Vector3f* result = Vector3f::Cross(edge1, edge2);
+	result = result->Normalised();
 	return result;
 }
 
-Vector3 Triangle::SurfaceNormalBack() // Back face normal. (pointing in opposite direction)
+Vector3f* Triangle::SurfaceNormalBack() // Back face normal. (pointing in opposite direction)
 {
-	Vector3 edge1 = vertex01 - vertex10; // Opposite winding order, or opposite edge loop.
-	Vector3 edge2 = vertex00 - vertex01;
-	Vector3 result = Vector3::Cross(edge1, edge2).Normalised();
+	Vector3f* edge1 = Vector3f::Subtract(vertex01, vertex10); // Opposite winding order, or opposite edge loop.
+	Vector3f* edge2 = Vector3f::Subtract(vertex00, vertex01);
+	Vector3f* result = Vector3f::Cross(edge1, edge2);
+	result = result->Normalised();
 	return result;
 }
 
 void Triangle::SwapVectors()
 {
 	// Sort vertex atrributes by y-value.
-	Vector3 tmp;
-	Vector4 col;
-	Vector3 norm;
-	Vector2 tex;
+	Vector3f* tmp;
+	Vector4f* col;
+	Vector3f* norm;
+	Vector2f* tex;
 
 	bool vc = HasVertexColours();
 	bool vn = HasVertexNormals();
 	bool vt = HasVertexTexCoords();
 
-	if (vertex10.y < vertex01.y)
+	if (vertex10->y < vertex01->y)
 	{
 		tmp = vertex10;
 		vertex10 = vertex01;
@@ -267,7 +296,7 @@ void Triangle::SwapVectors()
 			texCoord01 = tex;
 		}
 	}
-	if (vertex01.y < vertex00.y)
+	if (vertex01->y < vertex00->y)
 	{
 		tmp = vertex01;
 		vertex01 = vertex00;
@@ -294,7 +323,7 @@ void Triangle::SwapVectors()
 			texCoord00 = tex;
 		}
 	}
-	if (vertex10.y < vertex01.y)
+	if (vertex10->y < vertex01->y)
 	{
 		tmp = vertex10;
 		vertex10 = vertex01;
@@ -325,7 +354,7 @@ void Triangle::SwapVectors()
 
 float Triangle::GetArea()
 {
-	return TriangleAreaTimesTwo(vertex10.xy(), vertex01.xy(), vertex00.xy());
+	return TriangleAreaTimesTwo(vertex10->xy(), vertex01->xy(), vertex00->xy());
 }
 int Triangle::GetHandednessI()
 {
@@ -336,17 +365,18 @@ bool Triangle::GetHandedness()
 	return GetArea() >= 0;
 }
 
-float Triangle::TriangleAreaTimesTwo(Vector3 b, Vector3 c, Vector3 m)
+float Triangle::TriangleAreaTimesTwo(Vector3f* b, Vector3f* c, Vector3f* m)
 {
-	Vector3 d1 = b - m;
-	Vector3 d2 = c - m;
-	return 0.5f * Vector3::Crossf(d1.xy(), d2.xy());
+	Vector3f* d1 = Vector3f::Subtract(b, m);
+	Vector3f* d2 = Vector3f::Subtract(c, m);
+
+	return 0.5f * Vector3f::Crossf(d1, d2);
 }
 
-float Triangle::TriangleAreaTimesTwo(Vector2 b, Vector2 c, Vector2 m)
+float Triangle::TriangleAreaTimesTwo(Vector2f* b, Vector2f* c, Vector2f* m)
 {
-	Vector2 d1 = b - m;
-	Vector2 d2 = c - m;
+	Vector2f* d1 = Vector2f::Subtract(b, m);
+	Vector2f* d2 = Vector2f::Subtract(c, m);
 
-	return 0.5f * Vector2::Cross(d1, d2);
+	return 0.5f * Vector2f::Cross(d1, d2);
 }

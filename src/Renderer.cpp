@@ -6,6 +6,20 @@
 #include "TimeManager.h"
 #include "Debug.h"
 
+void GLAPIENTRY
+MessageCallback(GLenum source,
+	GLenum type,
+	GLuint id,
+	GLenum severity,
+	GLsizei length,
+	const GLchar* message,
+	const void* userParam)
+{
+	fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+		type, severity, message);
+}
+
 Renderer::Renderer() : window(nullptr), textureCursor(nullptr)
 {
 
@@ -72,6 +86,23 @@ bool Renderer::InitGL()
 		noErrors = false;
 		std::cout << "machine does not support GLEW >= 2.1 API" << std::endl;
 	}
+
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+	// get version info
+	const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
+	const GLubyte* version = glGetString(GL_VERSION); // version as a string
+	std::cout << "Renderer: " << renderer << " ";
+	std::cout << "OpenGL version supported: " << version << std::endl;
+
+	// During init, enable debug output
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(MessageCallback, 0);
+
 	return noErrors;
 }
 
@@ -142,17 +173,25 @@ void Renderer::renderQuad()
 	glBindVertexArray(0);
 }
 
-void Renderer::Render(Transform cameraTransform)
+void Renderer::Render(Transform* cameraTransform)
 {
     if(!noErrors) return;
 
 	TimeManager::Update();
 	messageQueue->update();
 
+	fw->start();
+
 	// CLEAR THE BUFFERS
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glViewport(0, 0, window->getSize().x, window->getSize().y);
+
+	// check OpenGL error
+	GLenum err;
+	while ((err = glGetError()) != GL_NO_ERROR) {
+		std::cout << "OpenGL error: " << err << std::endl;
+	}
 
 	// 1. render scene into floating point framebuffer
 	// -----------------------------------------------
@@ -196,8 +235,8 @@ void Renderer::Render(Transform cameraTransform)
 		for (unsigned int i = 0; i < amount; i++)
 		{
 			glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[horizontal]);
-			shaderBlur->setInt("image", 0);
-			shaderBlur->setInt("horizontal", horizontal);
+			shaderBlur->setInt(new std::string("image"), 0);
+			shaderBlur->setInt(new std::string("horizontal"), horizontal);
 
 			// bind texture of other framebuffer (or scene if first iteration)
 			glActiveTexture(GL_TEXTURE0);
@@ -225,14 +264,14 @@ void Renderer::Render(Transform cameraTransform)
 		shaderBloomFinal->start();
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, colorBuffers[0]);
-		shaderBloomFinal->setInt("scene", 0);
+		shaderBloomFinal->setInt(new std::string("scene"), 0);
 
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, pingpongColorbuffers[!horizontal]);
-		shaderBloomFinal->setInt("bloomBlur", 1);
+		shaderBloomFinal->setInt(new std::string("bloomBlur"), 1);
 
-		shaderBloomFinal->setInt("bloom", bloom);
-		shaderBloomFinal->setFloat("exposure", exposure);
+		shaderBloomFinal->setInt(new std::string("bloom"), bloom);
+		shaderBloomFinal->setFloat(new std::string("exposure"), exposure);
 		renderQuad();
 		shaderBloomFinal->stop();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -318,10 +357,10 @@ void Renderer::InitScene()
 	// Matricies
 	projectionMatrix = Matrix4::Perspective(fov, (float)window->getSize().x / (float)window->getSize().y, 0.1f, 1000);
 
-	lightModelView = Matrix4::GetIdentity();
+	lightModelView = Matrix4::Identity();
 
-	modelview = Matrix4::GetIdentity();
-	modelview.Translate(Vector3(0, 0, -2.0f));
+	modelview = Matrix4::Identity();
+	modelview->Translate(new Vector3f(0.0f, 0.0f, -2.0f));
 
 	// Time Management.
 	TimeManager::Initilise();
@@ -361,45 +400,45 @@ void Renderer::InitScreenQuad()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 }
 
-void Renderer::ShowShadowMap(Transform cameraTransform)
+void Renderer::ShowShadowMap(Transform* cameraTransform)
 {
 	//TODO: show window in bottom right with shadow map
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	
-	Vector2 spriteSize = Vector2(1024, 1024); // size of the sprite in pixels
-	Vector2 spritePosition = Vector2(0.0f, 0.0f);
-	Vector2 screenSize = Vector2((float)window->getSize().x, (float)window->getSize().y);
-	Vector3 position = ScreenSpaceToOrthographic(spritePosition, screenSize, spriteSize);
+	Vector2f* spriteSize = new Vector2f(1024, 1024); // size of the sprite in pixels
+	Vector2f* spritePosition = new Vector2f(0.0f, 0.0f);
+	Vector2f* screenSize = new Vector2f((float)window->getSize().x, (float)window->getSize().y);
+	Vector3f* position = ScreenSpaceToOrthographic(spritePosition, screenSize, spriteSize);
 	//Vector3 position = spritePosition;
 
-	float sizeX = (spriteSize.x / (float)window->getSize().x);
-	float sizeY = (spriteSize.y / (float)window->getSize().y);
+	float sizeX = (spriteSize->x / (float)window->getSize().x);
+	float sizeY = (spriteSize->y / (float)window->getSize().y);
 	//float sizeX = spriteSize.x;
 	//float sizeY = spriteSize.y;
 
-	Matrix4 model = Matrix4::GetIdentity();
-	model.Scale(Vector3(sizeX, sizeY, 1.0f));
-	model.Translate(Vector3(-0.5f * sizeX, -0.5f * sizeY, 0.0f));
-	model = model * Matrix4::RotationYawPitchRoll(0.0f, 0.0f, 0.0f);
-	model.Translate(Vector3(0.5f * sizeX, 0.5f * sizeY, 0.0f));
-	model.Translate(position);
+	Matrix4* model = Matrix4::Identity();
+	model->Scale(new Vector3f(sizeX, sizeY, 1.0f));
+	model->Translate(new Vector3f(-0.5f * sizeX, -0.5f * sizeY, 0.0f));
+	model = Matrix4::Multiply(model, Matrix4::RotationYawPitchRoll(0.0f, 0.0f, 0.0f));
+	model->Translate(new Vector3f(0.5f * sizeX, 0.5f * sizeY, 0.0f));
+	model->Translate(position);
 	
 	
-	Matrix4 quadView;
+	Matrix4* quadView = Matrix4::Identity();
 	//quadView = Matrix4::LookAt(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3::Up);
-	quadView = cameraTransform.localMatrix;
-	Matrix4 quadProj;
+	quadView = cameraTransform->localMatrix;
+	Matrix4* quadProj;
 	//quadProj = Matrix4::Orthographic(-1, 1, -1, 1, 0.1f, 1);
 	//quadProj = Matrix4::Perspective(90, window->getSize().x / (float)window->getSize().y, 0.1f, 1000);
 	//quadProj = Matrix4::Orthographic(0.0f, window->getSize().x, window->getSize().y, 0.0f, -1.0f, 1.0f);
 	//quadProj = Matrix4::Orthographic(0, 1, -1, 0, -1.0f, 1.0f);
 	quadProj = Matrix4::Orthographic(-1, 1, -1, 1, -1.0f, 1.0f);
-	Matrix4 MVP = quadProj * quadView * model;
-	MVP = quadProj * model;
+	Matrix4* MVP = Matrix4::Multiply(Matrix4::Multiply(quadProj, quadView), model);
+	MVP = Matrix4::Multiply(quadProj, model);
 
-	float* arrMVP = MVP.ToArray();
+	float* arrMVP = MVP->ToArray();
 
 	OpenGlUtils::EnableDepthTesting(false);
 	glEnable(GL_CULL_FACE);
@@ -431,33 +470,33 @@ void Renderer::ShowAOMap()
 
 	glUseProgram(programScreenQuadAO);
 
-	Vector2 spriteSize = Vector2(400, 400); // size of the sprite in pixels
-	Vector2 spritePosition = Vector2(0.0f, 0.75f);
-	Vector2 screenSize = Vector2((float)window->getSize().x, (float)window->getSize().y);
-	Vector3 position = ScreenSpaceToOrthographic(spritePosition, screenSize, spriteSize);
+	Vector2f* spriteSize = new Vector2f(400, 400); // size of the sprite in pixels
+	Vector2f* spritePosition = new Vector2f(0.0f, 0.75f);
+	Vector2f* screenSize = new Vector2f((float)window->getSize().x, (float)window->getSize().y);
+	Vector3f* position = ScreenSpaceToOrthographic(spritePosition, screenSize, spriteSize);
 
-	float sizeX = (spriteSize.x / (float)window->getSize().x);
-	float sizeY = (spriteSize.y / (float)window->getSize().y);
-	Matrix4 quadModel = Matrix4::GetIdentity();
-	quadModel.Scale(Vector3(sizeX, sizeY, 1.0f));
+	float sizeX = (spriteSize->x / (float)window->getSize().x);
+	float sizeY = (spriteSize->y / (float)window->getSize().y);
+	Matrix4* quadModel = Matrix4::Identity();
+	quadModel->Scale(new Vector3f(sizeX, sizeY, 1.0f));
 	//quadModel.Translate(Vector3(-0.5f * sizeX, -0.5f * sizeY, 0.0f));
-	quadModel = quadModel * Matrix4::RotationYawPitchRoll(0.0f, 0.0f, 0.0f);
+	quadModel = Matrix4::Multiply(quadModel, Matrix4::RotationYawPitchRoll(0.0f, 0.0f, 0.0f));
 	//quadModel.Translate(Vector3(0.5f * sizeX, 0.5f * sizeY, 0.0f));
-	quadModel.Translate(position);
+	quadModel->Translate(position);
 
-	Matrix4 quadView;
-	quadView = Matrix4::GetIdentity();
+	Matrix4* quadView;
+	quadView = Matrix4::Identity();
 	
-	Matrix4 quadProj;
+	Matrix4* quadProj;
 	quadProj = Matrix4::Orthographic(-1, 1, -1, 1, -1.0f, 1.0f);
 
-	Matrix4 MVP = quadProj * quadView * quadModel;
+	Matrix4* MVP = Matrix4::Multiply(Matrix4::Multiply(quadProj, quadView), quadModel);
 
-	float* arrMVP = MVP.ToArray();
+	float* arrMVP = MVP->ToArray();
 
 	OpenGlUtils::EnableDepthTesting(false);
 	glUniformMatrix4fv(glGetUniformLocation(programScreenQuadAO, "MVP"), 1, GL_FALSE, arrMVP);
-	glUniform2f(glGetUniformLocation(programScreenQuadAO, "framebufferSize"), spriteSize.x, spriteSize.y);
+	glUniform2f(glGetUniformLocation(programScreenQuadAO, "framebufferSize"), spriteSize->x, spriteSize->y);
 	glUniform1f(glGetUniformLocation(programScreenQuadAO, "near_plane"), 0.1f);
 	glUniform1f(glGetUniformLocation(programScreenQuadAO, "far_plane"), 1000);
 	glUniform1i(glGetUniformLocation(programScreenQuadAO, "depthTexture"), 0);
@@ -476,39 +515,50 @@ void Renderer::ShowAOMap()
 
 void Renderer::InitCursor()
 {
-	textureCursor = Texture::LoadTexture("light_cursor.tga").Create();
-	std::vector<GLfloat> vertices;
-	vertices.push_back(0);
-	vertices.push_back(0);
-	vertices.push_back(0);
+	textureCursor = Texture::LoadTexture(new std::string("light_cursor.tga"))->Create();
+	std::vector<GLfloat>* vertices = new std::vector<GLfloat>();
+	GLfloat v = 0.0f;
+	GLfloat v2 = 1.0f;
 
-	vertices.push_back(1);
-	vertices.push_back(0);
-	vertices.push_back(0);
-	vertices.push_back(1);
-	vertices.push_back(1);
-	vertices.push_back(0);
+	vertices->push_back(v);
+	vertices->push_back(v);
+	vertices->push_back(v);
 
-	vertices.push_back(0);
-	vertices.push_back(1);
-	vertices.push_back(0);
+	vertices->push_back(v2);
+	vertices->push_back(v);
+	vertices->push_back(v);
+	vertices->push_back(v2);
+	vertices->push_back(v2);
+	vertices->push_back(v);
 
-	std::vector<GLfloat> texCoords;
-	texCoords.push_back(0.0f);
-	texCoords.push_back(0.0f);
-	texCoords.push_back(1.0f);
-	texCoords.push_back(0.0f);
-	texCoords.push_back(1.0f);
-	texCoords.push_back(1.0f);
-	texCoords.push_back(0.0f);
-	texCoords.push_back(1.0f);
+	vertices->push_back(v);
+	vertices->push_back(v2);
+	vertices->push_back(v);
+
+	std::vector<GLfloat>* texCoords = new std::vector<GLfloat>();
+	GLfloat f = 0.0f;
+	GLfloat f2 = 1.0f;
+
+	texCoords->push_back(f);
+	texCoords->push_back(f2);
+	texCoords->push_back(f);
+	texCoords->push_back(f);
+	texCoords->push_back(f2);
+	texCoords->push_back(f2);
+	texCoords->push_back(f);
+	texCoords->push_back(f2);
 
 
-	std::vector<int> indicies;
-	indicies.push_back(0);
-	indicies.push_back(1);
-	indicies.push_back(2);
-	indicies.push_back(3);
+	indicies = new std::vector<unsigned int>();
+	unsigned int i = 0;
+	unsigned int i2 = 1;
+	unsigned int i3 = 2;
+	unsigned int i4 = 3;
+
+	indicies->push_back(i);
+	indicies->push_back(i2);
+	indicies->push_back(i3);
+	indicies->push_back(i4);
 
 	vaoCursor = Vao::create();
 	vaoCursor->bind();
@@ -518,7 +568,7 @@ void Renderer::InitCursor()
 	vaoCursor->unbind();
 }
 
-void Renderer::RenderCursor(Transform cameraTransform)
+void Renderer::RenderCursor(Transform* cameraTransform)
 {
 	//float screenW = 64, screenH = 64; // size of the cursor in pixels
 	//float sizeX = (screenW / (float)window->getSize().x);
@@ -530,43 +580,43 @@ void Renderer::RenderCursor(Transform cameraTransform)
 	//Vector2 mouse = Vector2((mousePosition.x / (float)window->getSize().x), (mousePosition.y / (float)window->getSize().y));
 	//Vector3 position = Vector3(((mouse.x - halfX) * 2.0f) - 1.0f, ((1.0f - mouse.y - halfY) * 2.0f) - 1.0f, -1.0f);
 
-	Vector2 cursorSize = Vector2(64, 64); // size of the cursor in pixels
+	Vector2f* cursorSize = new Vector2f(64, 64); // size of the cursor in pixels
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(*window);
-	Vector2i mouse = Vector2i(mousePosition.x, mousePosition.y);
-	Vector2 screenSize = Vector2((float)window->getSize().x, (float)window->getSize().y);
-	Vector3 position = ScreenSpaceToOrthographic(mouse, screenSize, cursorSize);
+	Vector2i* mouse = new Vector2i(mousePosition.x, mousePosition.y);
+	Vector2f* screenSize = new Vector2f((float)window->getSize().x, (float)window->getSize().y);
+	Vector3f* position = ScreenSpaceToOrthographic(mouse, screenSize, cursorSize);
 
-	Matrix4 model = Matrix4::GetIdentity();
+	Matrix4* model = Matrix4::Identity();
 
-	float sizeX = (cursorSize.x / (float)window->getSize().x);
-	float sizeY = (cursorSize.y / (float)window->getSize().y);
-	model.Scale(Vector3(sizeX, sizeY, 1.0f));
-	model.Translate(Vector3(-0.5f * sizeX, -0.5f * sizeY, 0.0f));
-	model = model * Matrix4::RotationYawPitchRoll(0.0f, 0.0f, 0.0f);
-	model.Translate(Vector3(0.5f * sizeX, 0.5f * sizeY, 0.0f));
-	model.Translate(position);
+	float sizeX = (cursorSize->x / (float)window->getSize().x);
+	float sizeY = (cursorSize->y / (float)window->getSize().y);
+	model->Scale(new Vector3f(sizeX, sizeY, 1.0f));
+	model->Translate(new Vector3f(-0.5f * sizeX, -0.5f * sizeY, 0.0f));
+	model = Matrix4::Multiply(model, Matrix4::RotationYawPitchRoll(0.0f, 0.0f, 0.0f));
+	model->Translate(new Vector3f(0.5f * sizeX, 0.5f * sizeY, 0.0f));
+	model->Translate(position);
 
 
-	Matrix4 scalem = Matrix4::GetIdentity();
+	Matrix4* scalem = Matrix4::Identity();
 	//scalem.Scale(Vector3(1,1,1) * 0.01f);
 
-	Matrix4 quadModelView = model;
+	Matrix4* quadModelView = model;
 	//quadModelView.Scale(Vector3(1, 1, 1) * 10);
 	//quadModelView.Translate(Vector3(10,0,0));
-	Matrix4 quadView;
+	Matrix4* quadView;
 	//quadView = Matrix4::LookAt(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3::Up);
-	quadView = cameraTransform.localMatrix;
-	Matrix4 quadProj;
+	quadView = cameraTransform->localMatrix;
+	Matrix4* quadProj;
 	quadProj = Matrix4::Orthographic(-1, 1, -1, 1, -1.0f, 1.0f);
 	//quadProj = Matrix4::Perspective(90, window->getSize().x / (float)window->getSize().y, 0.1f, 1000);
 	//quadProj = Matrix4::Orthographic(0.0f, window->getSize().x, window->getSize().y, 0.0f, -1.0f, 1.0f);
 	//quadProj = Matrix4::Orthographic(0, 1, -1, 0, -1.0f, 1.0f);
 	//quadProj = Matrix4::Orthographic(0, window->getSize().x, window->getSize().y, 0, 0.1f, 1.0f);
 	//quadProj = Matrix4::GetIdentity();
-	Matrix4 MVP = quadProj * quadView * quadModelView;
-	MVP = quadProj * scalem * quadModelView;
+	Matrix4* MVP = Matrix4::Multiply(Matrix4::Multiply(quadProj, quadView), quadModelView);
+	MVP = Matrix4::Multiply(Matrix4::Multiply(quadProj, scalem), quadModelView);
 
-	float* arrMVP = MVP.ToArray();
+	float* arrMVP = MVP->ToArray();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	OpenGlUtils::EnableAlphaBlending();
 	OpenGlUtils::EnableDepthTesting(false);
@@ -576,10 +626,14 @@ void Renderer::RenderCursor(Transform cameraTransform)
 	glUniform1i(glGetUniformLocation(programCursor, "cursorTexture"), 0);
 
 	textureCursor->bindToUnit(0);
-	vaoCursor->bind(0, 1);
-	glDrawElements(GL_QUADS, 6, GL_UNSIGNED_INT, nullptr);
-	vaoCursor->unbind(0, 1);
-	glUseProgram(0);
+	if (vaoCursor != nullptr)
+	{
+		vaoCursor->bind();
+		vaoCursor->binder(0, 1);
+		glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, indicies->data());
+		vaoCursor->unbinder(0, 1);
+		glUseProgram(0);
+	}
 
 	delete[] arrMVP;
 }
@@ -603,33 +657,33 @@ void Renderer::ShowNoiseMap()
 
 	glUseProgram(programScreenQuadAO);
 
-	Vector2 spriteSize = Vector2(400, 400); // size of the sprite in pixels
-	Vector2 spritePosition = Vector2(0.0f, 0.75f);
-	Vector2 screenSize = Vector2((float)window->getSize().x, (float)window->getSize().y);
-	Vector3 position = ScreenSpaceToOrthographic(spritePosition, screenSize, spriteSize);
+	Vector2f* spriteSize = new Vector2f(400, 400); // size of the sprite in pixels
+	Vector2f* spritePosition = new Vector2f(0.0f, 0.75f);
+	Vector2f* screenSize = new Vector2f((float)window->getSize().x, (float)window->getSize().y);
+	Vector3f* position = ScreenSpaceToOrthographic(spritePosition, screenSize, spriteSize);
 
-	float sizeX = (spriteSize.x / (float)window->getSize().x);
-	float sizeY = (spriteSize.y / (float)window->getSize().y);
-	Matrix4 quadModel = Matrix4::GetIdentity();
-	quadModel.Scale(Vector3(sizeX, sizeY, 1.0f));
-	//quadModel.Translate(Vector3(-0.5f * sizeX, -0.5f * sizeY, 0.0f));
-	quadModel = quadModel * Matrix4::RotationYawPitchRoll(0.0f, 0.0f, 0.0f);
+	float sizeX = (spriteSize->x / (float)window->getSize().x);
+	float sizeY = (spriteSize->y / (float)window->getSize().y);
+	Matrix4* quadModel = Matrix4::Identity();
+	quadModel->Scale(new Vector3f(sizeX, sizeY, 1.0f));
+	//quadModel->Translate(new Vector3f(-0.5f * sizeX, -0.5f * sizeY, 0.0f));
+	quadModel = Matrix4::Multiply(quadModel, Matrix4::RotationYawPitchRoll(0.0f, 0.0f, 0.0f));
 	//quadModel.Translate(Vector3(0.5f * sizeX, 0.5f * sizeY, 0.0f));
-	quadModel.Translate(position);
+	quadModel->Translate(position);
 
-	Matrix4 quadView;
-	quadView = Matrix4::GetIdentity();
+	Matrix4* quadView;
+	quadView = Matrix4::Identity();
 
-	Matrix4 quadProj;
+	Matrix4* quadProj;
 	quadProj = Matrix4::Orthographic(-1, 1, -1, 1, -1.0f, 1.0f);
 
-	Matrix4 MVP = quadProj * quadView * quadModel;
+	Matrix4* MVP = Matrix4::Multiply(Matrix4::Multiply(quadProj, quadView), quadModel);
 
-	float* arrMVP = MVP.ToArray();
+	float* arrMVP = MVP->ToArray();
 
 	OpenGlUtils::EnableDepthTesting(false);
 	glUniformMatrix4fv(glGetUniformLocation(programScreenQuadAO, "MVP"), 1, GL_FALSE, arrMVP);
-	glUniform2f(glGetUniformLocation(programScreenQuadAO, "framebufferSize"), spriteSize.x, spriteSize.y);
+	glUniform2f(glGetUniformLocation(programScreenQuadAO, "framebufferSize"), spriteSize->x, spriteSize->y);
 	glUniform1f(glGetUniformLocation(programScreenQuadAO, "near_plane"), 0.1f);
 	glUniform1f(glGetUniformLocation(programScreenQuadAO, "far_plane"), 1000);
 	glUniform1i(glGetUniformLocation(programScreenQuadAO, "depthTexture"), 0);

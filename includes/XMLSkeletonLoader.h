@@ -13,17 +13,19 @@ class SkeletonLoader
 {
 private:
 	pugi::xpath_node armatureData;
-	std::vector<std::string> boneOrder;
-	std::vector<Matrix4> bindPoses;
+	std::vector<std::string*>* boneOrder;
+	std::vector<Matrix4*>* bindPoses;
 	int jointCount = 0;
 
 public:
-	SkeletonLoader(pugi::xpath_node jointHierarchy, std::vector<std::string> boneOrder, std::vector<Matrix4> bindPoses);
-	SkeletonData extractBoneData(bool& loaded);
+	SkeletonLoader(pugi::xpath_node jointHierarchy, std::vector<std::string*>* boneOrder, std::vector<Matrix4*>* bindPoses);
+	SkeletonData* extractBoneData(bool& loaded);
 
 private:
-	JointData loadJointData(pugi::xpath_node jointNode, bool isRoot);
-	JointData extractMainJointData(pugi::xpath_node jointNode, bool isRoot);
+	JointData* loadJointData(pugi::xpath_node jointNode, bool isRoot);
+	Matrix4* ConvertDataToMatrix(std::vector<std::string> data, int matrixIndex);
+	Matrix4* ConvertDataToMatrix(std::string* data);
+	JointData* extractMainJointData(pugi::xpath_node jointNode, bool isRoot);
 };
 
 #endif

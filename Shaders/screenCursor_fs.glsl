@@ -17,7 +17,9 @@ void main()
 		discard;
 	}
 
-	//frag_colour = vec4(1,1,1,1);
+	frag_colour = vec4(1,1,1,1);
 	//frag_colour = vec4(1,0,0,0.5);
-	frag_colour = colour;
+	//frag_colour = colour;
+	//frag_colour = vec4(1,1,1,1);
+
 }

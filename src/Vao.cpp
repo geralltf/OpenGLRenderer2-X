@@ -13,7 +13,7 @@ Vao::Vao(GLuint id)
 Vao::~Vao()
 {
 	glDeleteVertexArrays(1, &id);
-	for (Vbo* vbo : dataVbos)
+	for (Vbo* vbo : *dataVbos)
 	{
 		delete vbo;
 	}
@@ -32,27 +32,55 @@ int Vao::getIndexCount()
 	return indexCount;
 }
 
-void Vao::createIndexBuffer(std::vector<int> indices)
+//void Vao::createIndexBuffer(std::vector<unsigned int*>* indices)
+//{
+//	this->indexVbo = Vbo::create(GL_ELEMENT_ARRAY_BUFFER);
+//	indexVbo->bind();
+//	indexVbo->storeData(indices);
+//	this->indexCount = indices->size();
+//}
+
+void Vao::createIndexBuffer(std::vector<unsigned int>* indices)
 {
 	this->indexVbo = Vbo::create(GL_ELEMENT_ARRAY_BUFFER);
 	indexVbo->bind();
 	indexVbo->storeData(indices);
-	this->indexCount = indices.size();
+	indicies_data = indices;
+	this->indexCount = indices->size();
 }
 
-void Vao::createAttribute(int attribute, std::vector<Matrix4> data)
-{
-	const int ARRAY_SIZE = data.size() * sizeof(GLfloat) * 16;
+//void Vao::createIndexBuffer(std::vector<int*>* indices)
+//{
+//	this->indexVbo = Vbo::create(GL_ELEMENT_ARRAY_BUFFER);
+//	indexVbo->bind();
+//	indexVbo->storeData(indices);
+//	this->indexCount = indices->size();
+//}
 
-	std::vector<float> matrices;
+//void Vao::createIndexBuffer(std::vector<int>* indices)
+//{
+//	this->indexVbo = Vbo::create(GL_ELEMENT_ARRAY_BUFFER);
+//	indexVbo->bind();
+//	indexVbo->storeData(indices);
+//	indicies_data = indices;
+//	this->indexCount = indices->size();
+//}
+
+void Vao::createAttribute(int attribute, std::vector<Matrix4*>* data)
+{
+	const int ARRAY_SIZE = data->size() * sizeof(GLfloat) * 16;
+
+	std::vector<float*>* matrices = new std::vector<float*>();
 	
-	for (int i = 0; i < data.size(); i++)
+	for (int i = 0; i < data->size(); i++)
 	{
-		Matrix4 m = data[i];
+		Matrix4* m = (*data)[i];
 
 		for (int j = 0; j < 16; j++)
 		{
-			matrices.push_back(m[j]);
+			Matrix4 mat = m[j];
+			float m00 = mat[j];
+			matrices->push_back(&m00);
 		}
 	}
 
@@ -77,10 +105,10 @@ void Vao::createAttribute(int attribute, std::vector<Matrix4> data)
 	glVertexAttribDivisor(attribute + 3, 1);
 
 	dataVbo->unbind();
-	dataVbos.push_back(dataVbo);
+	dataVbos->push_back(dataVbo);
 }
 
-void Vao::createAttribute(int attribute, std::vector<float> data, int attrSize)
+void Vao::createAttribute(int attribute, std::vector<float>* data, int attrSize)
 {
 	Vbo* dataVbo = Vbo::create(GL_ARRAY_BUFFER);
 	dataVbo->bind();
@@ -88,31 +116,44 @@ void Vao::createAttribute(int attribute, std::vector<float> data, int attrSize)
 	glVertexAttribPointer(attribute, attrSize, GL_FLOAT, GL_FALSE, attrSize * BYTES_PER_FLOAT, 0);
 	//glVertexAttribPointer(attribute, attrSize, GL_FLOAT, GL_FALSE, 0, nullptr);
 	dataVbo->unbind();
-	dataVbos.push_back(dataVbo);
+	dataVbos->push_back(dataVbo);
 }
 
-void Vao::createIntAttribute(int attribute, std::vector<int> data, int attrSize)
+void Vao::createIntAttribute(int attribute, std::vector<unsigned int>* data, int attrSize)
 {
-	Vbo* dataVbo = Vbo::create(GL_ARRAY_BUFFER);
+	Vbo* dataVbo = Vbo::create(GL_ARRAY_BUFFER); // GL_ELEMENT_ARRAY_BUFFER GL_ARRAY_BUFFER
 	dataVbo->bind();
 	dataVbo->storeData(data);
-	glVertexAttribIPointer(attribute, attrSize, GL_INT, attrSize * BYTES_PER_INT, 0);
+	indicies_data = data;
+	glVertexAttribIPointer(attribute, attrSize, GL_UNSIGNED_INT, attrSize * BYTES_PER_INT, 0);
 	//glVertexAttribIPointer(attribute, attrSize, GL_INT, 0, nullptr);
 	dataVbo->unbind();
-	dataVbos.push_back(dataVbo);
+	dataVbos->push_back(dataVbo);
 }
 
 void Vao::bind()
 {
 	glBindVertexArray(id);
+	for (int i = 0; i < dataVbos->size(); i++)
+	{
+		Vbo* dataVbo = dataVbos->at(i);
+
+		dataVbo->bind();
+	}
 }
 
 void Vao::unbind()
 {
 	glBindVertexArray(0);
+	for (int i = 0; i < dataVbos->size(); i++)
+	{
+		Vbo* dataVbo = dataVbos->at(i);
+
+		dataVbo->unbind();
+	}
 }
 
-void binder(GLuint start, GLuint end)
+void Vao::binder(GLuint start, GLuint end)
 {
 	glEnableVertexAttribArray(start);
 
@@ -122,24 +163,12 @@ void binder(GLuint start, GLuint end)
 	}
 }
 
-void unbinder(GLuint start, GLuint end)
+void Vao::unbinder(GLuint start, GLuint end)
 {
-	glEnableVertexAttribArray(start);
+	glDisableVertexAttribArray(start);
 
 	if (start < end)
 	{
-		binder(start + 1, end);
+		unbinder(start + 1, end);
 	}
-}
-
-void Vao::bind(GLuint startAttributeIndex, GLuint endAttributeIndex)
-{
-	bind();
-	binder(startAttributeIndex, endAttributeIndex);
-}
-
-void Vao::unbind(GLuint startAttributeIndex, GLuint endAttributeIndex)
-{
-	unbind();
-	unbinder(startAttributeIndex, endAttributeIndex);
 }

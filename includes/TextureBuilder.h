@@ -20,19 +20,19 @@ private:
 	bool anisotropic = true;
 	bool nearest = false;
 
-	std::string file;
-	std::string texFileRightPosX; 
-	std::string texFileLeftNegX;
-	std::string texFileTopPosY; 
-	std::string texFileBottomNegY;
-	std::string texFileBackPosZ; 
-	std::string texFileFrontNegZ;
+	std::string* file;
+	std::string* texFileRightPosX; 
+	std::string* texFileLeftNegX;
+	std::string* texFileTopPosY; 
+	std::string* texFileBottomNegY;
+	std::string* texFileBackPosZ; 
+	std::string* texFileFrontNegZ;
 
 public:
-	TextureBuilder(std::string textureFile);
-	TextureBuilder(std::string textureFileRightPosX, std::string texFileLeftNegX,
-		std::string textureFileTopPosY, std::string texFileBottomNegY,
-		std::string textureFileBackPosZ, std::string texFileFrontNegZ);
+	TextureBuilder(std::string* textureFile);
+	TextureBuilder(std::string* textureFileRightPosX, std::string* texFileLeftNegX,
+		std::string* textureFileTopPosY, std::string* texFileBottomNegY,
+		std::string* textureFileBackPosZ, std::string* texFileFrontNegZ);
 
 	Texture* Create();
 	TextureBuilder* ClampEdges();

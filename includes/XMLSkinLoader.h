@@ -17,15 +17,17 @@ private:
 
 public:
 	SkinLoader(pugi::xpath_node libraryControllers, pugi::xpath_node libraryVisualScenes, int maxWeights);
-	SkinningData extractSkinData();
+	SkinningData* extractSkinData();
 
 private:
 
-	void loadJointsList(std::vector<std::string>& jointIDList, std::vector<std::string>& jointSIDList);
+	void loadJointsList(std::vector<std::string*>** jointIDList, std::vector<std::string*>** jointSIDList);
 	float* loadWeights(int& count);
 	int* getEffectiveJointsCounts(int& count, pugi::xpath_node weightsDataNode);
-	std::vector<VertexSkinData> getSkinData(pugi::xpath_node weightsDataNode, int* counts, int countJoints, float* weights, int countWeights);
-	std::vector<Matrix4> loadBindPoses();
+	std::vector<VertexSkinData*>* getSkinData(pugi::xpath_node weightsDataNode, int* counts, int countJoints, float* weights, int countWeights);
+	std::vector<Matrix4*>* loadBindPoses();
+	Matrix4* ConvertDataToMatrix(std::vector<std::string> data, int matrixIndex);
+	Matrix4* ConvertDataToMatrix(std::string* data);
 };
 
 #endif

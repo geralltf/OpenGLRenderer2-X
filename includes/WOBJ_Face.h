@@ -9,9 +9,9 @@ class WOBJ_Face
 public:
 	int VertexCount;
 
-	std::vector<int>* VertexCoordIndicies;
-	std::vector<int>* VertexTexCoordIndicies;
-	std::vector<int>* VertexNormalIndicies;
+	std::vector<int*>* VertexCoordIndicies;
+	std::vector<int*>* VertexTexCoordIndicies;
+	std::vector<int*>* VertexNormalIndicies;
 
 	bool HasNormals;
 	bool HasTextureCoords;
@@ -26,9 +26,9 @@ public:
 		HasNormals = false;
 		HasTextureCoords = false;
 
-		VertexCoordIndicies = new std::vector<int>();
-		VertexTexCoordIndicies = new std::vector<int>();
-		VertexNormalIndicies = new std::vector<int>();
+		VertexCoordIndicies = new std::vector<int*>();
+		VertexTexCoordIndicies = new std::vector<int*>();
+		VertexNormalIndicies = new std::vector<int*>();
 	}
 };
 

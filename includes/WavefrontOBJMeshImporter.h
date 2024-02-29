@@ -31,11 +31,11 @@ public:
 	std::string ParseMTLLibLocation(std::string line);
 	std::string ParseMaterialRef(std::string line);
 	std::string ParseName(std::string line);
-	bool try_parse_vector3(std::string line, Vector3** outVector);
-	bool try_parse_vector2(std::string line, Vector2** outVector);
-	Vector3 ParseVertexCoord(std::string line);
-	Vector2 ParseVertexTextureCoordinate(std::string line);
-	Vector3 ParseVertexNormal(std::string line);
+	bool try_parse_vector3(std::string line, Vector3f** outVector);
+	bool try_parse_vector2(std::string line, Vector2f** outVector);
+	Vector3f* ParseVertexCoord(std::string line);
+	Vector2f* ParseVertexTextureCoordinate(std::string line);
+	Vector3f* ParseVertexNormal(std::string line);
 	WOBJ_Face* ParseFace(std::string line);
 };
 

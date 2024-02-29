@@ -22,12 +22,14 @@ public:
 private:
 	std::vector<float> getKeyTimes();
 	std::vector<KeyFrameData*>* initKeyFrames(std::vector<float> times);
-	void loadJointTransforms(std::vector<KeyFrameData*>* frames, pugi::xpath_node jointData, std::string rootNodeId);
-	std::string getDataId(pugi::xpath_node jointData);
-	std::string getJointName(pugi::xpath_node jointData);
-	void processTransforms(std::string jointName, std::string rawData, std::vector<KeyFrameData*>* keyFrames, bool root);
-	std::string findRootJointName();
+	void loadJointTransforms(std::vector<KeyFrameData*>* frames, pugi::xpath_node jointData, std::string* rootNodeId);
+	std::string* getDataId(pugi::xpath_node jointData);
+	std::string* getJointName(pugi::xpath_node jointData);
+	void processTransforms(std::string* jointName, std::string rawData, std::vector<KeyFrameData*>* keyFrames, bool root);
+	std::string* findRootJointName();
 	void checkNodeHierarchy();
+	Matrix4* ConvertDataToMatrix(std::vector<std::string> data, int matrixIndex);
+	Matrix4* ConvertDataToMatrix(std::string* data);
 };
 
 

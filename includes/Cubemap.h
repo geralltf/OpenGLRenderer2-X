@@ -10,9 +10,13 @@ public:
 	Cubemap(GLuint textureId);
 	~Cubemap();
 
-	static TextureBuilder LoadTexture(std::string texFileRightPosX, std::string texFileLeftNegX, 
-									   std::string texFileTopPosY, std::string texFileBottomNegY, 
-									   std::string texFileBackPosZ, std::string texFileFrontNegZ);
+	//static TextureBuilder LoadTexture(std::string* texFileRightPosX, std::string* texFileLeftNegX, 
+	//								   std::string* texFileTopPosY, std::string* texFileBottomNegY, 
+	//								   std::string* texFileBackPosZ, std::string* texFileFrontNegZ);
+
+	static TextureBuilder* LoadTexture(std::string* texFileRightPosX, std::string* texFileLeftNegX,
+		std::string* texFileTopPosY, std::string* texFileBottomNegY,
+		std::string* texFileBackPosZ, std::string* texFileFrontNegZ);
 };
 
 #endif

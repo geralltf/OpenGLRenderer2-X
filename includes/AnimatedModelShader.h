@@ -23,16 +23,16 @@ private:
 	GLuint programID_HasAnim;
 	GLuint programID_Geo;
 public:
-	UniformMatrix* projectionMatrix = new UniformMatrix("projectionMatrix");
-	UniformMatrix* modelviewMatrix = new UniformMatrix("modelviewMatrix");
-	UniformMatrix* viewMatrix = new UniformMatrix("viewMatrix");
-	UniformVec3* lightDirection = new UniformVec3("lightDirection");
-	UniformVec3* eye = new UniformVec3("eye");
-	UniformMat4Array* jointTransforms = new UniformMat4Array("jointTransforms", MAX_JOINTS);
-	UniformSampler* diffuseTexture = new UniformSampler("diffuseTexture");
-	UniformSampler* normalTexture = new UniformSampler("normalTexture");
-	UniformSampler* specularTexture = new UniformSampler("specularTexture");
-	UniformSampler* glowTexture = new UniformSampler("glowTexture");
+	UniformMatrix* projectionMatrix = new UniformMatrix(new std::string("projectionMatrix"));
+	UniformMatrix* modelviewMatrix = new UniformMatrix(new std::string("modelviewMatrix"));
+	UniformMatrix* viewMatrix = new UniformMatrix(new std::string("viewMatrix"));
+	UniformVec3* lightDirection = new UniformVec3(new std::string("lightDirection"));
+	UniformVec3* eye = new UniformVec3(new std::string("eye"));
+	UniformMat4Array* jointTransforms = new UniformMat4Array(new std::string("jointTransforms"), MAX_JOINTS);
+	UniformSampler* diffuseTexture = new UniformSampler(new std::string("diffuseTexture"));
+	UniformSampler* normalTexture = new UniformSampler(new std::string("normalTexture"));
+	UniformSampler* specularTexture = new UniformSampler(new std::string("specularTexture"));
+	UniformSampler* glowTexture = new UniformSampler(new std::string("glowTexture"));
 public:
 	/**
 	 * Creates the shader program for the {@link AnimatedModelRenderer} by
@@ -68,17 +68,17 @@ public:
 		}
 		programID = programID_Geo;
 
-		std::vector<Uniform*> inUniforms;
-		inUniforms.push_back((Uniform*)projectionMatrix);
-		inUniforms.push_back((Uniform*)modelviewMatrix);
-		inUniforms.push_back((Uniform*)viewMatrix);
-		inUniforms.push_back((Uniform*)diffuseTexture);
-		inUniforms.push_back((Uniform*)normalTexture);
-		inUniforms.push_back((Uniform*)specularTexture);
-		inUniforms.push_back((Uniform*)glowTexture);
-		inUniforms.push_back((Uniform*)lightDirection);
-		inUniforms.push_back((Uniform*)eye);
-		inUniforms.push_back((Uniform*)jointTransforms);
+		std::vector<Uniform*>* inUniforms = new std::vector<Uniform*>();
+		inUniforms->push_back((Uniform*)projectionMatrix);
+		inUniforms->push_back((Uniform*)modelviewMatrix);
+		inUniforms->push_back((Uniform*)viewMatrix);
+		inUniforms->push_back((Uniform*)diffuseTexture);
+		inUniforms->push_back((Uniform*)normalTexture);
+		inUniforms->push_back((Uniform*)specularTexture);
+		inUniforms->push_back((Uniform*)glowTexture);
+		inUniforms->push_back((Uniform*)lightDirection);
+		inUniforms->push_back((Uniform*)eye);
+		inUniforms->push_back((Uniform*)jointTransforms);
 
 		storeAllUniformLocations(inUniforms);
 		connectTextureUnits();

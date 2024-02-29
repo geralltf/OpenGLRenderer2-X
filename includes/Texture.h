@@ -26,7 +26,7 @@ public:
 	int getHeight();
 	void bindToUnit(GLuint unit);
 
-	static TextureBuilder LoadTexture(std::string textureFile);
+	static TextureBuilder* LoadTexture(std::string* textureFile);
 };
 
 #endif

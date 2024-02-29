@@ -9,9 +9,9 @@ class FaceAttributes
 public:
 	PolygonType Polygon;
 
-	Vector3 Origin;
+	Vector3f* Origin;
 
-	Nullable<Vector4> faceColour;
+	Nullable<Vector4f*>* faceColour;
 
 	bool HasNormalPerVertex = false;
 	bool HasColourPerVertex = false;
@@ -20,8 +20,8 @@ public:
 
 	FaceAttributes() : 
 		Polygon(PolygonType::PT_Triangles),
-		Origin(Vector3::Zero),
-		faceColour(Nullable<Vector4>())
+		Origin(Vector3f::ZERO),
+		faceColour(new Nullable<Vector4f*>())
 	{
 
 	}

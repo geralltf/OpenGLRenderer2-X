@@ -206,13 +206,13 @@ HalfEdgeMesh* HalfEdgeMesh::CreateDummyMesh()
 	float width = 1, height = 1, z = -1;
 	HalfEdgeMesh* dummy = new HalfEdgeMesh();
 
-	HE_Face face0;
-	HE_Face face1;
+	HE_Face* face0 = new HE_Face();
+	HE_Face* face1 = new HE_Face();
 
-	HE_Vertex vertex0 = HE_Vertex(0, Vector3(-width, -height, z));
-	HE_Vertex vertex1 = HE_Vertex(1, Vector3(width, -height, z));
-	HE_Vertex vertex2 = HE_Vertex(2, Vector3(width, height, z));
-	HE_Vertex vertex3 = HE_Vertex(3, Vector3(-width, height, z));
+	HE_Vertex* vertex0 = new HE_Vertex(0, new Vector3f(-width, -height, z));
+	HE_Vertex* vertex1 = new HE_Vertex(1, new Vector3f(width, -height, z));
+	HE_Vertex* vertex2 = new HE_Vertex(2, new Vector3f(width, height, z));
+	HE_Vertex* vertex3 = new HE_Vertex(3, new Vector3f(-width, height, z));
 
 	// CHECK: Test see if just a Quad renders
 
@@ -221,7 +221,7 @@ HalfEdgeMesh* HalfEdgeMesh::CreateDummyMesh()
 	HE_Edge* edge_0_1 = new HE_Edge(vertex1, face0, 1);
 	HE_Edge* edge_0_2 = new HE_Edge(vertex2, face0, 2);
 
-	face0.Edge = edge_0_0; // Set initial edge for face 0.
+	face0->Edge = edge_0_0; // Set initial edge for face 0.
 
 	edge_0_0->Next = edge_0_1;
 	edge_0_1->Next = edge_0_2;
@@ -236,7 +236,7 @@ HalfEdgeMesh* HalfEdgeMesh::CreateDummyMesh()
 	HE_Edge* edge_1_4 = new HE_Edge(vertex2, face1, 1);
 	HE_Edge* edge_1_5 = new HE_Edge(vertex3, face1, 2);
 
-	face1.Edge = edge_1_3; // Set initial edge for face 1.
+	face1->Edge = edge_1_3; // Set initial edge for face 1.
 
 	edge_1_3->Next = edge_1_4;
 	edge_1_4->Next = edge_1_5;
@@ -274,12 +274,12 @@ HalfEdgeMesh* HalfEdgeMesh::CreateDummyMesh()
 
 	//face0.t = t0;
 	//face1.t = t1;
-	face0.FaceIndex = 0;
-	face1.FaceIndex = 1;
+	face0->FaceIndex = 0;
+	face1->FaceIndex = 1;
 
 
 	// Set the entry point in the mesh to point to the first face in the geometry.
-	dummy->SetRoot(&face0);
+	dummy->SetRoot(face0);
 
 	return dummy;
 }
@@ -397,27 +397,27 @@ bool HalfEdgeMesh::HasVertex(HE_Vertex* vertex)
 /// </summary>
 /// <param name="position"></param>
 /// <returns></returns>
-HE_Vertex HalfEdgeMesh::GetVertex(Vector3 position)
+HE_Vertex* HalfEdgeMesh::GetVertex(Vector3f* position)
 {
 	throw "NotImplementedException";
 }
 
-HE_Edge HalfEdgeMesh::GetFace(Vector3 v00, Vector3 v01, Vector3 v10)
+HE_Edge* HalfEdgeMesh::GetFace(Vector3f* v00, Vector3f* v01, Vector3f* v10)
 {
 	throw "NotImplementedException";
 }
 
-HE_Face HalfEdgeMesh::GetFace(int faceIndex)
+HE_Face* HalfEdgeMesh::GetFace(int faceIndex)
 {
 	throw "NotImplementedException";
 }
 
-HE_Edge HalfEdgeMesh::GetEdge(Vector3 begin, Vector3 end)
+HE_Edge* HalfEdgeMesh::GetEdge(Vector3f* begin, Vector3f* end)
 {
 	throw "NotImplementedException";
 }
 
-HE_Edge HalfEdgeMesh::GetEdge(int vertexIndex, int edgeIndex)
+HE_Edge* HalfEdgeMesh::GetEdge(int vertexIndex, int edgeIndex)
 {
 	throw "NotImplementedException";
 }

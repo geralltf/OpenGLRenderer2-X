@@ -36,9 +36,9 @@ int TextureData::getHeight()
 	return height;
 }
 
-Vector2i TextureData::getSize()
+Vector2i* TextureData::getSize()
 {
-	return Vector2i(width, height);
+	return new Vector2i(width, height);
 }
 
 byte* TextureData::getBuffer()
@@ -46,29 +46,29 @@ byte* TextureData::getBuffer()
 	return buffer;
 }
 
-ColourRGBA TextureData::get(int x, int y)
+ColourRGBA* TextureData::get(int x, int y)
 {
 	if (!buffer || x < 0 || y < 0 || x >= width || y >= height) {
-		return ColourRGBA();
+		return new ColourRGBA();
 	}
 
 	byte* pCol = buffer + (x + y * width) * bytesPerPixel; // brga
 
-	return ColourRGBA(pCol[3], pCol[1], pCol[2], pCol[0]);
+	return new ColourRGBA(pCol[3], pCol[1], pCol[2], pCol[0]);
 }
 
-ColourRGBA TextureData::get(float u, float v)
+ColourRGBA* TextureData::get(float u, float v)
 {
 	int x = width * u; 
 	int y = height * v;
 
 	if (!buffer || x < 0 || y < 0 || x >= width || y >= height) {
-		return ColourRGBA();
+		return new ColourRGBA();
 	}
 
 	byte* pCol = buffer + (x + y * width) * bytesPerPixel; // brga
 
-	return ColourRGBA(pCol[3], pCol[1], pCol[2], pCol[0]);
+	return new ColourRGBA(pCol[3], pCol[1], pCol[2], pCol[0]);
 }
 
 int TextureData::getBytesPerPixel()
@@ -76,14 +76,14 @@ int TextureData::getBytesPerPixel()
 	return bytesPerPixel;
 }
 
-Vector3 TextureData::normal(Vector2 uvf)
+Vector3f* TextureData::normal(Vector2f* uvf)
 {
-	ColourRGBA c = get(uvf.x, uvf.y);
-	Vector3 normal;
+	ColourRGBA* c = get(uvf->x, uvf->y);
+	Vector3f* normal = new Vector3f();
 
-	normal.z = c.b * 2.f - 1.f;
-	normal.y = c.r * 2.f - 1.f;
-	normal.x = c.g * 2.f - 1.f;
+	normal->z = c->b * 2.f - 1.f;
+	normal->y = c->r * 2.f - 1.f;
+	normal->x = c->g * 2.f - 1.f;
 
 	return normal;
 }

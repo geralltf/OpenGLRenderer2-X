@@ -2,7 +2,7 @@
 #define ANIMATED_MODEL_RENDERER_H
 
 #include <GL/glew.h>
-#include "Vector3.h"
+#include "Vector3f.h"
 #include "AnimatedModelShader.h"
 #include "AnimatedModel.h"
 #include "Transform.h"
@@ -47,7 +47,7 @@ public:
 	 * @param lightDir
 	 *            - the direction of the light in the scene.
 	 */
-	void render(AnimatedModel* entity, Transform camera, Matrix4 projection, Matrix4 modelview, Vector3 lightDir);
+	void render(AnimatedModel* entity, Transform* camera, Matrix4* projection, Matrix4* modelview, Vector3f* lightDir);
 
 	/**
 	 * Starts the shader program and loads up the projection view matrix, as
@@ -59,7 +59,7 @@ public:
 	 * @param lightDir
 	 *            - the direction of the light in the scene.
 	 */
-	void prepare(Transform camera, Matrix4 projection, Matrix4 modelview, Vector3 lightDir);
+	void prepare(Transform* camera, Matrix4* projection, Matrix4* modelview, Vector3f* lightDir);
 
 private:
 	/**

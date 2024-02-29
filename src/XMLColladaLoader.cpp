@@ -9,8 +9,8 @@
 AnimatedModelData* ColladaLoader::loadColladaModel(std::string colladaFile, int maxWeights, bool& loadedData, bool& loadedSkeletonData, bool& loadedAnimData)
 {
 	AnimationData* animData = nullptr;
-	SkinningData skinningData;
-	SkeletonData jointsData;
+	SkinningData* skinningData = nullptr;
+	SkeletonData* jointsData = nullptr;
 	MeshData* meshData = nullptr;
 	bool loadedSkinningData = false;
 
@@ -33,28 +33,28 @@ AnimatedModelData* ColladaLoader::loadColladaModel(std::string colladaFile, int 
 	if(HasChildren(libraryController))
 	{
 		// Extract skin data and joint order.
-		SkinLoader skinLoader = SkinLoader(libraryController, libraryVisualScenes, maxWeights);
-		skinningData = skinLoader.extractSkinData();
+		SkinLoader* skinLoader = new SkinLoader(libraryController, libraryVisualScenes, maxWeights);
+		skinningData = skinLoader->extractSkinData();
 
 		loadedSkinningData = true;
 
 		if (HasChildren(libraryVisualScenes))
 		{
-			SkeletonLoader jointsLoader = SkeletonLoader(libraryVisualScenes, skinningData.jointOrder, skinningData.bindPoses);
-			jointsData = jointsLoader.extractBoneData(loadedSkeletonData);
+			SkeletonLoader* jointsLoader = new SkeletonLoader(libraryVisualScenes, skinningData->jointOrder, skinningData->bindPoses);
+			jointsData = jointsLoader->extractBoneData(loadedSkeletonData);
 		}
 	}
 
 	pugi::xpath_node libraryGeometries = doc.select_node("/COLLADA//library_geometries");
 	if (HasChildren(libraryGeometries))
 	{
-		std::vector<VertexSkinData> verticesSkinData;
+		std::vector<VertexSkinData*>* verticesSkinData = nullptr;
 		if(loadedSkinningData)
 		{
-			verticesSkinData = skinningData.verticesSkinData;
+			verticesSkinData = skinningData->verticesSkinData;
 		}
-		GeometryLoader g = GeometryLoader(libraryGeometries, verticesSkinData);
-		meshData = g.extractModelData();
+		GeometryLoader* g = new GeometryLoader(libraryGeometries, verticesSkinData);
+		meshData = g->extractModelData();
 	}
 
 	loadedData = true;
@@ -64,8 +64,8 @@ AnimatedModelData* ColladaLoader::loadColladaModel(std::string colladaFile, int 
 		pugi::xpath_node animNode = doc.select_node("/COLLADA//library_animations");
 
 		pugi::xpath_node jointsNode = doc.select_node("/COLLADA//library_visual_scenes");
-		AnimationLoader loader = AnimationLoader(animNode, jointsNode);
-		animData = loader.extractAnimation();
+		AnimationLoader* loader = new AnimationLoader(animNode, jointsNode);
+		animData = loader->extractAnimation();
 
 		loadedAnimData = true;
 	}

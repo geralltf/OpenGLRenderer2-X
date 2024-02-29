@@ -24,7 +24,7 @@ class KeyFrame
 {
 private:
 	float timeStamp;
-	std::map<std::string, JointTransform*>* pose;
+	std::map<std::string*, JointTransform*>* pose;
 
 public:
 	KeyFrame() : timeStamp(0.0f)
@@ -46,7 +46,7 @@ public:
 	 *            keyframe, indexed by the name of the joint that they should be
 	 *            applied to.
 	 */
-	KeyFrame(float timeStamp, std::map<std::string, JointTransform*>* jointKeyFrames)
+	KeyFrame(float timeStamp, std::map<std::string*, JointTransform*>* jointKeyFrames)
 	{
 		this->timeStamp = timeStamp;
 		this->pose = jointKeyFrames;
@@ -63,7 +63,7 @@ public:
 	 *         they correspond to. This basically represents the "pose" at this
 	 *         keyframe.
 	 */
-	std::map<std::string, JointTransform*>* getJointKeyFrames();
+	std::map<std::string*, JointTransform*>* getJointKeyFrames();
 
 };
 

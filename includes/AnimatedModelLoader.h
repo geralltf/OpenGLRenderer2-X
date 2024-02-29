@@ -12,7 +12,7 @@ const int MAX_WEIGHTS = 3;
 class AnimatedModelLoader 
 {
 public:
-	static Matrix4 CORRECTION;
+	static Matrix4* CORRECTION;
 
 	/**
 	 * Creates an AnimatedEntity from the data in an entity file. It loads up
@@ -35,7 +35,7 @@ private:
 	 *            - the joints data from the collada file for the head joint.
 	 * @return The created joint, with all its descendants added.
 	 */
-	static Joint* createJoints(JointData data);
+	static Joint* createJoints(JointData* data);
 
 	/**
 	 * Stores the mesh data in a VAO.

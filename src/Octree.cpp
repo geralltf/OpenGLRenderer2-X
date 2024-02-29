@@ -18,13 +18,13 @@ bool Octree::Add(Octree* octTree)
 
 	bool inserted = false;
 	Octree* node;
-	std::stack<Octree*> stack;
-	stack.push(this);
+	std::stack<Octree*>* stack = new std::stack<Octree*>();
+	stack->push(this);
 
-	while (stack.size() > 0 && !inserted)
+	while (stack->size() > 0 && !inserted)
 	{
-		node = stack.top();
-		stack.pop();
+		node = stack->top();
+		stack->pop();
 
 		// Ignore areas that the object (p) does not belong in.
 		if (node->BBox->Intersects(octTree->BBox))
@@ -40,39 +40,39 @@ bool Octree::Add(Octree* octTree)
 			}
 			else
 			{
-				// Continue the search frontier.
+				// Continue the search frontier->
 				if (node->TopBackLeft != nullptr)
 				{
-					stack.push(node->TopBackLeft);
+					stack->push(node->TopBackLeft);
 				}
 				if (node->TopBackRight != nullptr)
 				{
-					stack.push(node->TopBackRight);
+					stack->push(node->TopBackRight);
 				}
 				if (node->TopFrontLeft != nullptr)
 				{
-					stack.push(node->TopFrontLeft);
+					stack->push(node->TopFrontLeft);
 				}
 				if (node->TopFrontRight != nullptr)
 				{
-					stack.push(node->TopFrontRight);
+					stack->push(node->TopFrontRight);
 				}
 
 				if (node->BottomBackLeft != nullptr)
 				{
-					stack.push(node->BottomBackLeft);
+					stack->push(node->BottomBackLeft);
 				}
 				if (node->BottomBackRight != nullptr)
 				{
-					stack.push(node->BottomBackRight);
+					stack->push(node->BottomBackRight);
 				}
 				if (node->BottomFrontLeft != nullptr)
 				{
-					stack.push(node->BottomFrontLeft);
+					stack->push(node->BottomFrontLeft);
 				}
 				if (node->BottomFrontRight != nullptr)
 				{
-					stack.push(node->BottomFrontRight);
+					stack->push(node->BottomFrontRight);
 				}
 			}
 		}
@@ -94,13 +94,13 @@ bool Octree::Add(MeshBufferVAO* meshBufferVAO)
 
 	bool inserted = false;
 	Octree* node;
-	std::stack<Octree*> stack;
-	stack.push(this);
+	std::stack<Octree*>* stack = new std::stack<Octree*>();
+	stack->push(this);
 
-	while (stack.size() > 0 && !inserted)
+	while (stack->size() > 0 && !inserted)
 	{
-		node = stack.top();
-		stack.pop();
+		node = stack->top();
+		stack->pop();
 
 		// Ignore areas that the object (p) does not belong in.
 		if (meshBufferVAO->Intersects(node->BBox))
@@ -122,36 +122,36 @@ bool Octree::Add(MeshBufferVAO* meshBufferVAO)
 				// Continue the search frontier.
 				if (node->TopBackLeft != nullptr)
 				{
-					stack.push(node->TopBackLeft);
+					stack->push(node->TopBackLeft);
 				}
 				if (node->TopBackRight != nullptr)
 				{
-					stack.push(node->TopBackRight);
+					stack->push(node->TopBackRight);
 				}
 				if (node->TopFrontLeft != nullptr)
 				{
-					stack.push(node->TopFrontLeft);
+					stack->push(node->TopFrontLeft);
 				}
 				if (node->TopFrontRight != nullptr)
 				{
-					stack.push(node->TopFrontRight);
+					stack->push(node->TopFrontRight);
 				}
 
 				if (node->BottomBackLeft != nullptr)
 				{
-					stack.push(node->BottomBackLeft);
+					stack->push(node->BottomBackLeft);
 				}
 				if (node->BottomBackRight != nullptr)
 				{
-					stack.push(node->BottomBackRight);
+					stack->push(node->BottomBackRight);
 				}
 				if (node->BottomFrontLeft != nullptr)
 				{
-					stack.push(node->BottomFrontLeft);
+					stack->push(node->BottomFrontLeft);
 				}
 				if (node->BottomFrontRight != nullptr)
 				{
-					stack.push(node->BottomFrontRight);
+					stack->push(node->BottomFrontRight);
 				}
 			}
 		}
@@ -168,54 +168,54 @@ void Octree::Subdivide()
 	// and then use these new values to create 4 new quad children of equal area.
 
 	// Divide the current half size by two to calculate the AABB's of the new children:
-	Vector3 h = BBox->HalfSize / 2; // Easier to read.
+	Vector3f* h = Vector3f::Divide(BBox->HalfSize, 2); // Easier to read.
 
-	Vector3 c = BBox->Center;
+	Vector3f* c = BBox->Center;
 
 	// Subdivide into 8 octants or 3 planes. (the octants are like 8 mini cubes stacked together)
 
 	// Octant 0.
 	TopFrontLeft = new Octree();
-	TopFrontLeft->BBox = new AABB(Vector3(c.x - h.x, c.y + h.y, c.z + h.z), h);
+	TopFrontLeft->BBox = new AABB(new Vector3f(c->x - h->x, c->y + h->y, c->z + h->z), h);
 	TopFrontLeft->parent = this;
 
-	// Octant 1.
+	// Octant 1->
 	TopFrontRight = new Octree();
-	TopFrontRight->BBox = new AABB(Vector3(c.x + h.x, c.y + h.y, c.z + h.z), h);
+	TopFrontRight->BBox = new AABB(new Vector3f(c->x + h->x, c->y + h->y, c->z + h->z), h);
 	TopFrontRight->parent = this;
 
-	// Octant 2.
+	// Octant 2->
 	BottomFrontLeft = new Octree();
-	BottomFrontLeft->BBox = new AABB(Vector3(c.x - h.x, c.y - h.y, c.z + h.z), h);
+	BottomFrontLeft->BBox = new AABB(new Vector3f(c->x - h->x, c->y - h->y, c->z + h->z), h);
 	BottomFrontLeft->parent = this;
 
-	// Octant 3.
+	// Octant 3->
 	BottomFrontRight = new Octree();
-	BottomFrontRight->BBox = new AABB(Vector3(c.x + h.x, c.y - h.y, c.z + h.z), h);
+	BottomFrontRight->BBox = new AABB(new Vector3f(c->x + h->x, c->y - h->y, c->z + h->z), h);
 	BottomFrontRight->parent = this;
 
-	// Octant 4.
+	// Octant 4->
 	TopBackLeft = new Octree();
-	TopBackLeft->BBox = new AABB(Vector3(c.x - h.x, c.y + h.y, c.z - h.z), h);
+	TopBackLeft->BBox = new AABB(new Vector3f(c->x - h->x, c->y + h->y, c->z - h->z), h);
 	TopBackLeft->parent = this;
 
-	// Octant 5.
+	// Octant 5->
 	TopBackRight = new Octree();
-	TopBackRight->BBox = new AABB(Vector3(c.x + h.x, c.y + h.y, c.z - h.z), h);
+	TopBackRight->BBox = new AABB(new Vector3f(c->x + h->x, c->y + h->y, c->z - h->z), h);
 	TopBackRight->parent = this;
 
-	// Octant 6.
+	// Octant 6->
 	BottomBackLeft = new Octree();
-	BottomBackLeft->BBox = new AABB(Vector3(c.x - h.x, c.y - h.y, c.z - h.z), h);
+	BottomBackLeft->BBox = new AABB(new Vector3f(c->x - h->x, c->y - h->y, c->z - h->z), h);
 	BottomBackLeft->parent = this;
 
-	// Octant 7.
+	// Octant 7->
 	BottomBackRight = new Octree();
-	BottomBackRight->BBox = new AABB(Vector3(c.x + h.x, c.y - h.y, c.z - h.z), h);
+	BottomBackRight->BBox = new AABB(new Vector3f(c->x + h->x, c->y - h->y, c->z - h->z), h);
 	BottomBackRight->parent = this;
 }
 
-void Octree::FindNearestObjects(AABB area, std::vector<MeshBufferVAO*>& nearestList)
+void Octree::FindNearestObjects(AABB* area, std::vector<MeshBufferVAO*>** nearestList)
 {
 	if (BBox == nullptr) throw "Bounding box must not be null";
 
@@ -224,25 +224,25 @@ void Octree::FindNearestObjects(AABB area, std::vector<MeshBufferVAO*>& nearestL
 	//TODO: Occlusion testing here
 
 	Octree* node;
-	std::stack<Octree*> stack;
-	stack.push(this);
+	std::stack<Octree*>* stack = new std::stack<Octree*>();
+	stack->push(this);
 
-	while (stack.size() > 0)
+	while (stack->size() > 0)
 	{
-		node = stack.top();
-		stack.pop();
+		node = stack->top();
+		stack->pop();
 
 		// Automatically abort if the range does not intersect this octree
-		if (node->BBox->Intersects(&area))
+		if (node->BBox->Intersects(area))
 		{
 			// Check objects at this octree level
 			for (int p = 0; p < node->sceneObjects->size(); p++)
 			{
-				if (area.Intersects(node->sceneObjects->at(p)->Bounds))
+				if (area->Intersects(node->sceneObjects->at(p)->Bounds))
 				{
 					MeshBufferVAO* nearest = node->sceneObjects->at(p);
 
-					nearestList.push_back(nearest);
+					(*nearestList)->push_back(nearest);
 				}
 			}
 
@@ -252,36 +252,36 @@ void Octree::FindNearestObjects(AABB area, std::vector<MeshBufferVAO*>& nearestL
 				// Continue the search frontier.
 				if (node->TopBackLeft != nullptr)
 				{
-					stack.push(node->TopBackLeft);
+					stack->push(node->TopBackLeft);
 				}
 				if (node->TopBackRight != nullptr)
 				{
-					stack.push(node->TopBackRight);
+					stack->push(node->TopBackRight);
 				}
 				if (node->TopFrontLeft != nullptr)
 				{
-					stack.push(node->TopFrontLeft);
+					stack->push(node->TopFrontLeft);
 				}
 				if (node->TopFrontRight != nullptr)
 				{
-					stack.push(node->TopFrontRight);
+					stack->push(node->TopFrontRight);
 				}
 
 				if (node->BottomBackLeft != nullptr)
 				{
-					stack.push(node->BottomBackLeft);
+					stack->push(node->BottomBackLeft);
 				}
 				if (node->BottomBackRight != nullptr)
 				{
-					stack.push(node->BottomBackRight);
+					stack->push(node->BottomBackRight);
 				}
 				if (node->BottomFrontLeft != nullptr)
 				{
-					stack.push(node->BottomFrontLeft);
+					stack->push(node->BottomFrontLeft);
 				}
 				if (node->BottomFrontRight != nullptr)
 				{
-					stack.push(node->BottomFrontRight);
+					stack->push(node->BottomFrontRight);
 				}
 			}
 		}

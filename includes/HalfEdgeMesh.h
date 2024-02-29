@@ -6,7 +6,7 @@
 
 #include <map>
 #include <stack>
-#include "Vector3.h"
+#include "Vector3f.h"
 #include "HE_Face.h"
 #include "HE_AdjacencyList.h"
 #include "Octree.h"
@@ -94,15 +94,15 @@ public:
 	/// </summary>
 	/// <param name="position"></param>
 	/// <returns></returns>
-	HE_Vertex GetVertex(Vector3 position);
+	HE_Vertex* GetVertex(Vector3f* position);
 
-	HE_Edge GetFace(Vector3 v00, Vector3 v01, Vector3 v10);
+	HE_Edge* GetFace(Vector3f* v00, Vector3f* v01, Vector3f* v10);
 
-	HE_Face GetFace(int faceIndex);
+	HE_Face* GetFace(int faceIndex);
 
-	HE_Edge GetEdge(Vector3 begin, Vector3 end);
+	HE_Edge* GetEdge(Vector3f* begin, Vector3f* end);
 
-	HE_Edge GetEdge(int vertexIndex, int edgeIndex);
+	HE_Edge* GetEdge(int vertexIndex, int edgeIndex);
 
 	HE_Edge* GetEdgesNearVertex(HE_Vertex* vertex);
 

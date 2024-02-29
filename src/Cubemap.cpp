@@ -10,9 +10,9 @@ Cubemap::~Cubemap()
 	Texture::~Texture();
 }
 
-TextureBuilder Cubemap::LoadTexture(std::string texFileRightPosX, std::string texFileLeftNegX,
-	std::string texFileTopPosY, std::string texFileBottomNegY,
-	std::string texFileBackPosZ, std::string texFileFrontNegZ)
+TextureBuilder* Cubemap::LoadTexture(std::string* texFileRightPosX, std::string* texFileLeftNegX,
+	std::string* texFileTopPosY, std::string* texFileBottomNegY,
+	std::string* texFileBackPosZ, std::string* texFileFrontNegZ)
 {
-	return TextureBuilder(texFileRightPosX, texFileLeftNegX, texFileTopPosY, texFileBottomNegY, texFileBackPosZ, texFileFrontNegZ);
+	return new TextureBuilder(texFileRightPosX, texFileLeftNegX, texFileTopPosY, texFileBottomNegY, texFileBackPosZ, texFileFrontNegZ);
 }

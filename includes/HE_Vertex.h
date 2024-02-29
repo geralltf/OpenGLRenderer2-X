@@ -2,7 +2,7 @@
 #define HE_VERTEX_H
 
 #include "HE_Edge.h"
-#include "Vector3.h"
+#include "Vector3f.h"
 #include "VertexAttributes.h"
 
 class Vector3;
@@ -21,7 +21,7 @@ public:
 
 	HE_Vertex();
 	HE_Vertex(int index);
-	HE_Vertex(int index, Vector3 vertexPosition);
+	HE_Vertex(int index, Vector3f* vertexPosition);
 
 	~HE_Vertex();
 

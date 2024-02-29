@@ -15,7 +15,7 @@ HE_Face::~HE_Face()
 /// Applies a transformation matrix to all verticies in the face.
 /// </summary>
 /// <param name="tranform"></param>
-void HE_Face::Transform(Matrix4 tranform)
+void HE_Face::Transform(Matrix4* tranform)
 {
 	//Vector4 v0 = Vector4(t->vertex00, 1.0f);
 	//Vector4 v1 = Vector4(t->vertex01, 1.0f);
@@ -28,10 +28,10 @@ void HE_Face::Transform(Matrix4 tranform)
 	//TODO: also update Vertex data in edge loop.
 }
 
-Vector3 HE_Face::CenterOfMass()
+Vector3f* HE_Face::CenterOfMass()
 {
 	//return t->CenterOfTriangle();
-	return Vector3::Zero;
+	return Vector3f::ZERO;
 }
 
 void HE_Face::ConnectTo(HE_Face* other)
@@ -165,24 +165,24 @@ bool HE_Face::HasSharedEdge(HE_Face* face, HE_Face* compareTo, HE_Pair* pair)
 	return isConnected;
 }
 
-std::vector<HE_Vertex>* HE_Face::GetVertexes()
+std::vector<HE_Vertex*>* HE_Face::GetVertexes()
 {
-	std::vector<HE_Vertex>* verticiesList = new std::vector<HE_Vertex>();
+	std::vector<HE_Vertex*>* verticiesList = new std::vector<HE_Vertex*>();
 	HE_Edge* edge = Edge;
 
 	// Traverse the edges of the Face.
 	while (edge != Edge)
 	{
-		verticiesList->push_back(*edge->Vertex);
+		verticiesList->push_back(edge->Vertex);
 
 		edge = edge->Next;
 	}
 	return verticiesList;
 }
 
-std::vector<Vector3>* HE_Face::GetVerticies()
+std::vector<Vector3f*>* HE_Face::GetVerticies()
 {
-	std::vector<Vector3>* verticiesList = new std::vector<Vector3>();
+	std::vector<Vector3f*>* verticiesList = new std::vector<Vector3f*>();
 	HE_Edge* edge = Edge;
 
 	// Traverse the edges of the Face.
@@ -196,9 +196,9 @@ std::vector<Vector3>* HE_Face::GetVerticies()
 	return verticiesList;
 }
 
-std::vector<Vector3>* HE_Face::GetNormals()
+std::vector<Vector3f*>* HE_Face::GetNormals()
 {
-	std::vector<Vector3>* normalsList = new std::vector<Vector3>();
+	std::vector<Vector3f*>* normalsList = new std::vector<Vector3f*>();
 	HE_Edge* edge = Edge;
 
 	// Traverse the edges of the Face.
@@ -221,23 +221,23 @@ void HE_Face::GetAdjacentFaces(HE_Face* face1, HE_Face* face2)
 	face2 = Edge->Other->Face;
 }
 
-std::vector<HE_Face>* HE_Face::GetAdjacentFaces()
+std::vector<HE_Face*>* HE_Face::GetAdjacentFaces()
 {
-	std::vector<HE_Face>* facesList = new std::vector<HE_Face>();
+	std::vector<HE_Face*>* facesList = new std::vector<HE_Face*>();
 	if (Edge->Face != nullptr)
 	{
-		facesList->push_back(*Edge->Face);
+		facesList->push_back(Edge->Face);
 	}
 	if (Edge->Other->Face != nullptr)
 	{
-		facesList->push_back(*Edge->Other->Face);
+		facesList->push_back(Edge->Other->Face);
 	}
 	return facesList;
 }
 
-std::vector<HE_Face>* HE_Face::GetNearestFaces()
+std::vector<HE_Face*>* HE_Face::GetNearestFaces()
 {
-	std::vector<HE_Face>* nearestFaces2 = new std::vector<HE_Face>();
+	std::vector<HE_Face*>* nearestFaces2 = new std::vector<HE_Face*>();
 	std::vector<HE_Face*>* nearestFaces = new std::vector<HE_Face*>();
 	HE_Edge* edgeInner = Edge;
 	HE_Edge* edgePrev = Edge;
@@ -254,7 +254,7 @@ std::vector<HE_Face>* HE_Face::GetNearestFaces()
 			if (it == nearestFaces->end())
 			{
 				nearestFaces->push_back(edgeInner->Other->Face);
-                nearestFaces2->push_back(*edgeInner->Other->Face);
+                nearestFaces2->push_back(edgeInner->Other->Face);
 				faces++;
 			}
 		}
@@ -271,15 +271,15 @@ std::vector<HE_Face>* HE_Face::GetNearestFaces()
 /// Get all the edges around the current Face.
 /// </summary>
 /// <returns></returns>
-std::vector<HE_Edge>* HE_Face::GetEdges()
+std::vector<HE_Edge*>* HE_Face::GetEdges()
 {
-	std::vector<HE_Edge>* edgesList = new std::vector<HE_Edge>();
+	std::vector<HE_Edge*>* edgesList = new std::vector<HE_Edge*>();
 	HE_Face* face = this;
 	HE_Edge* edge = face->Edge;
 
 	do
 	{
-		edgesList->push_back(*edge);
+		edgesList->push_back(edge);
 
 		edge = edge->Next;
 

@@ -35,9 +35,9 @@ public:
 	/// Applies a transformation matrix to all verticies in the face.
 	/// </summary>
 	/// <param name="tranform"></param>
-	void Transform(Matrix4 tranform);
+	void Transform(Matrix4* tranform);
 
-	Vector3 CenterOfMass();
+	Vector3f* CenterOfMass();
 
 	void ConnectTo(HE_Face* other);
 
@@ -83,11 +83,11 @@ public:
 
 	//Triangle GetPrimitive();
 
-	std::vector<HE_Vertex>* GetVertexes();
+	std::vector<HE_Vertex*>* GetVertexes();
 
-	std::vector<Vector3>* GetVerticies();
+	std::vector<Vector3f*>* GetVerticies();
 
-	std::vector<Vector3>* GetNormals();
+	std::vector<Vector3f*>* GetNormals();
 
 	//static HE_Face* GetFace(IndexedTriangleSet* triangleSet, int faceIndex);
 
@@ -103,17 +103,17 @@ public:
 	/// </summary>
 	void GetAdjacentFaces(HE_Face* face1, HE_Face* face2);
 
-	std::vector<HE_Face>* GetAdjacentFaces();
+	std::vector<HE_Face*>* GetAdjacentFaces();
 
-	std::vector<HE_Face>* GetNearestFaces();
+	std::vector<HE_Face*>* GetNearestFaces();
 
 	/// <summary>
 	/// Get all the edges around the current Face.
 	/// </summary>
 	/// <returns></returns>
-	std::vector<HE_Edge>* GetEdges();
+	std::vector<HE_Edge*>* GetEdges();
 
-	//std::vector<Triangle>* GetTriangles();
+	//std::vector<Triangle*>* GetTriangles();
 };
 
 #endif

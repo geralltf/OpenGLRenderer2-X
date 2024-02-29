@@ -16,17 +16,23 @@ private:
 	Vao* vao;
 	ShaderProgram* shader;
 
-	UniformMatrix* projectionMatrix = new UniformMatrix("projectionMatrix");
-	UniformMatrix* viewMatrix = new UniformMatrix("viewMatrix");
-	UniformSampler* cubeMap = new UniformSampler("cubemap");
+	UniformMatrix* projectionMatrix = new UniformMatrix(new std::string("projectionMatrix"));
+	UniformMatrix* viewMatrix = new UniformMatrix(new std::string("viewMatrix"));
+	UniformSampler* cubeMap = new UniformSampler(new std::string("cubemap"));
+
+	unsigned int _TEST_VAO;
+	unsigned int _TEST_EBO;
+	unsigned int _TEST_VBO;
+	unsigned int _TEST_VBO_TEXCOORD;
+	unsigned int _TEST_VBO_NORMAL;
 public:
-	Skybox(std::string texFileRightPosX, std::string texFileLeftNegX,
-		std::string texFileTopPosY, std::string texFileBottomNegY,
-		std::string texFileBackPosZ, std::string texFileFrontNegZ);
+	Skybox(std::string* texFileRightPosX, std::string* texFileLeftNegX,
+		std::string* texFileTopPosY, std::string* texFileBottomNegY,
+		std::string* texFileBackPosZ, std::string* texFileFrontNegZ);
 
 	~Skybox();
 
-	void Render(Transform cameraTransform, Matrix4 projection);
+	void Render(Transform* cameraTransform, Matrix4* projection);
 };
 
 #endif

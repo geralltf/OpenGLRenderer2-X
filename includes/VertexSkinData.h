@@ -7,16 +7,16 @@
 class VertexSkinData 
 {
 public:
-	std::vector<int> jointIds = std::vector<int>();
-	std::vector<float> weights = std::vector<float>();
+	std::vector<int>* jointIds = new std::vector<int>();
+	std::vector<float>* weights = new std::vector<float>();
 
 	void addJointEffect(int jointId, float weight);
 	void limitJointNumber(int max);
 
 private:
 	void fillEmptyWeights(int max);
-	float saveTopWeights(std::vector<float>& topWeightsArray);
-	void refillWeightList(std::vector<float>& topWeights, float total);
+	float saveTopWeights(std::vector<float>** topWeightsArray);
+	void refillWeightList(std::vector<float>** topWeights, float total);
 	void removeExcessJointIds(int max);
 
 };

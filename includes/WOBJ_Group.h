@@ -10,10 +10,10 @@
 class WOBJ_Group
 {
 public:
-	std::string GroupName;
+	std::string* GroupName;
 	int BeginIndex;
 	int EndIndex;
-	std::vector<int>* Indicies;
+	std::vector<int*>* Indicies;
 	PolygonType Polygon;
 
 	WOBJ_Group()

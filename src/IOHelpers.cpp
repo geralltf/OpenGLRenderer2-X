@@ -35,11 +35,11 @@ bool ReadShaderSource(const std::string file_name, std::string& shader_str)
 	return true;
 }
 
-int GetDirectoryFiles(std::string path, std::vector<std::string>& files)
+int GetDirectoryFiles(std::string path, std::vector<std::string*>& files)
 {
 	for (const auto& file : std::filesystem::directory_iterator(path))
 	{
-		files.push_back(std::string(file.path().u8string()));
+		files.push_back(new std::string(file.path().generic_string()));
 	}
 
 	return files.size();
@@ -47,7 +47,7 @@ int GetDirectoryFiles(std::string path, std::vector<std::string>& files)
 
 std::string GetFileExtension(std::string filename)
 {
-	return std::string(std::filesystem::path(filename).extension().u8string());
+	return std::string(std::filesystem::path(filename).extension().generic_string());
 }
 
 std::string ToLowerCaseCopy(const std::string input)

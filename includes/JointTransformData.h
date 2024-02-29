@@ -15,10 +15,10 @@
 class JointTransformData
 {
 public:
-	std::string jointNameId;
-	Matrix4 jointLocalTransform;
+	std::string* jointNameId;
+	Matrix4* jointLocalTransform;
 
-	JointTransformData(std::string jointNameId, Matrix4 jointLocalTransform)
+	JointTransformData(std::string* jointNameId, Matrix4* jointLocalTransform)
 	{
 		this->jointNameId = jointNameId;
 		this->jointLocalTransform = jointLocalTransform;

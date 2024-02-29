@@ -102,7 +102,7 @@ public:
 	   * @return The array of model-space transforms of the joints in the current
 	   *         animation pose.
 	   */
-	std::vector<Matrix4> getJointTransforms();
+	std::vector<Matrix4*>* getJointTransforms();
 };
 
 

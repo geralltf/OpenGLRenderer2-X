@@ -162,9 +162,9 @@ void ShaderProgram::deleteShaders()
 	glDeleteShader(fragmentShaderID);
 }
 
-void ShaderProgram::storeAllUniformLocations(std::vector<Uniform*> uniforms)
+void ShaderProgram::storeAllUniformLocations(std::vector<Uniform*>* uniforms)
 {
-	for (Uniform* uniform : uniforms)
+	for (Uniform* uniform : *uniforms)
 	{
 		uniform->storeUniformLocation(programID);
 	}
@@ -181,61 +181,61 @@ void ShaderProgram::stop()
 	glUseProgram(0);
 }
 
-void ShaderProgram::setBool(std::string name, bool value)
+void ShaderProgram::setBool(std::string* name, bool value)
 {
-	glUniform1i(glGetUniformLocation(programID, name.c_str()), (int)value);
+	glUniform1i(glGetUniformLocation(programID, name->c_str()), (int)value);
 }
 
-void ShaderProgram::setInt(std::string name, int value)
+void ShaderProgram::setInt(std::string* name, int value)
 {
-	glUniform1i(glGetUniformLocation(programID, name.c_str()), value);
+	glUniform1i(glGetUniformLocation(programID, name->c_str()), value);
 }
 
-void ShaderProgram::setFloat(std::string name, float value)
+void ShaderProgram::setFloat(std::string* name, float value)
 {
-	glUniform1f(glGetUniformLocation(programID, name.c_str()), value);
+	glUniform1f(glGetUniformLocation(programID, name->c_str()), value);
 }
 
-void ShaderProgram::setVec2(std::string name, Vector2& value)
+void ShaderProgram::setVec2(std::string* name, Vector2f* value)
 {
 	//glUniform2fv(glGetUniformLocation(programID, name.c_str()), 1, &value[0]);
-	glUniform2f(glGetUniformLocation(programID, name.c_str()), value.x, value.y);
+	glUniform2f(glGetUniformLocation(programID, name->c_str()), value->x, value->y);
 }
-void ShaderProgram::setVec2(std::string name, float x, float y)
+void ShaderProgram::setVec2(std::string* name, float x, float y)
 {
-	glUniform2f(glGetUniformLocation(programID, name.c_str()), x, y);
+	glUniform2f(glGetUniformLocation(programID, name->c_str()), x, y);
 }
 
-void ShaderProgram::setVec3(std::string name, Vector3& value)
+void ShaderProgram::setVec3(std::string* name, Vector3f* value)
 {
 	//glUniform3fv(glGetUniformLocation(programID, name.c_str()), 1, &value[0]);
-	glUniform3f(glGetUniformLocation(programID, name.c_str()), value.x, value.y, value.z);
+	glUniform3f(glGetUniformLocation(programID, name->c_str()), value->x, value->y, value->z);
 }
-void ShaderProgram::setVec3(std::string name, float x, float y, float z)
+void ShaderProgram::setVec3(std::string* name, float x, float y, float z)
 {
-	glUniform3f(glGetUniformLocation(programID, name.c_str()), x, y, z);
+	glUniform3f(glGetUniformLocation(programID, name->c_str()), x, y, z);
 }
 
-void ShaderProgram::setVec4(std::string name, Vector4& value)
+void ShaderProgram::setVec4(std::string* name, Vector4f* value)
 {
 	//glUniform4fv(glGetUniformLocation(programID, name.c_str()), 1, &value[0]);
-	glUniform4f(glGetUniformLocation(programID, name.c_str()), value.x, value.y, value.z, value.w);
+	glUniform4f(glGetUniformLocation(programID, name->c_str()), value->x, value->y, value->z, value->w);
 }
-void ShaderProgram::setVec4(std::string name, float x, float y, float z, float w)
+void ShaderProgram::setVec4(std::string* name, float x, float y, float z, float w)
 {
-	glUniform4f(glGetUniformLocation(programID, name.c_str()), x, y, z, w);
+	glUniform4f(glGetUniformLocation(programID, name->c_str()), x, y, z, w);
 }
 
-void ShaderProgram::setMat3(std::string name, Matrix3& mat)
+void ShaderProgram::setMat3(std::string* name, Matrix3* mat)
 {
-	float* matArr = mat.ToArray();
-	glUniformMatrix3fv(glGetUniformLocation(programID, name.c_str()), 1, GL_FALSE, matArr);
+	float* matArr = mat->ToArray();
+	glUniformMatrix3fv(glGetUniformLocation(programID, name->c_str()), 1, GL_FALSE, matArr);
 	delete[] matArr;
 }
 
-void ShaderProgram::setMat4(std::string name, Matrix4& mat)
+void ShaderProgram::setMat4(std::string* name, Matrix4* mat)
 {
-	float* matArr = mat.ToArray();
-	glUniformMatrix4fv(glGetUniformLocation(programID, name.c_str()), 1, GL_FALSE, matArr);
+	float* matArr = mat->ToArray();
+	glUniformMatrix4fv(glGetUniformLocation(programID, name->c_str()), 1, GL_FALSE, matArr);
 	delete[] matArr;
 }

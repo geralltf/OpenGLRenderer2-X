@@ -78,7 +78,7 @@ public:
 	/// <returns>
 	/// A list of objects in the area. (For now just test points)
 	/// </returns>
-	void FindNearestObjects(AABB area, std::vector<MeshBufferVAO*>& nearestList);
+	void FindNearestObjects(AABB* area, std::vector<MeshBufferVAO*>** nearestList);
 };
 
 #endif

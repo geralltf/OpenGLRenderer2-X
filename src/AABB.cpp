@@ -6,7 +6,7 @@ AABB::AABB()
 	Empty();
 }
 
-AABB::AABB(Vector3 center, Vector3 halfSize)
+AABB::AABB(Vector3f* center, Vector3f* halfSize)
 {
 	Center = center;
 	HalfSize = halfSize;
@@ -18,41 +18,43 @@ AABB::AABB(Vector3 center, Vector3 halfSize)
 /// <summary>
 /// Get the center of the bounding box.
 /// </summary>
-Vector3 AABB::GetCenter()
+Vector3f* AABB::GetCenter()
 {
-	return (Max + Min) / 2;
+	return Vector3f::Divide((Vector3f::Add(Max, Min)), 2);
 }
 
 /// <summary>
 /// Get the size of the bounding box.
 /// </summary>
-Vector3 AABB::GetSize()
+Vector3f* AABB::GetSize()
 {
-	return Max - Min;
+	return Vector3f::Subtract(Max, Min);
 }
 
 /// <summary>
 /// Get the half size (radius vector) of the bounding box.
 /// </summary>
-Vector3 AABB::GetHalfSize()
+Vector3f* AABB::GetHalfSize()
 {
-	return GetSize() / 2; // == Max - Center.
+	Vector3f* size = GetSize();
+	size = Vector3f::Divide(size, 2.0f); // == Max - Center.
+	return size;
 }
 
 /// <summary>
 /// The minimum extent of the bounding box.
 /// </summary>
-Vector3 AABB::GetMin()
+Vector3f* AABB::GetMin()
 {
-	return Vector3(Center.x - HalfSize.x, Center.y - HalfSize.y, Center.z - HalfSize.z);
+	return new Vector3f(Center->x - HalfSize->x, Center->y - HalfSize->y, Center->z - HalfSize->z);
 }
 
 /// <summary>
 /// The maximum extent of the bounding box.
 /// </summary>
-Vector3 AABB::GetMax()
+Vector3f* AABB::GetMax()
 {
-	return Vector3(Center.x + HalfSize.x, Center.y + HalfSize.y, Center.z + HalfSize.z);
+	return new Vector3f(Center->x + HalfSize->x, Center->y + HalfSize->y, Center->z + HalfSize->z);
 }
 
 /// <summary>
@@ -60,58 +62,61 @@ Vector3 AABB::GetMax()
 /// </summary>
 void AABB::Empty()
 {
-	Center = Vector3::Zero;
-	HalfSize = Vector3::Zero;
+	Center = Vector3f::ZERO;
+	HalfSize = Vector3f::ZERO;
 
-	Min.x = Min.y = Min.z = FLT_MAX;
-	Max.x = Max.y = Max.z = -FLT_MAX;
+	Min = new Vector3f(0.0f, 0.0f, 0.0f);
+	Max = new Vector3f(0.0f, 0.0f, 0.0f);
+
+	Min->x = Min->y = Min->z = FLT_MAX;
+	Max->x = Max->y = Max->z = -FLT_MAX;
 }
 
 /// <summary>
 /// Add a point to the axis-aligned bounding box to compute the AABB.
 /// </summary>
-void AABB::Add(Vector3 point)
+void AABB::Add(Vector3f* point)
 {
-	if (point.x < Min.x) Min.x = point.x;
-	if (point.x > Max.x) Max.x = point.x;
+	if (point->x < Min->x) Min->x = point->x;
+	if (point->x > Max->x) Max->x = point->x;
 
-	if (point.y < Min.y) Min.y = point.y;
-	if (point.y > Max.y) Max.y = point.y;
+	if (point->y < Min->y) Min->y = point->y;
+	if (point->y > Max->y) Max->y = point->y;
 
-	if (point.z < Min.z) Min.z = point.z;
-	if (point.z > Max.z) Max.z = point.z;
+	if (point->z < Min->z) Min->z = point->z;
+	if (point->z > Max->z) Max->z = point->z;
 }
 
 /// <summary>
 /// Add a bounding box to compute a greater AABB.
 /// </summary>
-void AABB::Add(AABB boundingBox)
+void AABB::Add(AABB* boundingBox)
 {
-	this->Add(boundingBox.Min);
-	this->Add(boundingBox.Max);
-	this->Add(boundingBox.Center);
+	this->Add(boundingBox->Min);
+	this->Add(boundingBox->Max);
+	this->Add(boundingBox->Center);
 }
 
 /// <summary>
 /// Test if the specified point intersects this bounding box.
 /// </summary>
-bool AABB::Intersects(Vector3 point)
+bool AABB::Intersects(Vector3f* point)
 {
-	Vector3 distance = Center - point;
+	Vector3f* distance = Vector3f::Subtract(Center, point);
 
-	return (abs(distance.x) <= HalfSize.x)
-		&& (abs(distance.y) <= HalfSize.y)
-		&& (abs(distance.z) <= HalfSize.z);
+	return (abs(distance->x) <= HalfSize->x)
+		&& (abs(distance->y) <= HalfSize->y)
+		&& (abs(distance->z) <= HalfSize->z);
 }
 
 /// <summary>
 /// Test if the specified point intersects this bounding box.
 /// </summary>
-bool AABB::Intersects(Vector2 point)
+bool AABB::Intersects(Vector2f* point)
 {
-	Vector2 distance(Center.x - point.x, Center.y - point.y);
+	Vector3f* distance = Vector3f::Subtract(Center, point->xyz());
 
-	return (abs(distance.x) <= HalfSize.x) && (abs(distance.y) <= HalfSize.y);
+	return (abs(distance->x) <= HalfSize->x) && (abs(distance->y) <= HalfSize->y);
 }
 
 /// <summary>
@@ -121,17 +126,17 @@ bool AABB::Intersects(AABB* other)
 {
 	//Vector3 min(Center.x - HalfSize.x, Center.y - HalfSize.y, Center.z - HalfSize.z);
 	//Vector3 max(Center.x + HalfSize.x, Center.y + HalfSize.y, Center.z + HalfSize.z);
-	Vector3 min = Min;
-	Vector3 max = Max;
+	Vector3f* min = Min;
+	Vector3f* max = Max;
 
-	if (min.x >= other->Max.x) return false;
-	if (max.x <= other->Min.x) return false;
+	if (min->x >= other->Max->x) return false;
+	if (max->x <= other->Min->x) return false;
 
-	if (min.y >= other->Max.y) return false;
-	if (max.y <= other->Min.y) return false;
+	if (min->y >= other->Max->y) return false;
+	if (max->y <= other->Min->y) return false;
 
-	if (min.z >= other->Max.z) return false;
-	if (max.z <= other->Min.z) return false;
+	if (min->z >= other->Max->z) return false;
+	if (max->z <= other->Min->z) return false;
 
 	// There is an Overlap on both axes, so there is an intersection.
 	return true;
@@ -164,7 +169,7 @@ bool AABB::Intersects(AABB* other)
 /// <summary>
 /// Draws lines for each plane of the bounding box.
 /// </summary>
-void AABB::Debug(ColourRGBA boundsColour)
+void AABB::Debug(ColourRGBA* boundsColour)
 {
 	
 	//ColourRGBA centerColour;
@@ -172,51 +177,51 @@ void AABB::Debug(ColourRGBA boundsColour)
 	// Debug the center point.
 	//renderer.DebugPoint(Center, centerColour, 1);
 
-	Vector3 c = Center;
-	Vector3 s = HalfSize;
+	Vector3f* c = Center;
+	Vector3f* s = HalfSize;
 	// Debug the bounds of the AABB, drawing the edges of the box.
 
 	// FRONT PLANE
 	// Top.
-	Debug::DrawLine(Vector3(c.x - s.x, c.y + s.y, c.z + s.z), Vector3(c.x + s.x, c.y + s.y, c.z + s.z), boundsColour);
+	Debug::DrawLine(new Vector3f(c->x - s->x, c->y + s->y, c->z + s->z), new Vector3f(c->x + s->x, c->y + s->y, c->z + s->z), boundsColour);
 
-	// Bottom.
-	Debug::DrawLine(Vector3(c.x - s.x, c.y - s.y, c.z + s.z), Vector3(c.x + s.x, c.y - s.y, c.z + s.z), boundsColour);
+	// Bottom->
+	Debug::DrawLine(new Vector3f(c->x - s->x, c->y - s->y, c->z + s->z), new Vector3f(c->x + s->x, c->y - s->y, c->z + s->z), boundsColour);
 
-	// Left.
-	Debug::DrawLine(Vector3(c.x - s.x, c.y + s.y, c.z + s.z), Vector3(c.x - s.x, c.y - s.y, c.z + s.z), boundsColour);
+	// Left->
+	Debug::DrawLine(new Vector3f(c->x - s->x, c->y + s->y, c->z + s->z), new Vector3f(c->x - s->x, c->y - s->y, c->z + s->z), boundsColour);
 
-	// Right.
-	Debug::DrawLine(Vector3(c.x + s.x, c.y + s.y, c.z + s.z), Vector3(c.x + s.x, c.y - s.y, c.z + s.z), boundsColour);
+	// Right->
+	Debug::DrawLine(new Vector3f(c->x + s->x, c->y + s->y, c->z + s->z), new Vector3f(c->x + s->x, c->y - s->y, c->z + s->z), boundsColour);
 
 	//  DEBUG Z-axis
 
 	// BACK PLANE
-	// Top.
-	Debug::DrawLine(Vector3(c.x - s.x, c.y + s.y, c.z - s.z), Vector3(c.x + s.x, c.y + s.y, c.z - s.z), boundsColour);
+	// Top->
+	Debug::DrawLine(new Vector3f(c->x - s->x, c->y + s->y, c->z - s->z), new Vector3f(c->x + s->x, c->y + s->y, c->z - s->z), boundsColour);
 
-	// Bottom.
-	Debug::DrawLine(Vector3(c.x - s.x, c.y - s.y, c.z - s.z), Vector3(c.x + s.x, c.y - s.y, c.z - s.z), boundsColour);
+	// Bottom->
+	Debug::DrawLine(new Vector3f(c->x - s->x, c->y - s->y, c->z - s->z), new Vector3f(c->x + s->x, c->y - s->y, c->z - s->z), boundsColour);
 
-	// Left.
-	Debug::DrawLine(Vector3(c.x - s.x, c.y + s.y, c.z - s.z), Vector3(c.x - s.x, c.y - s.y, c.z - s.z), boundsColour);
+	// Left->
+	Debug::DrawLine(new Vector3f(c->x - s->x, c->y + s->y, c->z - s->z), new Vector3f(c->x - s->x, c->y - s->y, c->z - s->z), boundsColour);
 
-	// Right.
-	Debug::DrawLine(Vector3(c.x + s.x, c.y + s.y, c.z - s.z), Vector3(c.x + s.x, c.y - s.y, c.z - s.z), boundsColour);
+	// Right->
+	Debug::DrawLine(new Vector3f(c->x + s->x, c->y + s->y, c->z - s->z), new Vector3f(c->x + s->x, c->y - s->y, c->z - s->z), boundsColour);
 
 	// LEFT PLANE
-	// top left edge front to back.
-	Debug::DrawLine(Vector3(c.x - s.x, c.y + s.y, c.z + s.z), Vector3(c.x - s.x, c.y + s.y, c.z - s.z), boundsColour);
+	// top left edge front to back->
+	Debug::DrawLine(new Vector3f(c->x - s->x, c->y + s->y, c->z + s->z), new Vector3f(c->x - s->x, c->y + s->y, c->z - s->z), boundsColour);
 
-	// bottom left edge front to back.
-	Debug::DrawLine(Vector3(c.x - s.x, c.y - s.y, c.z + s.z), Vector3(c.x - s.x, c.y - s.y, c.z - s.z), boundsColour);
+	// bottom left edge front to back->
+	Debug::DrawLine(new Vector3f(c->x - s->x, c->y - s->y, c->z + s->z), new Vector3f(c->x - s->x, c->y - s->y, c->z - s->z), boundsColour);
 
 	// RIGHT PLANE
-	//top right edge front to back.
-	Debug::DrawLine(Vector3(c.x + s.x, c.y + s.y, c.z + s.z), Vector3(c.x + s.x, c.y + s.y, c.z - s.z), boundsColour);
+	//top right edge front to back->
+	Debug::DrawLine(new Vector3f(c->x + s->x, c->y + s->y, c->z + s->z), new Vector3f(c->x + s->x, c->y + s->y, c->z - s->z), boundsColour);
 
-	// bottom right edge front to back.
-	Debug::DrawLine(Vector3(c.x + s.x, c.y - s.y, c.z + s.z), Vector3(c.x + s.x, c.y - s.y, c.z - s.z), boundsColour);
+	// bottom right edge front to back->
+	Debug::DrawLine(new Vector3f(c->x + s->x, c->y - s->y, c->z + s->z), new Vector3f(c->x + s->x, c->y - s->y, c->z - s->z), boundsColour);
 
 
 }

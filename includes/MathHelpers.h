@@ -5,95 +5,157 @@
 #include "Quaternion.h"
 #include "Matrix4.h"
 #include "Matrix3.h"
-#include "Vector4.h"
-#include "Vector3.h"
+#include "Vector4f.h"
+#include "Vector3f.h"
 #include "Vector2i.h"
-#include "Vector2.h"
+#include "Vector2f.h"
 
-//namespace ath
-//{
-	enum TexelMode
+enum TexelMode
+{
+	TexelMode_Clamp,
+	TexelMode_Wrap
+};
+
+void TriangleTangentSpace(Vector3f* v0, Vector3f* v1, Vector3f* v2,
+	Vector2f* uv1, Vector2f* uv2, Vector2f* uv3,
+	Vector3f** tangent, Vector3f** bitangent);
+
+//void ComputeTangentBasis(const Vector3f* P0, const Vector3f* P1, const Vector3f* P2,
+//	const Vector2f* UV0, const Vector2f* UV1, const Vector2f* UV2,
+//	Vector3f* normal, Vector3f** tangent, Vector3f** binormal);
+inline void ComputeTangentBasis(Vector3f* P0, Vector3f* P1, Vector3f* P2,
+	Vector2f* UV0, Vector2f* UV1, Vector2f* UV2,
+	Vector3f* normal, Vector3f** tangent, Vector3f** binormal)
+{
+	Vector3f* e0 = Vector3f::Subtract(P1, P0);
+	Vector3f* e1 = Vector3f::Subtract(P2, P0);
+
+	normal = Vector3f::Cross(e0, e1);
+	//using Eric Lengyel's approach with a few modifications
+	//from Mathematics for 3D Game Programmming and Computer Graphics
+	// want to be able to trasform a vector in Object Space to Tangent Space
+	// such that the x-axis cooresponds to the 's' direction and the
+	// y-axis corresponds to the 't' direction, and the z-axis corresponds
+	// to <0,0,1>, straight up out of the texture map
+
+	//let P = v1 - v0
+	Vector3f* P = Vector3f::Subtract(P1, P0);
+	//let Q = v2 - v0
+	Vector3f* Q = Vector3f::Subtract(P2, P0);
+	float s1 = UV1->x - UV0->x;
+	float t1 = UV1->y - UV0->y;
+	float s2 = UV2->x - UV0->x;
+	float t2 = UV2->y - UV0->y;
+
+
+	//we need to solve the equation
+	// P = s1*T + t1*B
+	// Q = s2*T + t2*B
+	// for T and B
+
+
+	//this is a linear system with six unknowns and six equatinos, for TxTyTz BxByBz
+	//[px,py,pz] = [s1,t1] * [Tx,Ty,Tz]
+	// qx,qy,qz     s2,t2     Bx,By,Bz
+
+	//multiplying both sides by the inverse of the s,t matrix gives
+	//[Tx,Ty,Tz] = 1/(s1t2-s2t1) *  [t2,-t1] * [px,py,pz]
+	// Bx,By,Bz                      -s2,s1	    qx,qy,qz  
+
+	//solve this for the unormalized T and B to get from tangent to object space
+
+	float tmp = 0.0f;
+	if (fabsf(s1 * t2 - s2 * t1) <= 0.0001f)
 	{
-		TexelMode_Clamp,
-		TexelMode_Wrap
-	};
-
-	void TriangleTangentSpace(Vector3 v0, Vector3 v1, Vector3 v2,
-		Vector2 uv1, Vector2 uv2, Vector2 uv3,
-		Vector3& tangent, Vector3& bitangent);
-
-	void ComputeTangentBasis(const Vector3& P0, const Vector3& P1, const Vector3& P2,
-		const Vector2& UV0, const Vector2& UV1, const Vector2& UV2,
-		Vector3& normal, Vector3& tangent, Vector3& binormal);
-
-	float cube_root(float value);
-
-	Vector3 ScreenSpaceToOrthographic(Vector2i screen, Vector2 screenSize, Vector2 objSize);
-	Vector3 ScreenSpaceToOrthographic(Vector2 screenNormalised, Vector2 screenSize, Vector2 objSize);
-
-	float ClampF(float value, float min, float max);
-
-	Vector2 Clamp(Vector2 uv);
-
-	Vector2 Wrap(Vector2 uv);
-
-	Vector2 NormaliseTexelCoord(Vector2 uv, TexelMode texelMode);
-
-	Vector2i ClampImageSpace(Vector2i texelCoord, Vector2i rectBounds);
-
-
-	class MathHelpers
+		tmp = 1.0f;
+	}
+	else
 	{
-	public:
-	    static ColourRGBA ToColour(Vector4 v);
-        static Vector4 ToVector(ColourRGBA c);
-		static Vector3 ConvertColourToNormalSpace(Vector3 colour);
-		static Vector3 ConvertNormalToColourSpace(Vector3 normal);
-		static Vector3 RandomPointInCube();
-		static Vector3 RandomPointInUnitSphere();
-		static Vector3 RandomPointInFrontOfPlane();
-		static Vector3 GetRandomPointInFrontOfPlane();
-		static Vector3 GetRandomPointInFrontOfPlane(float zOffset);
-		static Vector3 GetRandomPointInCube();
-		static int Clamp(int value, int min, int max);
-		static float Clamp(float value, float min, float max);
+		tmp = 1.0f / (s1 * t2 - s2 * t1);
+	}
 
-		//TODO: kinda belongs in each vector class
-		static Vector3 ClampVector(Vector3 v, float min, float max);
-		static Vector3 ClampVector(Vector3 v, float min, Vector3 max);
-		static Vector2 ClampVector(Vector2 v, float min, float max);
-		static Vector2 ClampVector(Vector2 v, float min, Vector2 max);
-		static Vector2i ClampVector(Vector2i v, int min, int max);
-		static Vector2i ClampVector(Vector2i v, int min, Vector2i max);
-		//TODO: kinda belongs in each vector class
-		static float Lerp(float left, float right, float ratio);
+	(*tangent)->x = (t2 * P->x - t1 * Q->x) * tmp;
+	(*tangent)->y = (t2 * P->y - t1 * Q->y) * tmp;
+	(*tangent)->z = (t2 * P->z - t1 * Q->z) * tmp;
 
-		static Vector2 Lerp(Vector2 left, Vector2 right, float ratio);
-		static Vector3 Lerp(Vector3 left, Vector3 right, float ratio);
+	//(*tangent) = (*tangent) * tmp;
 
-		//static Vector4 Lerp(Vector4 left, Vector4 right, float ratio);
+	(*binormal)->x = (s1 * Q->x - s2 * P->x) * tmp;
+	(*binormal)->y = (s1 * Q->y - s2 * P->y) * tmp;
+	(*binormal)->z = (s1 * Q->z - s2 * P->z) * tmp;
 
-		/// <summary>
-		/// Normalise value between -1 and 1.
-		/// </summary>
-		static float NormaliseBetweenNegPve(float value);
+	//binormal = binormal * tmp;
 
-		static float RandomFloat();
+	normal = normal->Normalise();
+	Vector3f* t = *tangent;
+	Vector3f* bitangent = *binormal;
+	(*tangent) = t->Normalise();
+	(*binormal) = bitangent->Normalise();
+}
 
-		static float Range(float min, float max);
+float cube_root(float value);
 
-		static Vector3 GetRandomPointInSphere()
-		{
-			return GetRandomPointInSphere(1.0f);
-		}
+Vector3f* ScreenSpaceToOrthographic(Vector2i* screen, Vector2f* screenSize, Vector2f* objSize);
+Vector3f* ScreenSpaceToOrthographic(Vector2f* screenNormalised, Vector2f* screenSize, Vector2f* objSize);
 
-		static Vector3 GetRandomPointInSphere(float radius);
+float ClampF(float value, float min, float max);
 
-		static Vector3 GetPointInSphere(float radius, float theta, float phiValue);
-	};
+Vector2f* Clamp(Vector2f* uv);
+
+Vector3f* Wrap(Vector2f* uv);
+
+Vector2f* NormaliseTexelCoord(Vector2f* uv, TexelMode texelMode);
+
+Vector2i* ClampImageSpace(Vector2i* texelCoord, Vector2i* rectBounds);
 
 
+class MathHelpers
+{
+public:
+	static ColourRGBA* ToColour(Vector4f* v);
+    static Vector4f* ToVector(ColourRGBA* c);
+	static Vector3f* ConvertColourToNormalSpace(Vector3f* colour);
+	static Vector3f* ConvertNormalToColourSpace(Vector3f* normal);
+	static Vector3f* RandomPointInCube();
+	static Vector3f* RandomPointInUnitSphere();
+	static Vector3f* RandomPointInFrontOfPlane();
+	static Vector3f* GetRandomPointInFrontOfPlane();
+	static Vector3f* GetRandomPointInFrontOfPlane(float zOffset);
+	static Vector3f* GetRandomPointInCube();
+	static int Clamp(int value, int min, int max);
+	static float Clamp(float value, float min, float max);
 
-//}
+	//TODO: kinda belongs in each vector class
+	static Vector3f* ClampVector(Vector3f* v, float min, float max);
+	static Vector3f* ClampVector(Vector3f* v, float min, Vector3f* max);
+	static Vector2f* ClampVector(Vector2f* v, float min, float max);
+	static Vector2f* ClampVector(Vector2f* v, float min, Vector2f* max);
+	static Vector2i* ClampVector(Vector2i* v, int min, int max);
+	static Vector2i* ClampVector(Vector2i* v, int min, Vector2i* max);
+	//TODO: kinda belongs in each vector class
+	static float Lerp(float left, float right, float ratio);
 
+	static Vector2f* Lerp(Vector2f* left, Vector2f* right, float ratio);
+	static Vector3f* Lerp(Vector3f* left, Vector3f* right, float ratio);
+
+	//static Vector4 Lerp(Vector4 left, Vector4 right, float ratio);
+
+	/// <summary>
+	/// Normalise value between -1 and 1.
+	/// </summary>
+	static float NormaliseBetweenNegPve(float value);
+
+	static float RandomFloat();
+
+	static float Range(float min, float max);
+
+	static Vector3f* GetRandomPointInSphere()
+	{
+		return GetRandomPointInSphere(1.0f);
+	}
+
+	static Vector3f* GetRandomPointInSphere(float radius);
+
+	static Vector3f* GetPointInSphere(float radius, float theta, float phiValue);
+};
 #endif

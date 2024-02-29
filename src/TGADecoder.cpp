@@ -37,13 +37,13 @@ TGADecoder& TGADecoder::operator =(const TGADecoder& img) {
 	return *this;
 }
 
-bool TGADecoder::read_tga_file(const std::string filename) {
+bool TGADecoder::read_tga_file(const std::string* filename) {
 	if (data) delete[] data;
 	data = nullptr;
 	std::ifstream in;
-	in.open(filename.c_str(), std::ios::binary);
+	in.open(filename->c_str(), std::ios::binary);
 	if (!in.is_open()) {
-		std::cerr << "can't open file " << filename << "\n";
+		std::cerr << "can't open file " << *filename << "\n";
 		in.close();
 		return false;
 	}
@@ -149,12 +149,12 @@ bool TGADecoder::load_rle_data(std::ifstream& in) {
 	return true;
 }
 
-bool TGADecoder::write_tga_file(const std::string filename, bool rle) {
+bool TGADecoder::write_tga_file(const std::string* filename, bool rle) {
 	byte developer_area_ref[4] = { 0, 0, 0, 0 };
 	byte extension_area_ref[4] = { 0, 0, 0, 0 };
 	byte footer[18] = { 'T','R','U','E','V','I','S','I','O','N','-','X','F','I','L','E','.','\0' };
 	std::ofstream out;
-	out.open(filename.c_str(), std::ios::binary);
+	out.open(filename->c_str(), std::ios::binary);
 	if (!out.is_open()) {
 		std::cerr << "can't open file " << filename << "\n";
 		out.close();

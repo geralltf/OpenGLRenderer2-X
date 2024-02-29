@@ -41,8 +41,8 @@ public:
 	TGADecoder();
 	TGADecoder(int w, int h, int bpp);
 	TGADecoder(const TGADecoder& img);
-	bool read_tga_file(const std::string filename);
-	bool write_tga_file(const std::string filename, bool rle = true);
+	bool read_tga_file(const std::string* filename);
+	bool write_tga_file(const std::string* filename, bool rle = true);
 	bool flip_horizontally();
 	bool flip_vertically();
 	bool scale(int w, int h);

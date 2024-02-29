@@ -21,34 +21,34 @@ class GeometryLoader
 {
 private:
 	pugi::xpath_node meshData;
-	std::vector<VertexSkinData> vertexWeights;
+	std::vector<VertexSkinData*>* vertexWeights;
 	bool hasNormals;
 	bool hasTexCoords;
 
-	std::vector<GLfloat> verticesArray;
+	std::vector<GLfloat>* verticesArray;
 	int verticiesCount;
-	std::vector<GLfloat> normalsArray;
+	std::vector<GLfloat>* normalsArray;
 	int normalsCount;
-	std::vector<GLfloat> texturesArray;
+	std::vector<GLfloat>* texturesArray;
 	int texCoordsCount;
-	std::vector<int> indicesArray;
+	std::vector<unsigned int>* indicesArray;
 	int indicesCount;
-	std::vector<int> jointIdsArray;
+	std::vector<unsigned int>* jointIdsArray;
 	int jointsCount;
-	std::vector<GLfloat> weightsArray;
+	std::vector<GLfloat>* weightsArray;
 	int weightsCount;
-	std::vector<GLfloat> vertexTangents;
+	std::vector<GLfloat>* vertexTangents;
 	int vertexTangentsCount;
-	std::vector<GLfloat> vertexBiTangents;
+	std::vector<GLfloat>* vertexBiTangents;
 	int vertexBiTangentsCount;
 
-	std::vector<Vertex*> vertices;
-	std::vector<Vector2> textures;
-	std::vector<Vector3> normals;
-	std::vector<int> indices;
+	std::vector<Vertex*>* vertices;
+	std::vector<Vector2f*>* textures;
+	std::vector<Vector3f*>* normals;
+	std::vector<unsigned int>* indices;
 
 public:
-	GeometryLoader(pugi::xpath_node geometryNode, std::vector<VertexSkinData> vertexWeights);
+	GeometryLoader(pugi::xpath_node geometryNode, std::vector<VertexSkinData*>* vertexWeights);
 	MeshData* extractModelData();
 
 private:
@@ -59,7 +59,7 @@ private:
 	void readTextureCoords();
 	void assembleVertices();
 	Vertex* processVertex(int posIndex, int normIndex, int texIndex);
-	std::vector<int> convertIndicesListToArray();
+	std::vector<unsigned int>* convertIndicesListToArray();
 	float convertDataToArrays();
 	Vertex* dealWithAlreadyProcessedVertex(Vertex* previousVertex, int newTextureIndex, int newNormalIndex);
 	void initArrays();

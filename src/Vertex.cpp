@@ -1,11 +1,11 @@
 #include "Vertex.h"
 
-VertexSkinData Vertex::getWeightsData()
+VertexSkinData* Vertex::getWeightsData()
 {
 	return weightsData;
 }
 
-void Vertex::addTangent(Vector3 tangent)
+void Vertex::addTangent(Vector3f* tangent)
 {
 	tangents->push_back(tangent);
 }
@@ -17,12 +17,12 @@ void Vertex::averageTangents()
 	}
 	for (auto const& tangent : *tangents)
 	{
-		averagedTangent = Vector3::Add(averagedTangent, tangent);
+		averagedTangent = Vector3f::Add(averagedTangent, tangent);
 	}
-	averagedTangent = averagedTangent.Normalise();
+	averagedTangent = averagedTangent->Normalise();
 }
 
-Vector3 Vertex::getAverageTangent()
+Vector3f* Vertex::getAverageTangent()
 {
 	return averagedTangent;
 }
@@ -57,7 +57,7 @@ void Vertex::setNormalIndex(int normalIndex)
 	this->normalIndex = normalIndex;
 }
 
-Vector3 Vertex::getPosition()
+Vector3f* Vertex::getPosition()
 {
 	return position;
 }

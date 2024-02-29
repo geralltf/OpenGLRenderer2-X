@@ -2,7 +2,7 @@
 #include "AnimatedModelLoader.h"
 #include "MathHelpers.h"
 
-GeometryLoader::GeometryLoader(pugi::xpath_node geometryNode, std::vector<VertexSkinData> vertexWeights)
+GeometryLoader::GeometryLoader(pugi::xpath_node geometryNode, std::vector<VertexSkinData*>* vertexWeights)
 {
 	this->vertexWeights = vertexWeights;
 	this->meshData = geometryNode.node().child("geometry").child("mesh");
@@ -43,19 +43,19 @@ void GeometryLoader::readPositions()
 		float x = std::stof(posData[i * 3]);
 		float y = std::stof(posData[i * 3 + 1]);
 		float z = std::stof(posData[i * 3 + 2]);
-		Vector4 position = Vector4(x, y, z, 1);
+		Vector4f* position = new Vector4f(x, y, z, 1);
 
 		//because in Blender z is up, but in our game y is up.
 		position = Matrix4::TransformVector(AnimatedModelLoader::CORRECTION, position);
 
-		if(vertexWeights.size() == 0)
+		if(vertexWeights->size() == 0)
 		{
-			VertexSkinData empty;
-			vertices.push_back(new Vertex(vertices.size(), Vector3(position.x, position.y, position.z), empty));
+			VertexSkinData* empty = new VertexSkinData();
+			vertices->push_back(new Vertex(vertices->size(), new Vector3f(position->x, position->y, position->z), empty));
 		}
 		else
 		{
-			vertices.push_back(new Vertex(vertices.size(), Vector3(position.x, position.y, position.z), vertexWeights.at(vertices.size())));
+			vertices->push_back(new Vertex(vertices->size(), new Vector3f(position->x, position->y, position->z), vertexWeights->at(vertices->size())));
 		}
 	}
 }
@@ -99,12 +99,12 @@ void GeometryLoader::readNormals()
 			float x = std::stof(normData[i * 3]);
 			float y = std::stof(normData[i * 3 + 1]);
 			float z = std::stof(normData[i * 3 + 2]);
-			Vector4 norm = Vector4(x, y, z, 0.0f);
+			Vector4f* norm = new Vector4f(x, y, z, 0.0f);
 
 			//because in Blender z is up, but in our game y is up.
 			norm = Matrix4::TransformVector(AnimatedModelLoader::CORRECTION, norm);
 
-			normals.push_back(Vector3(norm.x, norm.y, norm.z));
+			normals->push_back(new Vector3f(norm->x, norm->y, norm->z));
 		}
 	}
 }
@@ -148,7 +148,7 @@ void GeometryLoader::readTextureCoords()
 			float s = std::stof(texData[i * 2]);
 			float t = std::stof(texData[i * 2 + 1]);
 
-			textures.push_back(Vector2(s, t));
+			textures->push_back(new Vector2f(s, t));
 		}
 	}
 }
@@ -192,12 +192,12 @@ void GeometryLoader::assembleVertices()
 
 Vertex* GeometryLoader::processVertex(int posIndex, int normIndex, int texIndex)
 {
-	Vertex* currentVertex = vertices.at(posIndex);
+	Vertex* currentVertex = vertices->at(posIndex);
 	if (!currentVertex->isSet())
 	{
 		currentVertex->setTextureIndex(texIndex);
 		currentVertex->setNormalIndex(normIndex);
-		indices.push_back(posIndex);
+		indices->push_back(posIndex);
 
 		return currentVertex;
 	}
@@ -207,41 +207,41 @@ Vertex* GeometryLoader::processVertex(int posIndex, int normIndex, int texIndex)
 	}
 }
 
-std::vector<int> GeometryLoader::convertIndicesListToArray()
+std::vector<unsigned int>* GeometryLoader::convertIndicesListToArray()
 {
-	this->indicesCount = indices.size();
+	this->indicesCount = indices->size();
 	this->indicesArray = indices;
 	return indicesArray;
 }
 
 float GeometryLoader::convertDataToArrays()
 {
-	Vector3 tangent;
-	Vector3 bitangent;
+	Vector3f* tangent;
+	Vector3f* bitangent;
 	float furthestPoint = 0;
-	for (int i = 0; i < vertices.size(); i++)
+	for (int i = 0; i < vertices->size(); i++)
 	{
-		Vertex* currentVertex = vertices.at(i);
+		Vertex* currentVertex = vertices->at(i);
 		if (currentVertex->getLength() > furthestPoint) 
 		{
 			furthestPoint = currentVertex->getLength();
 		}
-		Vector3 position = currentVertex->getPosition();
-		verticesArray.push_back(position.x);
-		verticesArray.push_back(position.y);
-		verticesArray.push_back(position.z);
+		Vector3f* position = currentVertex->getPosition();
+		verticesArray->push_back(position->x);
+		verticesArray->push_back(position->y);
+		verticesArray->push_back(position->z);
 
 		if (hasTexCoords)
 		{
-			Vector2 textureCoord = textures.at(currentVertex->getTextureIndex());
+			Vector2f* textureCoord = textures->at(currentVertex->getTextureIndex());
 
-			texturesArray.push_back(textureCoord.x);
-			texturesArray.push_back(textureCoord.y);
+			texturesArray->push_back(textureCoord->x);
+			texturesArray->push_back(textureCoord->y);
 		}
 		else 
 		{
-			texturesArray.push_back(0);
-			texturesArray.push_back(0);
+			texturesArray->push_back(0);
+			texturesArray->push_back(0);
 		}
 
 		//// Retrive normals from baked texture instead
@@ -269,86 +269,86 @@ float GeometryLoader::convertDataToArrays()
 
 		if (hasNormals)
 		{
-			Vector3 normalVector = normals.at(currentVertex->getNormalIndex());
+			Vector3f* normalVector = normals->at(currentVertex->getNormalIndex());
 
-			normalsArray.push_back(normalVector.x);
-			normalsArray.push_back(normalVector.y);
-			normalsArray.push_back(normalVector.z);
+			normalsArray->push_back(normalVector->x);
+			normalsArray->push_back(normalVector->y);
+			normalsArray->push_back(normalVector->z);
 		}
 		
-		VertexSkinData weights = currentVertex->getWeightsData();
+		VertexSkinData* weights = currentVertex->getWeightsData();
 
-		if(weights.jointIds.size() > 0)
+		if(weights->jointIds->size() > 0)
 		{
-			jointIdsArray.push_back(weights.jointIds.at(0));
-			jointIdsArray.push_back(weights.jointIds.at(1));
-			jointIdsArray.push_back(weights.jointIds.at(2));
+			jointIdsArray->push_back(weights->jointIds->at(0));
+			jointIdsArray->push_back(weights->jointIds->at(1));
+			jointIdsArray->push_back(weights->jointIds->at(2));
 		}
-		if (weights.weights.size() > 0)
+		if (weights->weights->size() > 0)
 		{
-			weightsArray.push_back(weights.weights.at(0));
-			weightsArray.push_back(weights.weights.at(1));
-			weightsArray.push_back(weights.weights.at(2));
+			weightsArray->push_back(weights->weights->at(0));
+			weightsArray->push_back(weights->weights->at(1));
+			weightsArray->push_back(weights->weights->at(2));
 		}
 	}
 
-	vertexTangents = std::vector<GLfloat>(vertices.size() * 3);
-	vertexBiTangents = std::vector<GLfloat>(vertices.size() * 3);
+	vertexTangents = new std::vector<GLfloat>(vertices->size() * 3);
+	vertexBiTangents = new std::vector<GLfloat>(vertices->size() * 3);
 
 	if (hasTexCoords)
 	{
 		int i;
 		int j;
-		for (i = 0; i < indices.size(); i++)
+		for (i = 0; i < indices->size(); i++)
 		{
 			int faceIndex = i % 3;
 
 			if (faceIndex == 0)
 			{
-				int ind0 = indices.at(i);
-				int ind1 = indices.at(i + 1);
-				int ind2 = indices.at(i + 2);
+				int ind0 = indices->at(i);
+				int ind1 = indices->at(i + 1);
+				int ind2 = indices->at(i + 2);
 
-				Vertex* cv0 = vertices.at(ind0);
-				Vertex* cv1 = vertices.at(ind1);
-				Vertex* cv2 = vertices.at(ind2);
+				Vertex* cv0 = vertices->at(ind0);
+				Vertex* cv1 = vertices->at(ind1);
+				Vertex* cv2 = vertices->at(ind2);
 
-				Vector3 v0 = cv0->getPosition();
-				Vector3 v1 = cv1->getPosition();
-				Vector3 v2 = cv2->getPosition();
+				Vector3f* v0 = cv0->getPosition();
+				Vector3f* v1 = cv1->getPosition();
+				Vector3f* v2 = cv2->getPosition();
 
-				Vector2 t0 = textures.at(cv0->getTextureIndex());
-				Vector2 t1 = textures.at(cv1->getTextureIndex());
-				Vector2 t2 = textures.at(cv2->getTextureIndex());
+				Vector2f* t0 = textures->at(cv0->getTextureIndex());
+				Vector2f* t1 = textures->at(cv1->getTextureIndex());
+				Vector2f* t2 = textures->at(cv2->getTextureIndex());
 
 				// Compute the Tangents and Bitangents
-				TriangleTangentSpace(v0, v1, v2, t0, t1, t2, tangent, bitangent);
+				TriangleTangentSpace(v0, v1, v2, t0, t1, t2, &tangent, &bitangent);
 
 
-				vertexTangents[ind0 * 3] = tangent.x;
-				vertexTangents[ind0 * 3 + 1] = tangent.y;
-				vertexTangents[ind0 * 3 + 2] = tangent.z;
+				(*vertexTangents)[ind0 * 3] = tangent->x;
+				(*vertexTangents)[ind0 * 3 + 1] = tangent->y;
+				(*vertexTangents)[ind0 * 3 + 2] = tangent->z;
 
-				vertexTangents[ind1 * 3] = tangent.x;
-				vertexTangents[ind1 * 3 + 1] = tangent.y;
-				vertexTangents[ind1 * 3 + 2] = tangent.z;
+				(*vertexTangents)[ind1 * 3] = tangent->x;
+				(*vertexTangents)[ind1 * 3 + 1] = tangent->y;
+				(*vertexTangents)[ind1 * 3 + 2] = tangent->z;
 
-				vertexTangents[ind2 * 3] = tangent.x;
-				vertexTangents[ind2 * 3 + 1] = tangent.y;
-				vertexTangents[ind2 * 3 + 2] = tangent.z;
+				(*vertexTangents)[ind2 * 3] = tangent->x;
+				(*vertexTangents)[ind2 * 3 + 1] = tangent->y;
+				(*vertexTangents)[ind2 * 3 + 2] = tangent->z;
 
 
-				vertexBiTangents[ind0 * 3] = bitangent.x;
-				vertexBiTangents[ind0 * 3 + 1] = bitangent.y;
-				vertexBiTangents[ind0 * 3 + 2] = bitangent.z;
+				(*vertexBiTangents)[ind0 * 3] = bitangent->x;
+				(*vertexBiTangents)[ind0 * 3 + 1] = bitangent->y;
+				(*vertexBiTangents)[ind0 * 3 + 2] = bitangent->z;
 
-				vertexBiTangents[ind1 * 3] = bitangent.x;
-				vertexBiTangents[ind1 * 3 + 1] = bitangent.y;
-				vertexBiTangents[ind1 * 3 + 2] = bitangent.z;
+				(*vertexBiTangents)[ind1 * 3] = bitangent->x;
+				(*vertexBiTangents)[ind1 * 3 + 1] = bitangent->y;
+				(*vertexBiTangents)[ind1 * 3 + 2] = bitangent->z;
 
-				vertexBiTangents[ind2 * 3] = bitangent.x;
-				vertexBiTangents[ind2 * 3 + 1] = bitangent.y;
-				vertexBiTangents[ind2 * 3 + 2] = bitangent.z;
+				(*vertexBiTangents)[ind2 * 3] = bitangent->x;
+				(*vertexBiTangents)[ind2 * 3 + 1] = bitangent->y;
+				(*vertexBiTangents)[ind2 * 3 + 2] = bitangent->z;
 			}
 		}
 	}
@@ -358,8 +358,10 @@ float GeometryLoader::convertDataToArrays()
 
 Vertex* GeometryLoader::dealWithAlreadyProcessedVertex(Vertex * previousVertex, int newTextureIndex, int newNormalIndex)
 {
+	int index;
 	if (previousVertex->hasSameTextureAndNormal(newTextureIndex, newNormalIndex)) {
-		indices.push_back(previousVertex->getIndex());
+		index = previousVertex->getIndex();
+		indices->push_back(index);
 		return previousVertex;
 	}
 	else {
@@ -368,12 +370,13 @@ Vertex* GeometryLoader::dealWithAlreadyProcessedVertex(Vertex * previousVertex, 
 			return dealWithAlreadyProcessedVertex(anotherVertex, newTextureIndex, newNormalIndex);
 		}
 		else {
-			Vertex* duplicateVertex = new Vertex(vertices.size(), previousVertex->getPosition(), previousVertex->getWeightsData());
+			Vertex* duplicateVertex = new Vertex(vertices->size(), previousVertex->getPosition(), previousVertex->getWeightsData());
 			duplicateVertex->setTextureIndex(newTextureIndex);
 			duplicateVertex->setNormalIndex(newNormalIndex);
 			previousVertex->setDuplicateVertex(duplicateVertex);
-			vertices.push_back(duplicateVertex);
-			indices.push_back(duplicateVertex->getIndex());
+			vertices->push_back(duplicateVertex);
+			index = duplicateVertex->getIndex();
+			indices->push_back(index);
 			return duplicateVertex;
 		}
 
@@ -382,18 +385,18 @@ Vertex* GeometryLoader::dealWithAlreadyProcessedVertex(Vertex * previousVertex, 
 
 void GeometryLoader::initArrays()
 {
-	this->verticiesCount = vertices.size() * 3;
-	this->texCoordsCount = vertices.size() * 2;
-	this->normalsCount = vertices.size() * 3;
-	this->jointsCount = vertices.size() * 3;
-	this->weightsCount = vertices.size() * 3;
-	this->vertexTangentsCount = vertices.size() * 3;
-	this->vertexBiTangentsCount = vertices.size() * 3;
+	this->verticiesCount = vertices->size() * 3;
+	this->texCoordsCount = vertices->size() * 2;
+	this->normalsCount = vertices->size() * 3;
+	this->jointsCount = vertices->size() * 3;
+	this->weightsCount = vertices->size() * 3;
+	this->vertexTangentsCount = vertices->size() * 3;
+	this->vertexBiTangentsCount = vertices->size() * 3;
 }
 
 void GeometryLoader::removeUnusedVertices()
 {
-	for (Vertex* vertex : vertices)
+	for (Vertex* vertex : *vertices)
 	{
 		vertex->averageTangents();
 

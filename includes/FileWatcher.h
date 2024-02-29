@@ -24,7 +24,7 @@ private:
 	const unsigned int update_interval = 1000; // update interval in milliseconds
 	std::unordered_map<std::string, std::filesystem::file_time_type> paths_;
 	std::function<void(std::string, FileStatus)> action_;
-	std::thread* update_th0;
+	//std::thread* update_th0;
 	std::atomic<bool> listening_{ true };
 public:
 	std::string path_to_watch;

@@ -407,13 +407,13 @@ float Grad(int x, int y, int z, float dx, float dy, float dz)
 
 int FloorI(float val) { return (int)floorf(val); }
 
-float Noise(float x, float y, float z) { return Noise(Vector3(x, y, z)); }
+float Noise(float x, float y, float z) { return Noise(new Vector3f(x, y, z)); }
 
-float Noise(Vector3 p)
+float Noise(Vector3f* p)
 {
 	// Compute noise cell coordinates and offsets
-	int ix = FloorI(p.x), iy = FloorI(p.y), iz = FloorI(p.z);
-	float dx = p.x - ix, dy = p.y - iy, dz = p.z - iz;
+	int ix = FloorI(p->x), iy = FloorI(p->y), iz = FloorI(p->z);
+	float dx = p->x - ix, dy = p->y - iy, dz = p->z - iz;
 
 	// Compute gradient weights for each corner of 3D cube (8 verticies)
 	ix &= (256 - 1);
@@ -433,10 +433,10 @@ float Noise(Vector3 p)
 	return TrilinearInterpolation(p, q0, q1, q2, q3, q4, q5, q6, q7);
 }
 
-float TrilinearInterpolation(Vector3 p, float q0, float q1, float q2, float q3, float q4, float q5, float q6, float q7)
+float TrilinearInterpolation(Vector3f* p, float q0, float q1, float q2, float q3, float q4, float q5, float q6, float q7)
 {
-	int ix = FloorI(p.x), iy = FloorI(p.y), iz = FloorI(p.z);
-	float dx = p.x - ix, dy = p.y - iy, dz = p.z - iz;
+	int ix = FloorI(p->x), iy = FloorI(p->y), iz = FloorI(p->z);
+	float dx = p->x - ix, dy = p->y - iy, dz = p->z - iz;
 
 	// Compute gradient weights for each corner of 3D cube (8 verticies)
 	ix &= (256 - 1);

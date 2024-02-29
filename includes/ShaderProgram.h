@@ -6,9 +6,9 @@
 #include <vector>
 #include "ShaderHelpers.h"
 #include <Uniform.h>
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
+#include "Vector2f.h"
+#include "Vector3f.h"
+#include "Vector4f.h"
 #include "Matrix3.h"
 #include "Matrix4.h"
 
@@ -48,20 +48,20 @@ protected:
 	void deleteShaders();
 
 public:
-	void storeAllUniformLocations(std::vector<Uniform*> uniforms);
+	void storeAllUniformLocations(std::vector<Uniform*>* uniforms);
 	void start();
 	void stop();
-	void setBool(std::string name, bool value);
-	void setInt(std::string name, int value);
-	void setFloat(std::string name, float value);
-	void setVec2(std::string name, Vector2& value);
-	void setVec2(std::string name, float x, float y);
-	void setVec3(std::string name, Vector3& value);
-	void setVec3(std::string name, float x, float y, float z);
-	void setVec4(std::string name, Vector4& value);
-	void setVec4(std::string name, float x, float y, float z, float w);
-	void setMat3(std::string name, Matrix3& mat);
-	void setMat4(std::string name, Matrix4& mat);
+	void setBool(std::string* name, bool value);
+	void setInt(std::string* name, int value);
+	void setFloat(std::string* name, float value);
+	void setVec2(std::string* name, Vector2f* value);
+	void setVec2(std::string* name, float x, float y);
+	void setVec3(std::string* name, Vector3f* value);
+	void setVec3(std::string* name, float x, float y, float z);
+	void setVec4(std::string* name, Vector4f* value);
+	void setVec4(std::string* name, float x, float y, float z, float w);
+	void setMat3(std::string* name, Matrix3* mat);
+	void setMat4(std::string* name, Matrix4* mat);
 };
 
 #endif

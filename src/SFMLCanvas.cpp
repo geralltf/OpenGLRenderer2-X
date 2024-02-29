@@ -77,9 +77,9 @@ void MyCanvas::OnUpdate()
 			// adjust the viewport when the window is resized
 			renderer->OnResize(event.size.width, event.size.height);
 		}
-		else if (event.type == sf::Event::MouseWheelMoved)
+		else if (event.type == sf::Event::MouseWheelScrolled)
 		{
-			characterController->cameraTransform.Translate(Vector3(0, 0, event.mouseWheel.delta * 0.01f));
+			characterController->cameraTransform->Translate(new Vector3f(0.0f, 0.0f, event.mouseWheelScroll.delta * 0.01f));
 		}
 		else if (event.type == sf::Event::GainedFocus)
 		{
@@ -104,13 +104,13 @@ void MyCanvas::OnUpdate()
 
 		// Mouse position from center of screen.
 		sf::Vector2i mousePosition = sf::Mouse::getPosition(*this);
-		Vector2 mouse;
-		mouse.y = (1.0f - (mousePosition.y / (float)this->getSize().y)) - 0.5f;
-		mouse.x = ((mousePosition.x / (float)this->getSize().x)) - 0.5f;
-		mouse = mouse * 10;
-		renderer->lightDir.x = mouse.x;
-		renderer->lightDir.y = mouse.y;
-		renderer->lightDir.z = 1;
+		Vector2f* mouse = new Vector2f(0.0f, 0.0f);
+		mouse->y = (1.0f - (mousePosition.y / (float)this->getSize().y)) - 0.5f;
+		mouse->x = ((mousePosition.x / (float)this->getSize().x)) - 0.5f;
+		mouse = Vector2f::Scale(mouse, 10);
+		renderer->lightDir->x = mouse->x;
+		renderer->lightDir->y = mouse->y;
+		renderer->lightDir->z = 1;
 		//std::cout << "x: " << mouse.x << " y: " << mouse.y << std::endl;
 	}
 	renderer->modelview = characterController->modelview;

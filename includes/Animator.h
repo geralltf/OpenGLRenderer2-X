@@ -86,7 +86,7 @@ private:
 	 */
 	void increaseAnimationTime();
 
-	std::map<std::string, Matrix4> GetDefaultPose();
+	std::map<std::string*, Matrix4*>* GetDefaultPose();
 
 	/**
 	 * This method returns the current animation pose of the entity. It returns
@@ -107,7 +107,7 @@ private:
 	 *         for all the joints. The transforms are indexed by the name ID of
 	 *         the joint that they should be applied to.
 	 */
-	std::map<std::string, Matrix4> calculateCurrentAnimationPose();
+	std::map<std::string*, Matrix4*>* calculateCurrentAnimationPose();
 
 	/**
 	 * This is the method where the animator calculates and sets those all-
@@ -142,7 +142,7 @@ private:
 	 *            - the desired model-space transform of the parent joint for
 	 *            the pose.
 	 */
-	void applyPoseToJoints(std::map<std::string, Matrix4> currentPose, Joint* joint, Matrix4 parentTransform);
+	void applyPoseToJoints(std::map<std::string*, Matrix4*>* currentPose, Joint* joint, Matrix4* parentTransform);
 
 	/**
 	 * Finds the previous keyframe in the animation and the next keyframe in the
@@ -155,7 +155,7 @@ private:
 	 * @return The previous and next keyframes, in an array which therefore will
 	 *         always have a length of 2.
 	 */
-	std::vector<KeyFrame*> getPreviousAndNextFrames();
+	std::vector<KeyFrame*>* getPreviousAndNextFrames();
 
 	/**
 	 * Calculates how far between the previous and next keyframe the current
@@ -186,7 +186,7 @@ private:
 	 *         current pose. They are returned in a map, indexed by the name of
 	 *         the joint to which they should be applied.
 	 */
-	std::map<std::string, Matrix4> interpolatePoses(KeyFrame* previousFrame, KeyFrame* nextFrame, float progression);
+	std::map<std::string*, Matrix4*>* interpolatePoses(KeyFrame* previousFrame, KeyFrame* nextFrame, float progression);
 
 };
 

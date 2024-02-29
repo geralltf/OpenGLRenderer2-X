@@ -9,7 +9,7 @@
 
 #include <queue>
 
-#include "Vector3.h"
+#include "Vector3f.h"
 #include "ColourRGBA.h"
 #include "Transform.h"
 #include "Matrix4.h"
@@ -21,12 +21,12 @@ typedef struct LineRenderable LineRenderable_T;
 class Debug
 {
 private:
-	static std::queue<LineRenderable_T> renderQueue;
+	static std::queue<LineRenderable_T*>* renderQueue;
 	static ShaderProgram* program;
 public:
-	static void DrawLine(Vector3 start, Vector3 end, ColourRGBA colour);
+	static void DrawLine(Vector3f* start, Vector3f* end, ColourRGBA* colour);
 	static void DrawLines_Init();
-	static void DrawLines_RenderDispatch(sf::RenderWindow* window, Transform cameraTransform, Matrix4 projectionMatrix, Matrix4 modelview);
+	static void DrawLines_RenderDispatch(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview);
 };
 
 #endif

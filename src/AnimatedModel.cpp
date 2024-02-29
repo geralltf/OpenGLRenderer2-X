@@ -13,7 +13,7 @@ AnimatedModel::AnimatedModel(Vao* model, Joint* rootJoint, int jointCount, Anima
 	// Compute inverse bind poses (do this if they are not already pre-loaded)
 	if(rootJoint != nullptr)
 	{
-		rootJoint->calcInverseBindTransform(Matrix4::GetIdentity());
+		rootJoint->calcInverseBindTransform(Matrix4::Identity());
 	}
 }
 
@@ -45,10 +45,10 @@ Animation* AnimatedModel::getAnimation()
 	return animation;
 }
 
-std::vector<Matrix4> AnimatedModel::getJointTransforms()
+std::vector<Matrix4*>* AnimatedModel::getJointTransforms()
 {
 	std::stack<Joint*> stack;
-	std::vector<Matrix4> jointMatrices = std::vector<Matrix4>(jointCount);
+	std::vector<Matrix4*>* jointMatrices = new std::vector<Matrix4*>(jointCount);
 
 	if (jointCount > 0)
 	{
@@ -59,9 +59,9 @@ std::vector<Matrix4> AnimatedModel::getJointTransforms()
 			Joint* jointNode = stack.top();
 			stack.pop();
 
-			jointMatrices.at(jointNode->index) = jointNode->getAnimatedTransform();
+			jointMatrices->at(jointNode->index) = jointNode->getAnimatedTransform();
 
-			for (Joint* childJoint : jointNode->children)
+			for (Joint* childJoint : *jointNode->children)
 			{
 				stack.push(childJoint);
 			}

@@ -28,6 +28,7 @@ private:
 	GLuint programCursor = 0;
 	GLuint vaoScreenQuad = 0, cursorVAO = 0;
 	Vao* vaoCursor;
+	std::vector<unsigned int>* indicies;
 	unsigned int hdrFBO;
 	unsigned int rboDepth;
 	unsigned int colorBuffers[2];
@@ -59,11 +60,11 @@ private:
 public:
 	sf::RenderWindow* window;
 	bool hasFocus;
-	Matrix4 projectionMatrix;
-	Matrix4 modelview;
-	Matrix4 lightModelView;
-	Vector3 lightDir = Vector3(0, 0, 0);
-	Vector3 worldPosition = Vector3::Zero;
+	Matrix4* projectionMatrix;
+	Matrix4* modelview;
+	Matrix4* lightModelView;
+	Vector3f* lightDir = new Vector3f(0, 0, 0);
+	Vector3f* worldPosition = Vector3f::ZERO;
 
 	Renderer();
 	~Renderer();
@@ -74,15 +75,15 @@ public:
 	void LoadModels();
 	void LoadShaders();
 	void renderQuad();
-	void Render(Transform cameraTransform);
+	void Render(Transform* cameraTransform);
 	void InitFBOs();
 	void InitScene();
 	void InitScreenQuad();
 	void initQuad();
-	void ShowShadowMap(Transform cameraTransform);
+	void ShowShadowMap(Transform* cameraTransform);
 	void ShowAOMap();
 	void InitCursor();
-	void RenderCursor(Transform cameraTransform);
+	void RenderCursor(Transform* cameraTransform);
 	void InitNoiseMap();
 	void ShowNoiseMap();
 };

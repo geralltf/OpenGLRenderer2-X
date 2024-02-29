@@ -607,7 +607,8 @@ void main()
 	// {
 		// bright_color = vec4(0.0, 0.0, 0.0, 1.0);	
 	// }
-	
+	//frag_colour = vec4(1.0, 0.0, 0.0, 1.0);
+	//bright_color = vec4(1.0, 0.0, 0.0, 1.0);
 	//frag_colour = bright_color;
 	//frag_colour = vec4(frag_colour.rgb + outlineColour * dot(n,viewDir), 1.0);
 	

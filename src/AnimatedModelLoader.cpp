@@ -1,7 +1,7 @@
 #include "AnimatedModelLoader.h"
 #include "XMLColladaLoader.h"
 
-Matrix4 AnimatedModelLoader::CORRECTION = Matrix4::GetIdentity();
+Matrix4* AnimatedModelLoader::CORRECTION = Matrix4::Identity();
 
 AnimatedModel* AnimatedModelLoader::LoadModel(std::string modelFile)
 {
@@ -9,7 +9,7 @@ AnimatedModel* AnimatedModelLoader::LoadModel(std::string modelFile)
 	bool loadedSkeletonData;
 	bool loadedAnimData;
 
-	CORRECTION = Matrix4::GetIdentity();
+	CORRECTION = Matrix4::Identity();
 	//CORRECTION = CORRECTION.RotationYawPitchRoll(0, -90, 0);
 
 	// Parse Collada.
@@ -17,13 +17,13 @@ AnimatedModel* AnimatedModelLoader::LoadModel(std::string modelFile)
 
 	// Load Model.
 	Vao* model = createVao(entityData->getMeshData());
-	SkeletonData skeletonData = entityData->getJointsData();
+	SkeletonData* skeletonData = entityData->getJointsData();
 	Joint* headJoint = nullptr;
 	int jointCount = 0;
 	if(loadedSkeletonData)
 	{
-		headJoint = createJoints(skeletonData.headJoint);
-		jointCount = skeletonData.jointCount;
+		headJoint = createJoints(skeletonData->headJoint);
+		jointCount = skeletonData->jointCount;
 	}
 	
 	// Load Animation.
@@ -49,10 +49,10 @@ AnimatedModel* AnimatedModelLoader::LoadModel(std::string modelFile)
 	return animatedModel;
 }
 
-Joint* AnimatedModelLoader::createJoints(JointData data)
+Joint* AnimatedModelLoader::createJoints(JointData* data)
 {
-	Joint* joint = new Joint(data.index, data.id, data.name, data.sid, data.bindLocalTransform, data.inverseBindPoseTransform);
-	for (JointData child : data.children) 
+	Joint* joint = new Joint(data->index, data->id, data->name, data->sid, data->bindLocalTransform, data->inverseBindPoseTransform);
+	for (JointData* child : *data->children) 
 	{
 		joint->addChild(createJoints(child));
 	}
@@ -63,7 +63,7 @@ Vao* AnimatedModelLoader::createVao(MeshData* data)
 {
 	if (data == nullptr) return nullptr;
 	Vao* vao = Vao::create();
-	vao->bind(); 
+	vao->bind();
 	vao->createIndexBuffer(data->getIndices());
 	vao->createAttribute(0, data->getVertices(), 3);
 	vao->createAttribute(1, data->getTextureCoords(), 2);
@@ -78,20 +78,20 @@ Vao* AnimatedModelLoader::createVao(MeshData* data)
 
 KeyFrame* AnimatedModelLoader::createKeyFrame(KeyFrameData* data)
 {
-	std::map<std::string, JointTransform*>* mapPose = new std::map<std::string, JointTransform*>();
+	std::map<std::string*, JointTransform*>* mapPose = new std::map<std::string*, JointTransform*>();
 	for (JointTransformData* jointData : *data->jointTransforms)
 	{
 		JointTransform* jointTransform = createTransform(jointData);
-		mapPose->insert(std::pair<std::string, JointTransform*>(jointData->jointNameId, jointTransform));
+		mapPose->insert(std::pair<std::string*, JointTransform*>(jointData->jointNameId, jointTransform));
 	}
 	return new KeyFrame(data->time, mapPose);
 }
 
 JointTransform* AnimatedModelLoader::createTransform(JointTransformData* data)
 {
-	Matrix4 mat = data->jointLocalTransform;
-	Vector3 translation = mat.GetTranslation();
-	Quaternion rotation = Quaternion::FromMatrix(mat);
+	Matrix4* mat = data->jointLocalTransform;
+	Vector3f* translation = mat->GetTranslation();
+	Quaternion* rotation = Quaternion::FromMatrix(mat);
 
 	return new JointTransform(translation, rotation);
 }

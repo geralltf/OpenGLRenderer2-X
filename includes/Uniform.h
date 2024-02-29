@@ -10,7 +10,7 @@ class Uniform
 private:
 	int NOT_FOUND = -1;
 
-	std::string name;
+	std::string* name;
 	int location;
 	bool invalid = false;
 
@@ -20,24 +20,24 @@ public:
 		
 	}
 
-	Uniform(std::string name) : location(-1)
+	Uniform(std::string* name) : location(-1)
 	{
 		this->name = name;
 	}
 
 	virtual void storeUniformLocation(GLuint programID)
 	{
-		location = glGetUniformLocation(programID, name.c_str());
+		location = glGetUniformLocation(programID, name->c_str());
 		if (!invalid && location == NOT_FOUND)
 		{
-			std::cout << "No uniform variable called " << name << " found!" << std::endl;
+			std::cout << "No uniform variable called " << *name << " found!" << std::endl;
 			invalid = true;
 		}
 	}
 
 	GLuint getLocation(GLuint programID)
 	{
-		location = glGetUniformLocation(programID, name.c_str());
+		location = glGetUniformLocation(programID, name->c_str());
 		return location;
 	}
 

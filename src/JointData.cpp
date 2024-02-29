@@ -1,6 +1,6 @@
 #include "JointData.h"
 
-void JointData::addChild(JointData child)
+void JointData::addChild(JointData* child)
 {
-	children.push_back(child);
+	children->push_back(child);
 }

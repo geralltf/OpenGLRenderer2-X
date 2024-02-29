@@ -15,8 +15,9 @@ void main(void)
 	mat4 MVP = projectionMatrix * viewMatrix;
 	
 	vec4 pos = MVP * vec4(in_position, 1.0);
-	gl_Position = pos.xyww;
-
+	gl_Position = pos;
+	//gl_Position = pos.xyww;
+	//gl_Position = vec4(in_position, 0.0);
 	normal = in_normal;
-	textureCoord = in_position.xyz;
+	textureCoord = vec3(in_textureCoord, 0.0);
 }

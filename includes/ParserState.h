@@ -19,10 +19,10 @@ public:
 	OBJToken token;
 	std::string line;
 	std::string objName;
-	std::string groupName;
-	Vector3 vertexCoord;
-	Vector3 normalCoord;
-	Vector2 texCoord;
+	std::string* groupName;
+	Vector3f* vertexCoord;
+	Vector3f* normalCoord;
+	Vector2f* texCoord;
 	WOBJ_Face* face;
 	std::string mtlFile;
 	std::string materialRef;
@@ -30,28 +30,28 @@ public:
 	int minFaceIndex = INT32_MAX;
 	int maxFaceIndex = INT32_MIN;
 	bool atFace = false;
-	std::vector<Vector3>* verticiesList;
-	std::vector<Vector3>* normalsList;
-	std::vector<Vector2>* texCoordList;
-	std::vector<int>* normalIndicies;
-	std::vector<int>* texCoordIndicies;
-	std::vector<int>* indicies;
-	std::vector<ColourRGBA>* colours;
+	std::vector<Vector3f*>* verticiesList;
+	std::vector<Vector3f*>* normalsList;
+	std::vector<Vector2f*>* texCoordList;
+	std::vector<int*>* normalIndicies;
+	std::vector<int*>* texCoordIndicies;
+	std::vector<int*>* indicies;
+	std::vector<ColourRGBA*>* colours;
 	PolygonType polyType;
 	WOBJ_Group* group;
 
 	ParserState()
 	{
 		group = new WOBJ_Group();
-		colours = new std::vector<ColourRGBA>();
+		colours = new std::vector<ColourRGBA*>();
 
-		verticiesList = new std::vector<Vector3>();
-		normalsList = new std::vector<Vector3>();
-		texCoordList = new std::vector<Vector2>();
-		normalIndicies = new std::vector<int>();
-		texCoordIndicies = new std::vector<int>();
-		indicies = new std::vector<int>();
-		indicies = new std::vector<int>();
+		verticiesList = new std::vector<Vector3f*>();
+		normalsList = new std::vector<Vector3f*>();
+		texCoordList = new std::vector<Vector2f*>();
+		normalIndicies = new std::vector<int*>();
+		texCoordIndicies = new std::vector<int*>();
+		indicies = new std::vector<int*>();
+		indicies = new std::vector<int*>();
 		polyType = PolygonType::PT_Triangles;
 	}
 };

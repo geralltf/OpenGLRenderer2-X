@@ -12,7 +12,7 @@ AnimationData* AnimationLoader::extractAnimation()
 {
 	checkNodeHierarchy();
 
-	std::string rootNode = findRootJointName();
+	std::string* rootNode = findRootJointName();
 
 	std::vector<float> times = getKeyTimes();
 
@@ -50,37 +50,37 @@ std::vector<KeyFrameData*>* AnimationLoader::initKeyFrames(std::vector<float> ti
 	return frames;
 }
 
-void AnimationLoader::loadJointTransforms(std::vector<KeyFrameData*>* frames, pugi::xpath_node jointData, std::string rootNodeId)
+void AnimationLoader::loadJointTransforms(std::vector<KeyFrameData*>* frames, pugi::xpath_node jointData, std::string* rootNodeId)
 {
-	std::string jointNameId = getJointName(jointData);
-	std::string dataId = getDataId(jointData);
+	std::string* jointNameId = getJointName(jointData);
+	std::string* dataId = getDataId(jointData);
 
-	pugi::xpath_node transformData = GetChildWithAttribute(jointData, "source", "id", dataId);
+	pugi::xpath_node transformData = GetChildWithAttribute(jointData, "source", "id", *dataId);
 	std::string rawData = std::string(transformData.node().child("float_array").text().as_string());
 
-	processTransforms(jointNameId, rawData, frames, jointNameId == rootNodeId);
+	processTransforms(jointNameId, rawData, frames, *jointNameId == *rootNodeId);
 }
 
-std::string AnimationLoader::getDataId(pugi::xpath_node jointData)
+std::string* AnimationLoader::getDataId(pugi::xpath_node jointData)
 {
 	std::string animID = std::string(jointData.node().attribute("id").value());
 	pugi::xpath_node sampler = jointData.node().child("sampler");
 	std::string samplerID = std::string(sampler.node().attribute("id").value());
 	pugi::xpath_node node = GetChildWithAttribute(sampler, "input", "semantic", "OUTPUT");
 	const pugi::char_t* sourceId = node.node().attribute("source").value();
-	std::string dataId = std::string(sourceId).substr(1);
+	std::string* dataId = new std::string((new std::string(sourceId))->substr(1));
 	return dataId;
 }
 
-std::string AnimationLoader::getJointName(pugi::xpath_node jointData)
+std::string* AnimationLoader::getJointName(pugi::xpath_node jointData)
 {
 	pugi::xpath_node channelNode = jointData.node().child("channel");
 	std::string data = std::string(channelNode.node().attribute("target").value());
 	std::string jointName = StringSplit(data, "/")[0];
-	return jointName;
+	return new std::string(jointName);
 }
 
-void AnimationLoader::processTransforms(std::string jointName, std::string rawData, std::vector<KeyFrameData*>* keyFrames, bool root)
+void AnimationLoader::processTransforms(std::string* jointName, std::string rawData, std::vector<KeyFrameData*>* keyFrames, bool root)
 {
 	std::vector<std::string> data;
 	
@@ -88,15 +88,15 @@ void AnimationLoader::processTransforms(std::string jointName, std::string rawDa
 
 	for (int i = 0; i < keyFrames->size(); i++)
 	{
-		Matrix4 transform = ConvertDataToMatrix(data, i);
+		Matrix4* transform = ConvertDataToMatrix(data, i);
 
 		// Find the transpose: Convert from a Collada row-major order to column-major order.
-		transform.Transpose();
+		transform = transform->Transpose();
 
 		if (root)
 		{
 			//because up axis in Blender is different to up axis in game
-			transform = AnimatedModelLoader::CORRECTION * transform;
+			transform = Matrix4::Multiply(AnimatedModelLoader::CORRECTION, transform);
 		}
 
 		JointTransformData* jointTransformData = new JointTransformData(jointName, transform);
@@ -104,7 +104,7 @@ void AnimationLoader::processTransforms(std::string jointName, std::string rawDa
 	}
 }
 
-std::string AnimationLoader::findRootJointName()
+std::string* AnimationLoader::findRootJointName()
 {
 	pugi::xpath_node visualScene = jointHierarchy.node().child("visual_scene");
 	auto it = visualScene.node().children("node");
@@ -117,11 +117,11 @@ std::string AnimationLoader::findRootJointName()
 	{
 		skeleton = visualScene.node().child("node");
 
-		return std::string(skeleton.node().attribute("id").value());
+		return new std::string(skeleton.node().attribute("id").value());
 	}
 	else 
 	{
-		return std::string(skeleton.node().child("node").attribute("id").value());
+		return new std::string(skeleton.node().child("node").attribute("id").value());
 	}
 }
 
@@ -139,4 +139,41 @@ void AnimationLoader::checkNodeHierarchy()
 	{
 		std::cout << "There are many root nodes present under visual_scene. Consider only having one. Choosing the first node." << std::endl;
 	}
+}
+
+Matrix4* AnimationLoader::ConvertDataToMatrix(std::vector<std::string> data, int matrixIndex)
+{
+	Matrix4* m = Matrix4::Identity();
+
+	int stride = 16 * matrixIndex;
+
+	m->m00 = std::stof(data[stride + 0]);
+	m->m01 = std::stof(data[stride + 1]);
+	m->m02 = std::stof(data[stride + 2]);
+	m->m03 = std::stof(data[stride + 3]);
+
+	m->m10 = std::stof(data[stride + 4]);
+	m->m11 = std::stof(data[stride + 5]);
+	m->m12 = std::stof(data[stride + 6]);
+	m->m13 = std::stof(data[stride + 7]);
+
+	m->m20 = std::stof(data[stride + 8]);
+	m->m21 = std::stof(data[stride + 9]);
+	m->m22 = std::stof(data[stride + 10]);
+	m->m23 = std::stof(data[stride + 11]);
+
+	m->m30 = std::stof(data[stride + 12]);
+	m->m31 = std::stof(data[stride + 13]);
+	m->m32 = std::stof(data[stride + 14]);
+	m->m33 = std::stof(data[stride + 15]);
+
+	return m;
+}
+
+
+Matrix4* AnimationLoader::ConvertDataToMatrix(std::string* data)
+{
+	std::vector<std::string> tokens;
+	Split(*data, " ", tokens, true);
+	return ConvertDataToMatrix(tokens, 0);
 }

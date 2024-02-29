@@ -34,19 +34,19 @@ public:
 
 	HE_Edge();
 
-	HE_Edge(HE_Vertex vertex);
+	HE_Edge(HE_Vertex* vertex);
 
-	HE_Edge(HE_Vertex vertex, HE_Face face);
+	HE_Edge(HE_Vertex* vertex, HE_Face* face);
 
-	HE_Edge(HE_Vertex vertex, HE_Face face, int edgeIndex);
+	HE_Edge(HE_Vertex* vertex, HE_Face* face, int edgeIndex);
 
-	std::string GetName();
+	std::string* GetName();
 
 	/// Get the vertices which border this half-edge.
-	void GetAdjacentVerticies(HE_Vertex start, HE_Vertex end);
+	void GetAdjacentVerticies(HE_Vertex* start, HE_Vertex* end);
 
 	/// Get the faces which border this half-edge.
-	void GetAdjacentFaces(HE_Face face1, HE_Face face2);
+	void GetAdjacentFaces(HE_Face* face1, HE_Face* face2);
 };
 
 #endif

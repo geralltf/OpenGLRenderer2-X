@@ -8,11 +8,11 @@ HE_Vertex::HE_Vertex()
 HE_Vertex::HE_Vertex(int index)
 {
 	Index = index;
-	Attributes->Vertex = Vector3::Zero;
+	Attributes->Vertex = Vector3f::ZERO;
 	Edge = nullptr;
 }
 
-HE_Vertex::HE_Vertex(int index, Vector3 vertexPosition)
+HE_Vertex::HE_Vertex(int index, Vector3f* vertexPosition)
 {
 	Index = index;
 	Attributes->Vertex = vertexPosition;

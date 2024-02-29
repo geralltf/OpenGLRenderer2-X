@@ -1,23 +1,34 @@
 #include "Terrain.h"
 #include "TimeManager.h"
+#include "MathHelpers.h"
 
 Terrain::Terrain()
 {
 	Init_Perlin_Noisy();
 
 	// Load textures into cubemap.
-	cubemapDiffuse = Cubemap::LoadTexture("Assets/crate.tga", "Assets/crate.tga", "Assets/crate.tga", "Assets/crate.tga", "Assets/crate.tga", "Assets/crate.tga")
-		.Anisotropic()->ClampEdges()->Create();
+	cubemapDiffuse = Cubemap::LoadTexture(new std::string("Assets/crate.tga"), 
+		new std::string("Assets/crate.tga"), 
+		new std::string("Assets/crate.tga"), 
+		new std::string("Assets/crate.tga"), 
+		new std::string("Assets/crate.tga"), 
+		new std::string("Assets/crate.tga")
+	)->Anisotropic()->ClampEdges()->Create();
 
-	cubemapSpecular = Cubemap::LoadTexture("Assets/crate_specular.tga", "Assets/crate_specular.tga", "Assets/crate_specular.tga", "Assets/crate_specular.tga", "Assets/crate_specular.tga", "Assets/crate_specular.tga")
-		.Anisotropic()->ClampEdges()->Create();
+	cubemapSpecular = Cubemap::LoadTexture(new std::string("Assets/crate_specular.tga"), 
+		new std::string("Assets/crate_specular.tga"), 
+		new std::string("Assets/crate_specular.tga"), 
+		new std::string("Assets/crate_specular.tga"), 
+		new std::string("Assets/crate_specular.tga"), 
+		new std::string("Assets/crate_specular.tga")
+	)->Anisotropic()->ClampEdges()->Create();
 
 	// Load shader program
 	shader = new ShaderProgram("Shaders/cube_vs.glsl", "Shaders/cube_fs.glsl");
 
 	Initilise();
 
-	model = Matrix4::GetIdentity();
+	model = Matrix4::Identity();
 	//model.Scale(0.1f);
 }
 
@@ -181,10 +192,10 @@ void Terrain::Initilise()
 	normals.push_back(1);
 	normals.push_back(0);
 
-	std::vector<int> indexBuffer;
+	std::vector<unsigned int>* indexBuffer = new std::vector<unsigned int>();
 
 	// Vertex, Normal, Texcoord
-	int indices[108] =
+	unsigned int indices[108] =
 	{
 		0, 0, 0, 
 		2, 0, 1, 
@@ -224,10 +235,10 @@ void Terrain::Initilise()
 		7, 11, 35
 	};
 
-	std::vector<GLfloat> _vertices;
-	std::vector<GLfloat> _normals;
-	std::vector<GLfloat> _texcords;
-	std::vector<int> _indicies;
+	std::vector<GLfloat>* _vertices_data = new std::vector<GLfloat>();
+	std::vector<GLfloat>* _normals_data = new std::vector<GLfloat>();
+	std::vector<GLfloat>* _texcords_data = new std::vector<GLfloat>();
+	std::vector<unsigned int>* _indicies_data = new std::vector<unsigned int>();
 
 	int id = 0;
 	for(int i=0;i<108;i+=3)
@@ -236,59 +247,83 @@ void Terrain::Initilise()
 		int norm = indices[i + 1];
 		int texc = indices[i + 2];
 
-		_vertices.push_back(vertices[vert * 3]);
-		_vertices.push_back(vertices[vert * 3 + 1]);
-		_vertices.push_back(vertices[vert * 3 + 2]);
+		_vertices_data->push_back(vertices[vert * 3]);
+		_vertices_data->push_back(vertices[vert * 3 + 1]);
+		_vertices_data->push_back(vertices[vert * 3 + 2]);
 
-		_normals.push_back(normals[norm * 3]);
-		_normals.push_back(normals[norm * 3 + 1]);
-		_normals.push_back(normals[norm * 3 + 2]);
+		_normals_data->push_back(normals[norm * 3]);
+		_normals_data->push_back(normals[norm * 3 + 1]);
+		_normals_data->push_back(normals[norm * 3 + 2]);
 
-		_texcords.push_back(texCoords[texc * 2]);
-		_texcords.push_back(texCoords[texc * 2 + 1]);
+		_texcords_data->push_back(texCoords[texc * 2]);
+		_texcords_data->push_back(texCoords[texc * 2 + 1]);
 
-		_indicies.push_back(id);
+		_indicies_data->push_back(id);
 		id++;
 	}
 
-	std::vector<GLfloat> vertexTangents = std::vector<GLfloat>(_vertices.size());
-	std::vector<GLfloat> vertexBiTangents = std::vector<GLfloat>(_vertices.size());
-	Vector3 normal;
-	Vector3 tangent;
-	Vector3 bitangent;
+	std::vector<GLfloat>* vertexTangents = new std::vector<GLfloat>(_vertices_data->size());
+	std::vector<GLfloat>* vertexBiTangents = new std::vector<GLfloat>(_vertices_data->size());
+	Vector3f* normal;
+	Vector3f* tangent;
+	Vector3f* bitangent;
 
 	for (int i = 0; i < 36; i++)
 	{
-		int index = _indicies[i];
+		int index = (*_indicies_data)[i];
 		
 		int faceIndex = i % 3;
 
-		indexBuffer.push_back(index);
+		indexBuffer->push_back(index);
 
 		if(faceIndex == 0)
 		{
-			int ind0 = _indicies[i];
-			int ind1 = _indicies[i + 1];
-			int ind2 = _indicies[i + 2];
+			int ind0 = (*_indicies_data)[i];
+			int ind1 = (*_indicies_data)[i + 1];
+			int ind2 = (*_indicies_data)[i + 2];
 
-			Vector3 v0 = Vector3(_vertices[ind0 * 3],
-				_vertices[ind0 * 3 + 1],
-				_vertices[ind0 * 3 + 2]);
+			Vector3f* v0 = new Vector3f(
+				(*_vertices_data)[ind0 * 3],
+				(*_vertices_data)[ind0 * 3 + 1],
+				(*_vertices_data)[ind0 * 3 + 2]
+			);
 
-			Vector3 v1 = Vector3(_vertices[ind1 * 3],
-				_vertices[ind1 * 3 + 1],
-				_vertices[ind1 * 3 + 2]);
+			Vector3f* v1 = new Vector3f(
+				(*_vertices_data)[ind1 * 3],
+				(*_vertices_data)[ind1 * 3 + 1],
+				(*_vertices_data)[ind1 * 3 + 2]
+			);
 
-			Vector3 v2 = Vector3(_vertices[ind2 * 3],
-				_vertices[ind2 * 3 + 1],
-				_vertices[ind2 * 3 + 2]);
+			Vector3f* v2 = new Vector3f(
+				(*_vertices_data)[ind2 * 3],
+				(*_vertices_data)[ind2 * 3 + 1],
+				(*_vertices_data)[ind2 * 3 + 2]
+			);
 
-			Vector2 t0 = Vector2(_texcords[ind0 * 2], _texcords[ind0 * 2 + 1]);
-			Vector2 t1 = Vector2(_texcords[ind1 * 2], _texcords[ind1 * 2 + 1]);;
-			Vector2 t2 = Vector2(_texcords[ind2 * 2], _texcords[ind2 * 2 + 1]);;
+			Vector2f* t0 = new Vector2f(
+				(*_texcords_data)[ind0 * 2], 
+				(*_texcords_data)[ind0 * 2 + 1]
+			);
+			Vector2f* t1 = new Vector2f(
+				(*_texcords_data)[ind1 * 2], 
+				(*_texcords_data)[ind1 * 2 + 1]
+			);
+			Vector2f* t2 = new Vector2f(
+				(*_texcords_data)[ind2 * 2], 
+				(*_texcords_data)[ind2 * 2 + 1]
+			);
+
+			normal = new Vector3f(
+				(*_normals_data)[ind2 * 3],
+				(*_normals_data)[ind2 * 3 + 1],
+				(*_normals_data)[ind2 * 3 + 2]
+			);
+
+			tangent = new Vector3f();
+			bitangent = new Vector3f();
 
 			//TriangleTangentSpace(v0, v1, v2, t0, t1, t2, tangent, bitangent);
-			ComputeTangentBasis(v0, v1, v2, t0, t1, t2, normal, tangent, bitangent);
+			ComputeTangentBasis(v0, v1, v2, t0, t1, t2, normal, &tangent, &bitangent);
 
 			//_normals[ind0 * 3] = normal.x;
 			//_normals[ind0 * 3 + 1] = normal.y;
@@ -303,30 +338,30 @@ void Terrain::Initilise()
 			//_normals[ind2 * 3 + 2] = normal.z;
 
 
-			vertexTangents[ind0 * 3] = tangent.x;
-			vertexTangents[ind0 * 3 + 1] = tangent.y;
-			vertexTangents[ind0 * 3 + 2] = tangent.z;
+			(*vertexTangents)[ind0 * 3] = tangent->x;
+			(*vertexTangents)[ind0 * 3 + 1] = tangent->y;
+			(*vertexTangents)[ind0 * 3 + 2] = tangent->z;
 
-			vertexTangents[ind1 * 3] = tangent.x;
-			vertexTangents[ind1 * 3 + 1] = tangent.y;
-			vertexTangents[ind1 * 3 + 2] = tangent.z;
+			(*vertexTangents)[ind1 * 3] = tangent->x;
+			(*vertexTangents)[ind1 * 3 + 1] = tangent->y;
+			(*vertexTangents)[ind1 * 3 + 2] = tangent->z;
 
-			vertexTangents[ind2 * 3] = tangent.x;
-			vertexTangents[ind2 * 3 + 1] = tangent.y;
-			vertexTangents[ind2 * 3 + 2] = tangent.z;
+			(*vertexTangents)[ind2 * 3] = tangent->x;
+			(*vertexTangents)[ind2 * 3 + 1] = tangent->y;
+			(*vertexTangents)[ind2 * 3 + 2] = tangent->z;
 
 
-			vertexBiTangents[ind0 * 3] = bitangent.x;
-			vertexBiTangents[ind0 * 3 + 1] = bitangent.y;
-			vertexBiTangents[ind0 * 3 + 2] = bitangent.z;
+			(*vertexBiTangents)[ind0 * 3] = bitangent->x;
+			(*vertexBiTangents)[ind0 * 3 + 1] = bitangent->y;
+			(*vertexBiTangents)[ind0 * 3 + 2] = bitangent->z;
 
-			vertexBiTangents[ind1 * 3] = bitangent.x;
-			vertexBiTangents[ind1 * 3 + 1] = bitangent.y;
-			vertexBiTangents[ind1 * 3 + 2] = bitangent.z;
+			(*vertexBiTangents)[ind1 * 3] = bitangent->x;
+			(*vertexBiTangents)[ind1 * 3 + 1] = bitangent->y;
+			(*vertexBiTangents)[ind1 * 3 + 2] = bitangent->z;
 
-			vertexBiTangents[ind2 * 3] = bitangent.x;
-			vertexBiTangents[ind2 * 3 + 1] = bitangent.y;
-			vertexBiTangents[ind2 * 3 + 2] = bitangent.z;
+			(*vertexBiTangents)[ind2 * 3] = bitangent->x;
+			(*vertexBiTangents)[ind2 * 3 + 1] = bitangent->y;
+			(*vertexBiTangents)[ind2 * 3 + 2] = bitangent->z;
 		}
 	}
 
@@ -334,7 +369,7 @@ void Terrain::Initilise()
 
 	//////////////////////////
 	float placementScale = 2.0f;
-	transforms = std::vector<Matrix4>(MAX_CHUNKS);
+	transforms = new std::vector<Matrix4*>(MAX_CHUNKS);
 
 	int size = cube_root(MAX_CHUNKS);
 
@@ -346,7 +381,7 @@ void Terrain::Initilise()
 	float pers = 0.1f;
 	float seed = 1;
 
-	Vector3 offset(Random01() * seed, Random01() * seed, Random01() * seed);
+	Vector3f* offset = new Vector3f(Random01() * seed, Random01() * seed, Random01() * seed);
 
 	int i = 0;
 	for (int x = 0; x < size; x++)
@@ -355,19 +390,19 @@ void Terrain::Initilise()
 		{
 			for (int z = 0; z < size; z++)
 			{
-				float noiseValue = OctavePerlin((x * scaleX) + offset.x, (y * scaleY) + offset.y, (z * scaleZ) + offset.z, octaves, pers);
+				float noiseValue = OctavePerlin((x * scaleX) + offset->x, (y * scaleY) + offset->y, (z * scaleZ) + offset->z, octaves, pers);
 				//std::cout << z << std::endl;
 
 				if (noiseValue < 0.5f)
 				{
-					Matrix4 m = Matrix4::GetIdentity();
+					Matrix4* m = Matrix4::Identity();
 
 					//float depth = (1 - noiseValue) * 10;
 					float depth = y;
-					Vector3 transl = (Vector3(x, depth, z) * placementScale);
-					m.Translate(transl);
+					Vector3f* transl = new Vector3f(x * placementScale, depth * placementScale, z * placementScale);
+					m->SetTranslation(transl);
 
-					transforms[i] = m;
+					(*transforms)[i] = m;
 					i++;
 				}
 			}
@@ -381,9 +416,9 @@ void Terrain::Initilise()
 	vao = Vao::create();
 	vao->bind();
 	vao->createIndexBuffer(indexBuffer);
-	vao->createAttribute(0, _vertices, 3);
-	vao->createAttribute(1, _texcords, 2);
-	vao->createAttribute(2, _normals, 3);
+	vao->createAttribute(0, _vertices_data, 3);
+	vao->createAttribute(1, _texcords_data, 2);
+	vao->createAttribute(2, _normals_data, 3);
 	vao->createAttribute(3, vertexTangents, 3);
 	vao->createAttribute(4, vertexBiTangents, 3);
 	vao->createAttribute(5, transforms);
@@ -394,36 +429,41 @@ void Terrain::Initilise()
 
 void Terrain::InitiliseLights()
 {
-	lights.clear();
+	if (lights == nullptr) 
+	{
+		lights = new std::vector<Light*>();
+	}
+	lights->clear();
 	for (int i = 0; i < MAX_LIGHTS; i++)
 	{
-		Light l;
+		Light* l = new Light();
 
-		l.position = Vector3(Random01(), Random01(), Random01()) * 200;
-		l.colour = ColourRGBA(1.0f, Random01(), Random01(), Random01());
+		l->position = Vector3f::Scale(new Vector3f(Random01(), Random01(), Random01()), 200);
+		l->colour = new ColourRGBA(1.0f, Random01(), Random01(), Random01());
 
-		lights.push_back(l);
+		lights->push_back(l);
 	}
 }
 
-void Terrain::Render(Transform cameraTransform, Matrix4 projection, Vector3 lightDir)
+void Terrain::Render(Transform* cameraTransform, Matrix4* projection, Vector3f* lightDir)
 {
 	renderCubes_instanced(cameraTransform, projection, model, lightDir);
 }
 
-void Terrain::renderCube(Transform cameraTransform, Matrix4 projection, Matrix4 model)
+void Terrain::renderCube(Transform* cameraTransform, Matrix4* projection, Matrix4* model)
 {
-	std::vector<Uniform*> inUniforms;
-	inUniforms.push_back((Uniform*)projectionMatrix);
-	inUniforms.push_back((Uniform*)viewMatrix);
-	inUniforms.push_back((Uniform*)modelMatrix);
-	inUniforms.push_back((Uniform*)cubeMap);
+	std::vector<Uniform*>* inUniforms = new std::vector<Uniform*>();
+	inUniforms->push_back((Uniform*)projectionMatrix);
+	inUniforms->push_back((Uniform*)viewMatrix);
+	inUniforms->push_back((Uniform*)modelMatrix);
+	inUniforms->push_back((Uniform*)cubeMap);
 
-	vao->bind(0, 2);
+	vao->bind();
+	vao->binder(0, 2);
 	shader->start();
 	projectionMatrix->loadMatrix(shader->programID, projection);
-	modelMatrix->loadMatrix(shader->programID, this->model * model);
-	viewMatrix->loadMatrix(shader->programID, cameraTransform.localMatrix);
+	modelMatrix->loadMatrix(shader->programID, Matrix4::Multiply(this->model, model));
+	viewMatrix->loadMatrix(shader->programID, cameraTransform->localMatrix);
 	cubeMap->loadTexUnit(shader->programID, 0); // Indicates which texture unit the cubemap texture should be sampled from
 	shader->storeAllUniformLocations(inUniforms);
 	cubemapDiffuse->bindToUnit(0);
@@ -436,17 +476,17 @@ void Terrain::renderCube(Transform cameraTransform, Matrix4 projection, Matrix4 
 
 	glDrawElements(GL_TRIANGLES, vao->getIndexCount(), GL_UNSIGNED_INT, nullptr);
 	shader->stop();
-	vao->unbind(0, 2);
+	vao->unbinder(0, 2);
 }
 
-void Terrain::renderCubes_slow(Transform cameraTransform, Matrix4 projection, Matrix4 model)
+void Terrain::renderCubes_slow(Transform* cameraTransform, Matrix4* projection, Matrix4* model)
 {
 	float xScale = 2.0f;
 	for (int x = 0; x < 50; x++)
 	{
 		for (int y = 0; y < 50; y++)
 		{
-			Matrix4 m = Matrix4::GetIdentity();
+			Matrix4* m = Matrix4::Identity();
 
 			float noiseValue;
 
@@ -454,11 +494,11 @@ void Terrain::renderCubes_slow(Transform cameraTransform, Matrix4 projection, Ma
 
 			noiseValue = Random01() * 10.0f;
 
-			Vector3 transl = Vector3(x, noiseValue, y) * xScale;
+			Vector3f* transl = new Vector3f(x * xScale, noiseValue * xScale, y * xScale);
 
 			//std::cout << noiseValue << std::endl;
 
-			m.Translate(transl);
+			m->Translate(transl);
 
 			renderCube(cameraTransform, projection, m);
 		}
@@ -466,21 +506,22 @@ void Terrain::renderCubes_slow(Transform cameraTransform, Matrix4 projection, Ma
 }
 
 // https://learnopengl.com/Advanced-OpenGL/Instancing
-void Terrain::renderCubes_instanced(Transform cameraTransform, Matrix4 projection, Matrix4 model, Vector3 lightDir)
+void Terrain::renderCubes_instanced(Transform* cameraTransform, Matrix4* projection, Matrix4* model, Vector3f* lightDir)
 {
-	std::vector<Uniform*> inUniforms;
-	inUniforms.push_back((Uniform*)projectionMatrix);
-	inUniforms.push_back((Uniform*)viewMatrix);
-	inUniforms.push_back((Uniform*)modelMatrix);
-	//inUniforms.push_back((Uniform*)chunkTransforms);
-	inUniforms.push_back((Uniform*)cubeMap);
-	inUniforms.push_back((Uniform*)lightDirection);
+	std::vector<Uniform*>* inUniforms = new std::vector<Uniform*>();
+	inUniforms->push_back((Uniform*)projectionMatrix);
+	inUniforms->push_back((Uniform*)viewMatrix);
+	inUniforms->push_back((Uniform*)modelMatrix);
+	//inUniforms->push_back((Uniform*)chunkTransforms);
+	inUniforms->push_back((Uniform*)cubeMap);
+	inUniforms->push_back((Uniform*)lightDirection);
 
-	vao->bind(0, 2);
+	vao->bind();
+	vao->binder(0, 2);
 	shader->start();
 	projectionMatrix->loadMatrix(shader->programID, projection);
-	modelMatrix->loadMatrix(shader->programID, this->model * model);
-	viewMatrix->loadMatrix(shader->programID, cameraTransform.localMatrix);
+	modelMatrix->loadMatrix(shader->programID, Matrix4::Multiply(this->model, model));
+	viewMatrix->loadMatrix(shader->programID, cameraTransform->localMatrix);
 	lightDirection->loadVec3(shader->programID, lightDir);
 	//chunkTransforms->loadMatrixArray(shader->programID, transforms);
 	//chunkTransforms->loadVectorArray(shader->programID, transforms);
@@ -492,21 +533,21 @@ void Terrain::renderCubes_instanced(Transform cameraTransform, Matrix4 projectio
 
 	for (GLuint i = 0; i < MAX_LIGHTS; i++)
 	{
-		Light light = lights[i];
+		Light* light = (*lights)[i];
 		std::string number = std::to_string(i);
-		Vector3 lightPosition = light.position;
-		ColourRGBA lightColour = light.colour;
+		Vector3f* lightPosition = light->position;
+		ColourRGBA* lightColour = light->colour;
 
-		glUniform3f(glGetUniformLocation(shader->programID, ("lights[" + number + "].position").c_str()), lightPosition.x, lightPosition.y, lightPosition.z);
-		glUniform3f(glGetUniformLocation(shader->programID, ("lights[" + number + "].colour").c_str()), lightColour.r, lightColour.g, lightColour.b);
+		glUniform3f(glGetUniformLocation(shader->programID, ("lights[" + number + "].position").c_str()), lightPosition->x, lightPosition->y, lightPosition->z);
+		glUniform3f(glGetUniformLocation(shader->programID, ("lights[" + number + "].colour").c_str()), lightColour->r, lightColour->g, lightColour->b);
 
 		glUniform1f(glGetUniformLocation(shader->programID, ("lights[" + number + "].constant").c_str()), 0.01f);
 		glUniform1f(glGetUniformLocation(shader->programID, ("lights[" + number + "].linear").c_str()), 0.001f);
 		glUniform1f(glGetUniformLocation(shader->programID, ("lights[" + number + "].quadratic").c_str()), 0.00064f);
 	}
 
-	Vector3 eye = cameraTransform.localMatrix.GetTranslation();
-	float* eyePos = eye.ToArray();
+	Vector3f* eye = cameraTransform->localMatrix->GetTranslation();
+	float* eyePos = eye->ToArray();
 	int eyeLocation = glGetUniformLocation(shader->programID, "eye");
 	glUniform3fv(eyeLocation, 1, eyePos);
 
@@ -530,7 +571,7 @@ void Terrain::renderCubes_instanced(Transform cameraTransform, Matrix4 projectio
 	glDrawElementsInstanced(GL_TRIANGLES, vao->getIndexCount(), GL_UNSIGNED_INT, 0, MAX_CHUNKS);
 	//glDrawElementsInstancedARB(GL_TRIANGLES, vao->getIndexCount(), GL_UNSIGNED_INT, 0, MAX_CHUNKS);
 	shader->stop();
-	vao->unbind(0, 2);
+	vao->unbinder(0, 2);
 
 	delete[] eyePos;
 }
