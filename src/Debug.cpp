@@ -37,8 +37,8 @@ void Debug::DrawLines_Init()
 void Debug::DrawLines_RenderDispatch(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview)
 {
 	// Get the lines and buffer them to the GPU.
-	std::vector<GLfloat*>* verticies = new std::vector<GLfloat*>();
-	std::vector<GLfloat*>* colours = new std::vector<GLfloat*>();
+	std::vector<GLfloat>* verticies = new std::vector<GLfloat>();
+	std::vector<GLfloat>* colours = new std::vector<GLfloat>();
 	bool hasLines = false;
 
 	while (!renderQueue->empty())
@@ -47,24 +47,24 @@ void Debug::DrawLines_RenderDispatch(sf::RenderWindow* window, Transform* camera
 		renderQueue->pop();
 		
 		// Vertex 1.
-		verticies->push_back(&line->start->x);
-		verticies->push_back(&line->start->y);
-		verticies->push_back(&line->start->z);
+		verticies->push_back(line->start->x);
+		verticies->push_back(line->start->y);
+		verticies->push_back(line->start->z);
 
 		// Vertex 2.
-		verticies->push_back(&line->end->x);
-		verticies->push_back(&line->end->y);
-		verticies->push_back(&line->end->z);
+		verticies->push_back(line->end->x);
+		verticies->push_back(line->end->y);
+		verticies->push_back(line->end->z);
 
 		// Vertex 1.
-		colours->push_back(&line->colour->r);
-		colours->push_back(&line->colour->g);
-		colours->push_back(&line->colour->b);
+		colours->push_back(line->colour->r);
+		colours->push_back(line->colour->g);
+		colours->push_back(line->colour->b);
 
 		// Vertex 2.
-		colours->push_back(&line->colour->r);
-		colours->push_back(&line->colour->g);
-		colours->push_back(&line->colour->b);
+		colours->push_back(line->colour->r);
+		colours->push_back(line->colour->g);
+		colours->push_back(line->colour->b);
 
 		hasLines = true;
 	}
