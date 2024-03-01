@@ -323,8 +323,8 @@ void Skybox::Render(Transform* cameraTransform, Matrix4* projection)
 	vao->binder(0, 3);
 	glUseProgram(shader->programID);
 	OpenGlUtils::Antialias(true);
-	//OpenGlUtils::EnableAlphaBlending();
-	OpenGlUtils::DisableBlending();
+	OpenGlUtils::EnableAlphaBlending();
+	//OpenGlUtils::DisableBlending();
 	OpenGlUtils::EnableDepthTesting(true);
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
