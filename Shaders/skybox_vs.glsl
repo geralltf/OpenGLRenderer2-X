@@ -9,15 +9,16 @@ out vec3 normal;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
+uniform mat4 modelMatrix;
 
 void main(void)
 {
-	mat4 MVP = projectionMatrix * viewMatrix;
+	mat4 MVP = projectionMatrix * viewMatrix; // modelMatrix
 	
 	vec4 pos = MVP * vec4(in_position, 1.0);
 	gl_Position = pos;
 	//gl_Position = pos.xyww;
 	//gl_Position = vec4(in_position, 0.0);
 	normal = in_normal;
-	textureCoord = vec3(in_textureCoord, 0.0);
+	textureCoord = in_position;// vec3(in_textureCoord, 0.0);
 }

@@ -134,6 +134,10 @@ void Vao::createIntAttribute(int attribute, std::vector<unsigned int>* data, int
 void Vao::bind()
 {
 	glBindVertexArray(id);
+	if (indexVbo != nullptr)
+	{
+		indexVbo->bind();
+	}
 	for (int i = 0; i < dataVbos->size(); i++)
 	{
 		Vbo* dataVbo = dataVbos->at(i);

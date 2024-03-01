@@ -13,7 +13,7 @@ Skybox::Skybox(std::string* texFileRightPosX, std::string* texFileLeftNegX,
 
 	// Construct the VAO/VBO for cube geometry.
 	std::vector<GLfloat> vertices;
-	std::vector<GLfloat>* vertices_data = new std::vector<GLfloat>();
+	vertices_data = new std::vector<GLfloat>();
 	GLfloat vertices_arr[24] = {
 		-1.0f, -1.0f, 1.0f, 1.0f,-1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 
 		1.0f, 1.0f, -1.0f, -1.0f, -1.0f,1.0f,-1.0f, -1.0f, 1.0f, 1.0f, 
@@ -48,6 +48,8 @@ Skybox::Skybox(std::string* texFileRightPosX, std::string* texFileLeftNegX,
 	for (int i = 0; i < 24; i++)
 	{
 		v = vertices[i];
+
+		v = v * 50.0f; // Scale skybox to make it bigger!
 		vertices_data->push_back(v);
 	}
 
@@ -173,47 +175,49 @@ Skybox::Skybox(std::string* texFileRightPosX, std::string* texFileLeftNegX,
 	//glNormalPointer(GL_FLOAT, 0, &normals_dat[0]);
 	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-	//vao = Vao::create();
-	//vao->bind();
-	//vao->createIndexBuffer(indexBuffer);
-	//vao->createAttribute(0, vertices_data, 3);
-	//vao->createAttribute(1, texCoords_data, 2);
-	//vao->createAttribute(2, normals_data, 3);
-	//vao->unbind();
+	vao = Vao::create();
+	vao->bind();
+	vao->createIndexBuffer(indexBuffer);
+	vao->createAttribute(0, vertices_data, 3);
+	vao->createAttribute(1, texCoords_data, 2);
+	vao->createAttribute(2, normals_data, 3);
+	vao->unbind();
 
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-	glGenVertexArrays(1, &_TEST_VAO);
-	glBindVertexArray(_TEST_VAO);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	//glGenVertexArrays(1, &_TEST_VAO);
+	//glBindVertexArray(_TEST_VAO);
 
-	glGenBuffers(1, &_TEST_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices_data->size() * sizeof(float), &vertices_arr, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	//glVertexPointer(3, GL_FLOAT, 0, farray);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-	//glBufferData(GL_ARRAY_BUFFER, norms->size() * sizeof(float) * 3, farray_norms, GL_STATIC_DRAW);
+	//glGenBuffers(1, &_TEST_VBO);
+	//glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO);
+	//glBufferData(GL_ARRAY_BUFFER, vertices_data->size() * sizeof(float) * 3, &vertices_arr[0], GL_STATIC_DRAW);
+	//glEnableVertexAttribArray(0);
+	////glVertexPointer(3, GL_FLOAT, 0, farray);
 	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	////glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+	////glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-	glGenBuffers(1, &_TEST_VBO_NORMAL);
-	glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_NORMAL);
-	glBufferData(GL_ARRAY_BUFFER, normals_data->size() * sizeof(float), &normals_dat[0], GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);
-	glNormalPointer(GL_FLOAT, 0, &normals_dat[0]);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(verts->size()));
+	//glGenBuffers(1, &_TEST_VBO_TEXCOORD);
+	//glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_TEXCOORD);
+	//glBufferData(GL_ARRAY_BUFFER, texCoords_data->size() * sizeof(float) * 3, &texcoords_arr[0], GL_STATIC_DRAW);
+	//glEnableVertexAttribArray(2);
+	////glTexCoordPointer(3, GL_FLOAT, 0, &texcoords_arr[0]);
+	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	////glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(verts->size() + norms->size()));
 
-	glGenBuffers(1, &_TEST_VBO_TEXCOORD);
-	glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_TEXCOORD);
-	glBufferData(GL_ARRAY_BUFFER, texCoords_data->size() * sizeof(float) * 3, &texcoords_arr[0], GL_STATIC_DRAW);
-	glEnableVertexAttribArray(2);
-	glTexCoordPointer(3, GL_FLOAT, 0, &texcoords_arr[0]);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(verts->size() + norms->size()));
+	////glBufferData(GL_ARRAY_BUFFER, norms->size() * sizeof(float) * 3, farray_norms, GL_STATIC_DRAW);
+	////glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+	//glGenBuffers(1, &_TEST_VBO_NORMAL);
+	//glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_NORMAL);
+	//glBufferData(GL_ARRAY_BUFFER, normals_data->size() * sizeof(float) * 3, &normals_dat[0], GL_STATIC_DRAW);
+	//glEnableVertexAttribArray(1);
+	//glNormalPointer(GL_FLOAT, 0, &normals_dat[0]);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	////glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(verts->size()));
+
+
 
 	////glGenBuffers(1, &tangentsBuffer);
 	////glBindBuffer(GL_ARRAY_BUFFER, tangentsBuffer);
@@ -237,9 +241,9 @@ Skybox::Skybox(std::string* texFileRightPosX, std::string* texFileLeftNegX,
 
 
 
-	glGenBuffers(1, &_TEST_EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _TEST_EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 48 * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+	//glGenBuffers(1, &_TEST_EBO);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _TEST_EBO);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, 48 * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
 
 
@@ -253,18 +257,18 @@ Skybox::Skybox(std::string* texFileRightPosX, std::string* texFileLeftNegX,
 	//glBufferSubData(GL_ARRAY_BUFFER, verts->size() + norms->size(), tex_coord->size(), to_float_array(tex_coord->data(), tex_coord->size()));
 
 	//glGenVertexArrays(1, &VAO);
-	glBindVertexArray(_TEST_VAO);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	glEnableVertexAttribArray(3);
-	glEnableVertexAttribArray(4);
-	glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_NORMAL);
-	glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_TEXCOORD);
-	//glBindBuffer(GL_ARRAY_BUFFER, tangentsBuffer);
-	//glBindBuffer(GL_ARRAY_BUFFER, bitangentsBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _TEST_EBO);
+	//glBindVertexArray(_TEST_VAO);
+	//glEnableVertexAttribArray(0);
+	//glEnableVertexAttribArray(1);
+	//glEnableVertexAttribArray(2);
+	//glEnableVertexAttribArray(3);
+	//glEnableVertexAttribArray(4);
+	//glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO);
+	//glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_TEXCOORD);
+	//glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_NORMAL);
+	////glBindBuffer(GL_ARRAY_BUFFER, tangentsBuffer);
+	////glBindBuffer(GL_ARRAY_BUFFER, bitangentsBuffer);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _TEST_EBO);
 }
 
 Skybox::~Skybox()
@@ -279,11 +283,12 @@ void Skybox::Render(Transform* cameraTransform, Matrix4* projection)
 	std::vector<Uniform*>* inUniforms = new std::vector<Uniform*>();
 	inUniforms->push_back((Uniform*)projectionMatrix);
 	inUniforms->push_back((Uniform*)viewMatrix);
+	inUniforms->push_back((Uniform*)modelMatrix);
 	inUniforms->push_back((Uniform*)cubeMap);
 	
 	shader->start();
 	
-	projection = Matrix4::Perspective(45, 800.0f / 600.0f, 0.1f, 1000);
+	//projection = Matrix4::Perspective(90, 800.0f / 600.0f, 0.1f, 1000);
 	projectionMatrix->loadMatrix(shader->programID, projection);
 
 	// Remove translation from view matrix.
@@ -293,24 +298,32 @@ void Skybox::Render(Transform* cameraTransform, Matrix4* projection)
 		cameraTransform->localMatrix->Row2(), 
 		cameraTransform->localMatrix->Row3()
 	);
-	view->SetTranslation(Vector3f::ZERO);
-	view = new Matrix4(
-		cameraTransform->localMatrix->Row0(), 
-		cameraTransform->localMatrix->Row1(), 
-		cameraTransform->localMatrix->Row2(), 
-		cameraTransform->localMatrix->Row3()
-	);
+
+	Matrix4* model = Matrix4::Identity();
+	//model->Scale(2.0f);
+
+	modelMatrix->loadMatrix(shader->programID, model);
+
+	//view->SetTranslation(new Vector3f(0.0f, 0.0f, -2.0f));
+	//view = new Matrix4(
+	//	cameraTransform->localMatrix->Row0(), 
+	//	cameraTransform->localMatrix->Row1(), 
+	//	cameraTransform->localMatrix->Row2(), 
+	//	cameraTransform->localMatrix->Row3()
+	//);
 	//view->SetTranslation(Vector3f::ZERO);
-	//view->Scale(1.5f);
+	//view->Scale(2.0f);
+	//view->SetTranslation(cameraTransform->localMatrix->Row3()->xyz());
 
 	viewMatrix->loadMatrix(shader->programID, view);
 	cubeMap->loadTexUnit(shader->programID, 0); // Indicates which texture unit the cubemap texture should be sampled from
 	shader->storeAllUniformLocations(inUniforms);
 	cubemap->bindToUnit(0);
-	//vao->bind();
-	//vao->binder(0, 3);
-
+	vao->bind();
+	vao->binder(0, 3);
+	glUseProgram(shader->programID);
 	OpenGlUtils::Antialias(true);
+	//OpenGlUtils::EnableAlphaBlending();
 	OpenGlUtils::DisableBlending();
 	OpenGlUtils::EnableDepthTesting(true);
 	glDepthFunc(GL_LEQUAL);
@@ -318,26 +331,36 @@ void Skybox::Render(Transform* cameraTransform, Matrix4* projection)
 	//glCullFace(GL_BACK);
 	glDisable(GL_CULL_FACE);
 
-	glBindVertexArray(_TEST_VAO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _TEST_EBO);
-	glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_TEXCOORD);
-	glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_NORMAL);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	//OpenGlUtils::GoWireframe(true);
-	//glDrawElements(GL_TRIANGLES, 48, GL_UNSIGNED_INT, nullptr); // vao->getIndexCount() vao->indicies_data
-	
-	unsigned int verticiesCount = 24 * 3;
-	glDrawArrays(GL_TRIANGLES, 0, verticiesCount);
+	//glBindVertexArray(_TEST_VAO);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _TEST_EBO);
+	//glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO);
+	//glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_TEXCOORD);
+	//glBindBuffer(GL_ARRAY_BUFFER, _TEST_VBO_NORMAL);
+	//glEnableVertexAttribArray(0);
+	//glEnableVertexAttribArray(1);
+	//glEnableVertexAttribArray(2);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap->textureId);
+	
+	//glDepthMask(GL_FALSE);
+
+	//OpenGlUtils::GoWireframe(true);
+	glDrawElements(GL_TRIANGLES, 48, GL_UNSIGNED_INT, nullptr); // vao->getIndexCount() vao->indicies_data
+	
+	//glDrawArrays(GL_TRIANGLES, 0, vertices_data->size());
+
+	//unsigned int verticiesCount = 24 * 3;
+	//glDrawArrays(GL_TRIANGLES, 0, verticiesCount);
+
+	OpenGlUtils::EnableDepthTesting(true);
+	glDepthMask(GL_TRUE);
 	glDisable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
 	shader->stop();
-	//vao->unbinder(0, 3);
-
+	vao->unbinder(0, 3);
+	vao->unbind();
 	glDepthFunc(GL_LESS);
 }

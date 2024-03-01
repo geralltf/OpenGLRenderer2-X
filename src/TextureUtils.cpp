@@ -12,7 +12,7 @@ TextureData* TextureUtils::decodeTextureFile(std::string* file)
 	TGADecoder* tgaDecoder = new TGADecoder();
 
 	bool loaded = tgaDecoder->read_tga_file(file);
-	tgaDecoder->flip_vertically();
+	//tgaDecoder->flip_vertically();
 	width = tgaDecoder->get_width();
 	height = tgaDecoder->get_height();
 	bytesPerPixel = tgaDecoder->get_bytesPerPixel();
@@ -148,7 +148,31 @@ GLuint TextureUtils::uploadTextureToOpenGL(TextureData* dataRight, TextureData* 
 				format = GL_BGR;
 			}
 
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat, data[i]->getWidth(), data[i]->getHeight(), 0, format, GL_UNSIGNED_BYTE, data[i]->getBuffer());
+			//GL_TEXTURE_CUBE_MAP_POSITIVE_X	Right	0
+			//GL_TEXTURE_CUBE_MAP_NEGATIVE_X	Left	1
+			//GL_TEXTURE_CUBE_MAP_POSITIVE_Y	Top		2
+			//GL_TEXTURE_CUBE_MAP_NEGATIVE_Y	Bottom	3
+			//GL_TEXTURE_CUBE_MAP_POSITIVE_Z	Back	4
+			//GL_TEXTURE_CUBE_MAP_NEGATIVE_Z	Front	5
+
+			if (i == 0) {
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, internalFormat, data[i]->getWidth(), data[i]->getHeight(), 0, format, GL_UNSIGNED_BYTE, data[i]->getBuffer());
+			}
+			else if (i == 1) {
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, internalFormat, data[i]->getWidth(), data[i]->getHeight(), 0, format, GL_UNSIGNED_BYTE, data[i]->getBuffer());
+			}
+			else if (i == 2) {
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, internalFormat, data[i]->getWidth(), data[i]->getHeight(), 0, format, GL_UNSIGNED_BYTE, data[i]->getBuffer());
+			}
+			else if (i == 3) {
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, internalFormat, data[i]->getWidth(), data[i]->getHeight(), 0, format, GL_UNSIGNED_BYTE, data[i]->getBuffer());
+			}
+			else if (i == 4) {
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, internalFormat, data[i]->getWidth(), data[i]->getHeight(), 0, format, GL_UNSIGNED_BYTE, data[i]->getBuffer());
+			}
+			else if (i == 5) {
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, internalFormat, data[i]->getWidth(), data[i]->getHeight(), 0, format, GL_UNSIGNED_BYTE, data[i]->getBuffer());
+			}
 		}
 
 		if (builder->isMipmap())

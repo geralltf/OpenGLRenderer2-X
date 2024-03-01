@@ -26,45 +26,64 @@ void CharacterController::PollInput()
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		direction->x = 1;
+		//direction->x = 1;
+		camera_angle_yaw -= turnSpeed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		direction->x = -1;
+		//direction->x = -1;
+		camera_angle_yaw += turnSpeed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		direction->z = 1;
+		//direction->z = 1;
+		camera_angle_pitch += turnSpeed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		direction->z = -1;
+		//direction->z = -1;
+		camera_angle_pitch -= turnSpeed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		direction->y = -1;
+		//direction->y = -1;
+
+		camera_pos = Vector3f::Add(camera_pos, Vector3f::Multiply(new Vector3f(camera_speed, camera_speed, camera_speed), camera_front));
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		direction->y = 1;
+		//direction->y = 1;
+
+		camera_pos = Vector3f::Subtract(camera_pos, Vector3f::Multiply(new Vector3f(camera_speed, camera_speed, camera_speed), camera_front));
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		direction->x = -1;
+		//direction->x = -1;
+
+		Vector3f* directionality;
+		directionality = Vector3f::Scale(Vector3f::Cross(camera_front, camera_up)->Normalised(), camera_speed);
+		camera_pos = Vector3f::Subtract(camera_pos, directionality);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		direction->x = 1;
+		//direction->x = 1;
+
+		Vector3f* directionality;
+		directionality = Vector3f::Scale(Vector3f::Cross(camera_front, camera_up)->Normalised(), camera_speed);
+		camera_pos = Vector3f::Add(camera_pos, directionality);
 	}
 
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 	{
-		rotation->x = 1;
+		//rotation->x = 1;
+		camera_angle_roll += turnSpeed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 	{
-		rotation->x = -1;
+		//rotation->x = -1;
+
+		camera_angle_roll -= turnSpeed;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
@@ -169,6 +188,9 @@ void CharacterController::PollInput()
 		movementSpeed = sprint;
 	}
 
+	camera_speed = movementSpeed;
+	turnSpeed = movementSpeed;
+
 	cameraTransform->Rotate(rotation->x* rotSpeed, rotation->y* rotSpeed, rotation->z* rotSpeed);
 	cameraTransform->Translate(Vector3f::Scale(direction, movementSpeed));
 	worldPosition = Vector3f::Scale(direction, movementSpeed);
@@ -180,4 +202,24 @@ void CharacterController::PollInput()
 
 	//Vector3 pos = cameraTransform.GetLocalPosition();
 	//std::cout << "x: " << pos.x << " y: " << pos.y << " z: " << pos.z << " [" << rotation.x << ", " << rotation.y << ", " << rotation.z << "]" << std::endl;
+	
+	Vector3f* cam_position = camera_pos->Add(new Vector3f(0.0f, 0.0f, -2.0f));
+
+	Matrix4* cam_transl = Matrix4::CreateTranslationMatrix(cam_position);
+
+	Matrix4* camera = Matrix4::Identity();
+	camera = Matrix4::Multiply(camera, cam_transl);
+	Matrix4* rotX = Matrix4::CreateRotationXMatrix(camera_angle_pitch);
+	Matrix4* rotY = Matrix4::CreateRotationYMatrix(camera_angle_yaw);
+	Matrix4* rotZ = Matrix4::CreateRotationZMatrix(camera_angle_roll);
+	camera = Matrix4::Multiply(camera, rotX);
+	camera = Matrix4::Multiply(camera, rotY);
+	camera = Matrix4::Multiply(camera, rotZ);
+	Vector3f* cam_forward = Matrix4::TransformVector(camera, new Vector3f(0.0f, 0.0f, 1.0f))->Normalised();
+	Vector3f* cam_up = Matrix4::TransformVector(camera, new Vector3f(0.0f, 1.0f, 0.0f))->Normalised();
+	camera_front = cam_forward;
+	camera_up = cam_up;
+
+	cameraTransform->localMatrix = camera;
+
 }

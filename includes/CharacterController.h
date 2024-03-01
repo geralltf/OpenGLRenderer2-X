@@ -15,6 +15,14 @@ public:
 	Vector3f*				cursorForward		= Vector3f::ZERO;
 	Vector3f*				direction			= Vector3f::ZERO;
 	Vector3f*				rotation			= Vector3f::ZERO;
+	Vector3f*				camera_pos			= Vector3f::ZERO;
+	float					camera_angle_pitch	= 0.0f;
+	float					camera_angle_yaw	= 0.0f;
+	float					camera_angle_roll	= 0.0f;
+	Vector3f*				camera_front		= new Vector3f(0.0f, 0.0f, 1.0f);
+	Vector3f*				camera_up			= new Vector3f(0.0f, 1.0f, 0.0f);
+	float					turnSpeed			= 0.1f;
+	float					camera_speed		= 0.1f;
 	float					movementSpeed		= 0;
 	float					sprint				= 0.7f;
 	float					speed				= 0.1f;

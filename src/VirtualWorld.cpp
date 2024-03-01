@@ -107,6 +107,8 @@ void VirtualWorld::Initilise()
 
 	//std::string model = "Assets/Animations/Mannequin_figure/free3DmodelDAE/free3Dmodel2.dae";
 	//std::string anim = "Assets/Animations/Mannequin_figure/Male_Locomotion_PackDAE/walking.dae";
+	//std::string model = "Assets/Animations/model.dae";
+	//std::string anim = "Assets/Animations/model.dae";
 	//animModel = AnimatedModelLoader::LoadModel(model);
 	//AnimatedModel* animModel2 = AnimatedModelLoader::LoadModel(anim);
 	//animModel = animModel2;
