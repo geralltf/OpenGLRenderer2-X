@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\projects\ragdoll\ragdollphys\ragdollphys\glfw-3.3.9\build\CMakeFiles\87b4a2cddf324a3448c7d4c71759b500\update_mappings.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\geral\Downloads\glfw-3.3.9\glfw-3.3.9\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\geral\Downloads\glfw-3.3.9\glfw-3.3.9\src\mappings.h.in">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="C:\Users\geral\Downloads\glfw-3.3.9\glfw-3.3.9\CMake\GenerateMappings.cmake" />
+    <None Include="C:\projects\ragdoll\ragdollphys\ragdollphys\glfw-3.3.9\build\src\CMakeFiles\update_mappings" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{166179EB-E02D-30A7-9129-AA5AC7BD15A5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{0B8173C3-CF92-3A6C-ACF7-846093313FC2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

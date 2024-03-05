@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\projects\ragdoll\ragdollphys\ragdollphys\glfw-3.3.9\build\CMakeFiles\aa3bd558c0f4477bf9b4410b49d15627\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{166179EB-E02D-30A7-9129-AA5AC7BD15A5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

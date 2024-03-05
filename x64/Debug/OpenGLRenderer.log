@@ -1,0 +1,455 @@
+﻿  AABB.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/AABB.cpp')
+  C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\external\glfw-3.3.9\include\GLFW\glfw3.h(123,1):
+  see previous definition of 'APIENTRY'
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\AABB.cpp(40,32): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  AnimatedModel.cpp
+  AnimatedModelData.cpp
+  AnimatedModelLoader.cpp
+  AnimatedModelRenderer.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformMat4Array.h(32,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'src/AnimatedModelRenderer.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformMat4Array.h(49,63): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  (compiling source file 'src/AnimatedModelRenderer.cpp')
+  
+  AnimatedModelShader.cpp
+  Animation.cpp
+  AnimationData.cpp
+  Animator.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244: '=': conversion from '_Rep' to 'long', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:             _Rep=__int64
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         ]
+  (compiling source file 'src/Animator.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244: 'initializing': conversion from '_Rep' to 'long', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:             _Rep=__int64
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         ]
+  (compiling source file 'src/Animator.cpp')
+  
+  BinaryReader.cpp
+  BinaryWriter.cpp
+  Character.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/Character.cpp')
+  C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\external\glfw-3.3.9\include\GLFW\glfw3.h(123,1):
+  see previous definition of 'APIENTRY'
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\Character.h(46,36): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/Character.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\Character.h(53,29): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/Character.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Character.cpp(148,19): warning C4305: 'initializing': truncation from 'double' to 'float'
+  CharacterController.cpp
+  Colour.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Colour.cpp(31,11): warning C4244: 'initializing': conversion from 'const _Ty' to 'byte', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Colour.cpp(31,11): warning C4244:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Colour.cpp(31,11): warning C4244:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Colour.cpp(31,11): warning C4244:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Colour.cpp(31,11): warning C4244:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Colour.cpp(32,11): warning C4244: 'initializing': conversion from 'const _Ty' to 'byte', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Colour.cpp(32,11): warning C4244:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Colour.cpp(32,11): warning C4244:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Colour.cpp(32,11): warning C4244:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Colour.cpp(32,11): warning C4244:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Colour.cpp(86,31): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  ColourRGBA.cpp
+  CoorinateSet.cpp
+  Cubemap.cpp
+  Debug.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/Debug.cpp')
+  C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\external\glfw-3.3.9\include\GLFW\glfw3.h(123,1):
+  see previous definition of 'APIENTRY'
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Debug.cpp(74,22): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Editor.cpp
+  EntryPoint.cpp
+  Generating Code...
+  Compiling...
+  FileWatcher.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244: '=': conversion from '_Rep' to 'long', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:             _Rep=__int64
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         ]
+  (compiling source file 'src/FileWatcher.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244: 'initializing': conversion from '_Rep' to 'long', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:             _Rep=__int64
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         ]
+  (compiling source file 'src/FileWatcher.cpp')
+  
+  HalfEdgeMesh.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/HalfEdgeMesh.cpp')
+  C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\external\glfw-3.3.9\include\GLFW\glfw3.h(123,1):
+  see previous definition of 'APIENTRY'
+  
+  HE_AdjacencyList.cpp
+  HE_Edge.cpp
+  HE_Face.cpp
+  HE_Pair.cpp
+  HE_Vertex.cpp
+  IOHelpers.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\IOHelpers.cpp(45,19): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  Joint.cpp
+  JointData.cpp
+  JointTransform.cpp
+  JointTransformData.cpp
+  KeyFrame.cpp
+  KeyFrameData.cpp
+  MathHelpers.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\MathHelpers.cpp(175,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Matrix3.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Matrix3.cpp(184,6): warning C4101: 'i': unreferenced local variable
+  Matrix4.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Matrix4.cpp(1027,42): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Matrix4.cpp(1027,24): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Matrix4.cpp(1028,43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Matrix4.cpp(1028,19): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  MeshBufferVAO.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/MeshBufferVAO.cpp')
+  C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\external\glfw-3.3.9\include\GLFW\glfw3.h(123,1):
+  see previous definition of 'APIENTRY'
+  
+  MeshData.cpp
+  Model.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Model.cpp(124,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Model.cpp(125,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Model.cpp(126,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Model.cpp(96,25): warning C4101: '_n': unreferenced local variable
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Model.cpp(96,17): warning C4101: '_f': unreferenced local variable
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Model.cpp(96,21): warning C4101: '_t': unreferenced local variable
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Model.cpp(251,9): warning C4101: 'vertex': unreferenced local variable
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Model.cpp(253,43): warning C4101: 'test3': unreferenced local variable
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Model.cpp(250,29): warning C4101: 'face': unreferenced local variable
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Model.cpp(286,23): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Model.cpp(291,32): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Matrix4.cpp(548): warning C4172: returning address of local variable or temporary: empty
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Matrix4.cpp(278): warning C4715: 'Matrix4::InvertAffine': not all control paths return a value
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Matrix3.cpp(232): warning C4172: returning address of local variable or temporary: result
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\HE_Edge.cpp(33): warning C4172: returning address of local variable or temporary: name
+  Compiling...
+  NoiseHelpers.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\NoiseHelpers.cpp(153,13): warning C4244: '=': conversion from 'float' to 'byte', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\NoiseHelpers.cpp(195,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\NoiseHelpers.cpp(203,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\NoiseHelpers.cpp(204,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\NoiseHelpers.cpp(205,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Nullable.cpp
+  Octree.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/Octree.cpp')
+  C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\external\glfw-3.3.9\include\GLFW\glfw3.h(123,1):
+  see previous definition of 'APIENTRY'
+  
+  OctreeRenderer.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/OctreeRenderer.cpp')
+  C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\external\glfw-3.3.9\include\GLFW\glfw3.h(123,1):
+  see previous definition of 'APIENTRY'
+  
+  OpenGLExt.cpp
+  OpenGlUtils.cpp
+  pugixml.cpp
+  Quad.cpp
+  Quadtree.cpp
+  Quaternion.cpp
+  Random.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Random.cpp(50,19): warning C4244: '=': conversion from 'uint64_t' to 'uint32_t', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Random.cpp(53,19): warning C4244: '=': conversion from 'uint64_t' to 'uint32_t', possible loss of data
+  Ray.cpp
+  Renderer.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/Renderer.cpp')
+  C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\external\glfw-3.3.9\include\GLFW\glfw3.h(123,1):
+  see previous definition of 'APIENTRY'
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\Character.h(46,36): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/Renderer.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\Character.h(53,29): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/Renderer.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformMat4Array.h(32,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'src/Renderer.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformMat4Array.h(49,63): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  (compiling source file 'src/Renderer.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformVec3Array.h(28,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'src/Renderer.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformVec3Array.h(45,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  (compiling source file 'src/Renderer.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244: '=': conversion from '_Rep' to 'long', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:             _Rep=__int64
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         ]
+  (compiling source file 'src/Renderer.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244: 'initializing': conversion from '_Rep' to 'long', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:             _Rep=__int64
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         ]
+  (compiling source file 'src/Renderer.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Renderer.cpp(114,42): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Renderer.cpp(358,42): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Rigidbody.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Rigidbody.cpp(124,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Rigidbody.cpp(138,56): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  SFMLCanvas.cpp
+  ShaderHelpers.cpp
+  ShaderProgram.cpp
+  SkeletonData.cpp
+  SkinningData.cpp
+  Skybox.cpp
+  Generating Code...
+  Compiling...
+  StringHelpers.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\StringHelpers.cpp(36,15): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\StringHelpers.cpp(62,15): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\StringHelpers.cpp(91,15): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  SystemTests.cpp
+  Terrain.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformMat4Array.h(32,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformMat4Array.h(49,63): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformVec3Array.h(28,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformVec3Array.h(45,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244: '=': conversion from '_Rep' to 'long', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:             _Rep=__int64
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(19,22): warning C4244:         ]
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244: 'initializing': conversion from '_Rep' to 'long', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:             _Rep=__int64
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\TimeManager.h(45,17): warning C4244:         ]
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(58,22): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(58,22): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(58,22): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(58,22): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(58,22): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(60,22): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(60,22): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(60,22): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(60,22): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(60,22): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(65,21): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(65,21): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(65,21): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(65,21): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(65,21): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(67,21): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(67,21): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(67,21): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(67,21): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(67,21): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(68,22): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(68,22): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(68,22): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(68,22): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(68,22): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(71,22): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(71,22): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(71,22): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(71,22): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(71,22): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(166,21): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(166,21): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(166,21): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(166,21): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(166,21): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(169,21): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(169,21): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(169,21): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(169,21): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(169,21): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(171,20): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(171,20): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(171,20): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(171,20): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(171,20): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(172,21): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(172,21): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(172,21): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(172,21): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(172,21): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(173,20): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(173,20): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(173,20): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(173,20): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(173,20): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(175,20): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(175,20): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(175,20): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(175,20): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(175,20): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(183,21): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(183,21): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(183,21): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(183,21): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(183,21): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(184,20): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(184,20): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(184,20): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(184,20): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(184,20): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(185,21): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(185,21): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(185,21): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(185,21): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(185,21): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(189,20): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(189,20): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(189,20): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(189,20): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(189,20): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(190,21): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(190,21): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(190,21): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(190,21): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(190,21): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(191,20): warning C4305: 'argument': truncation from 'double' to '_Ty'
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(191,20): warning C4305:         with
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(191,20): warning C4305:         [
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(191,20): warning C4305:             _Ty=float
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(191,20): warning C4305:         ]
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(374,23): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(374,11): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(401,18): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Terrain.cpp(534,23): warning C4018: '<': signed/unsigned mismatch
+  Texture.cpp
+  TextureBuilder.cpp
+  TextureData.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\TextureData.cpp(62,8): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\TextureData.cpp(63,8): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  TextureUtils.cpp
+  TGADecoder.cpp
+  Transform.cpp
+  Triangle.cpp
+  Vao.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Vao.cpp(49,34): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Vao.cpp(71,56): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Vao.cpp(71,23): warning C4267: 'initializing': conversion from 'size_t' to 'const int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Vao.cpp(96,76): warning C4312: 'type cast': conversion from 'GLsizei' to 'void *' of greater size
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Vao.cpp(98,76): warning C4312: 'type cast': conversion from 'GLsizei' to 'void *' of greater size
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Vao.cpp(100,76): warning C4312: 'type cast': conversion from 'GLsizei' to 'void *' of greater size
+  Vbo.cpp
+  Vector2f.cpp
+  Vector2i.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Vector2i.cpp(55,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Vector2i.cpp(55,37): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Vector2i.cpp(78,16): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\Vector2i.cpp(83,20): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+  Vector3f.cpp
+  Vector4f.cpp
+  VectorLib.cpp
+  Vertex.cpp
+  VertexSkinData.cpp
+  VirtualWorld.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/VirtualWorld.cpp')
+  C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\external\glfw-3.3.9\include\GLFW\glfw3.h(123,1):
+  see previous definition of 'APIENTRY'
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\Character.h(46,36): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/VirtualWorld.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\Character.h(53,29): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/VirtualWorld.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformMat4Array.h(32,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'src/VirtualWorld.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformMat4Array.h(49,63): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  (compiling source file 'src/VirtualWorld.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformVec3Array.h(28,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'src/VirtualWorld.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\UniformVec3Array.h(45,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  (compiling source file 'src/VirtualWorld.cpp')
+  
+  Generating Code...
+  Compiling...
+  WavefrontOBJMeshImporter.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/WavefrontOBJMeshImporter.cpp')
+  C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\external\glfw-3.3.9\include\GLFW\glfw3.h(123,1):
+  see previous definition of 'APIENTRY'
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\FileHelpers.h(136,38): warning C4101: 'ia': unreferenced local variable
+  (compiling source file 'src/WavefrontOBJMeshImporter.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\includes\FileHelpers.h(150,38): warning C4101: 'ia': unreferenced local variable
+  (compiling source file 'src/WavefrontOBJMeshImporter.cpp')
+  
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\WavefrontOBJMeshImporter.cpp(69,37): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\WavefrontOBJMeshImporter.cpp(137,1): warning C4010: single-line comment contains line-continuation character
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\WavefrontOBJMeshImporter.cpp(510,25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  WOBJ_Face.cpp
+  WOBJ_Mesh.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/WOBJ_Mesh.cpp')
+  C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\external\glfw-3.3.9\include\GLFW\glfw3.h(123,1):
+  see previous definition of 'APIENTRY'
+  
+  XMLAnimationLoader.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLAnimationLoader.cpp(35,17): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLAnimationLoader.cpp(132,17): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
+  XMLColladaLoader.cpp
+  XMLGeometryLoader.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(59,49): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(63,49): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(184,16): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(227,36): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(342,7): warning C4101: 'j': unreferenced local variable
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(414,55): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(429,42): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(430,42): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(431,40): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(432,39): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(433,40): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(434,47): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLGeometryLoader.cpp(435,49): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  XMLHelpers.cpp
+  XMLSkeletonLoader.cpp
+  XMLSkinLoader.cpp
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLSkinLoader.cpp(82,22): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLSkinLoader.cpp(94,22): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\src\XMLSkinLoader.cpp(148,21): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+glew32s.lib(glew.obj) : warning LNK4099: PDB '' was not found with 'glew32s.lib(glew.obj)' or at ''; linking object as if no debug info
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  OpenGLRenderer.vcxproj -> C:\projects\OpenGLRenderer\NEW3\OpenGLRenderer2-X\x64\Debug\OpenGLRenderer.exe

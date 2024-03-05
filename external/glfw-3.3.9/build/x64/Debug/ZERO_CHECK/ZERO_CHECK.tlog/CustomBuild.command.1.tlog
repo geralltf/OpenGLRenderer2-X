@@ -1,0 +1,10 @@
+^C:\PROJECTS\RAGDOLL\RAGDOLLPHYS\RAGDOLLPHYS\GLFW-3.3.9\BUILD\CMAKEFILES\AA3BD558C0F4477BF9B4410B49D15627\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/geral/Downloads/glfw-3.3.9/glfw-3.3.9 -BC:/projects/ragdoll/ragdollphys/ragdollphys/glfw-3.3.9/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/projects/ragdoll/ragdollphys/ragdollphys/glfw-3.3.9/build/GLFW.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
