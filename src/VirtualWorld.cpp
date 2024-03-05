@@ -58,7 +58,7 @@ void VirtualWorld::Initilise()
 	//character00->LoadModel("Assets/Cars/Audi_R8.obj");
 	character00->LoadModel(new std::string("Assets/diablo3_pose/diablo3_pose.obj"));
 	//character00->LoadModel("Assets/Dragon.obj");
-	//character00->LoadModel("Assets/cactus_v1.obj");
+	//character00->LoadModel(new std::string("Assets/cactus_v1.obj"));
 	//character00->LoadModel(new std::string("Assets/african_head/african_head.obj"));
 	//character00->LoadModel("Assets/african_head/african_head_eye_inner.obj");
 	//character00->LoadModel("Assets/african_head/african_head_eye_outer.obj");
@@ -110,11 +110,11 @@ void VirtualWorld::Initilise()
 	//std::string model = "Assets/Animations/model.dae";
 	//std::string anim = "Assets/Animations/model.dae";
 	//animModel = AnimatedModelLoader::LoadModel(model);
-	//AnimatedModel* animModel2 = AnimatedModelLoader::LoadModel(anim);
-	//animModel = animModel2;
+	////AnimatedModel* animModel2 = AnimatedModelLoader::LoadModel(anim);
+	////animModel = animModel2;
 	//animRenderer = new AnimatedModelRenderer();
 	//animDiffuseTexture = Texture::LoadTexture(new std::string("Assets/Animations/diffuse.tga"))->Anisotropic()->Create();
-	//selectedAnimation = animModel2->getAnimation();
+	//selectedAnimation = animModel->getAnimation();
 	//animator = new Animator(animModel);
 	//animator->doAnimation(selectedAnimation);
 
@@ -157,7 +157,7 @@ void VirtualWorld::Render(sf::RenderWindow* window, Transform* cameraTransform, 
 	//character02->lutTexture03 = lutTexture03;
 	//character02->lutTexture04 = lutTexture04;
 	Matrix4* model_floor = Matrix4::Identity();
-	model_floor->Scale(10.0f);
+	//model_floor->Scale(10.0f);
 
 	floor->Render(window, cameraTransform, projectionMatrix, model_floor, light_dir, lightModelView);
 
@@ -190,11 +190,13 @@ void VirtualWorld::Render(sf::RenderWindow* window, Transform* cameraTransform, 
 			if (worldSystem.CactusExists)
 			{
 				model = Matrix4::Identity();
-				model->Scale(0.1f);
+				//model->Scale(0.1f);
+				model->Translate(modelview->GetTranslation());
+				model->Translate(new Vector3f(1.5f, 0.0f, 0.0f));
 				//model.Translate(modelview.GetTranslation());
 				//model.Translate(Vector3(1.5f, 0, 0));
-				model->Translate(new Vector3f(x * 10.0f, 0.0f, y * 10.0f));
-				//model.Translate(cameraTransform.GetPosition());
+				model->Translate(new Vector3f(x * 3.0f, 0.0f, y * 3.0f));
+				//model->Translate(cameraTransform->GetPosition());
 				//model.Translate(worldPosition);
 
 				cactus->Render(window, cameraTransform, projectionMatrix, model, light_dir, lightModelView);
@@ -213,6 +215,7 @@ void VirtualWorld::Render(sf::RenderWindow* window, Transform* cameraTransform, 
 	//if (lutTexture02 != nullptr) lutTexture02->bindToUnit(6);
 	//if (lutTexture03 != nullptr) lutTexture03->bindToUnit(7);
 	//if (lutTexture04 != nullptr) lutTexture04->bindToUnit(8);
+
 	//animRenderer->render(animModel, cameraTransform, projectionMatrix, modelview, light_dir);
 
 	//terrain->lutTexture00 = lutTexture00;
