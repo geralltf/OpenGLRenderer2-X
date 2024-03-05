@@ -95,10 +95,22 @@ JointData* SkeletonLoader::extractMainJointData(pugi::xpath_node jointNode, bool
 	// blender changes the id but it is best to stick with the id attribute
 
 	int index = -1;
-	auto it = std::find(boneOrder->begin(), boneOrder->end(), id);
-	if (it != boneOrder->end())
+	//auto it = std::find(boneOrder->begin(), boneOrder->end(), *id);
+
+	//if (it != boneOrder->end())
+	//{
+	//	index = std::distance(boneOrder->begin(), it);
+	//}
+
+	for (int i = 0; i < boneOrder->size(); i++)
 	{
-		index = std::distance(boneOrder->begin(), it);
+		std::string* boneOrderId = boneOrder->at(i);
+
+		if (*boneOrderId == *id)
+		{
+			index = i;
+			break;
+		}
 	}
 
 	std::string* matrixData = new std::string(jointNode.node().child("matrix").text().as_string());

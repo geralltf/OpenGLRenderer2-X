@@ -76,26 +76,63 @@ std::map<std::string*, Matrix4*>* Animator::calculateCurrentAnimationPose()
 
 void Animator::applyPoseToJoints(std::map<std::string*, Matrix4*>* currentPose, Joint* rootJoint, Matrix4* parentTransform)
 {
-	Matrix4* currentLocalTransform = Matrix4::Identity();
-	std::map<std::string*, Matrix4*>::iterator it = currentPose->find(rootJoint->id);
-	if (it == currentPose->end())
-	{
-		it = currentPose->find(rootJoint->name);
+	//currentPose = GetDefaultPose();
 
-		if (it == currentPose->end())
-		{
-			// There was no keyframe pose made so this model doesn't move from its bind pose.
-			currentLocalTransform = rootJoint->getLocalBindTransform(); // Keeps the model in the bind pose
-		}
-		else
-		{
-			currentLocalTransform = currentPose->at(rootJoint->name);
-		}
-	}
-	else 
+	Matrix4* currentLocalTransform = Matrix4::Identity();
+	//std::map<std::string*, Matrix4*>::iterator it = currentPose->find(rootJoint->id);
+	bool first = false;
+	bool second = false;
+
+	for (auto i = currentPose->begin(); i != currentPose->end(); i++)
 	{
-		currentLocalTransform = currentPose->at(rootJoint->id);
+		if (*i->first == *rootJoint->id) 
+		{
+			first = true;
+			currentLocalTransform = i->second; // currentPose->at(rootJoint->id);
+			//currentLocalTransform = currentPose->at(rootJoint->id);
+			break;
+		}
+
 	}
+	if (!first)
+	{
+		for (auto i = currentPose->begin(); i != currentPose->end(); i++)
+		{
+			if (*i->first == *rootJoint->name)
+			{
+				second = true;
+				currentLocalTransform = i->second;
+				//currentLocalTransform = currentPose->at(rootJoint->name);
+
+				break;
+			}
+		}
+	}
+
+	if (!first && !second) 
+	{
+		// There was no keyframe pose made so this model doesn't move from its bind pose.
+		currentLocalTransform = rootJoint->getLocalBindTransform(); // Keeps the model in the bind pose
+	}
+
+	//if (it == currentPose->end())
+	//{
+	//	it = currentPose->find(rootJoint->name);
+
+	//	if (it == currentPose->end())
+	//	{
+	//		// There was no keyframe pose made so this model doesn't move from its bind pose.
+	//		currentLocalTransform = rootJoint->getLocalBindTransform(); // Keeps the model in the bind pose
+	//	}
+	//	else
+	//	{
+	//		currentLocalTransform = currentPose->at(rootJoint->name);
+	//	}
+	//}
+	//else 
+	//{
+	//	currentLocalTransform = currentPose->at(rootJoint->id);
+	//}
 
 	Matrix4* worldTransform = Matrix4::Multiply(parentTransform, currentLocalTransform);
 
@@ -153,17 +190,43 @@ std::map<std::string*, Matrix4*>* Animator::interpolatePoses(KeyFrame* previousF
 	std::map<std::string*, Matrix4*>* currentPose = new std::map<std::string*, Matrix4*>();
 	std::map<std::string*, JointTransform*>* prevKeyframeMap = previousFrame->getJointKeyFrames();
 	std::map<std::string*, JointTransform*>* nextKeyframeMap = nextFrame->getJointKeyFrames();
+	bool first = false;
+	bool second = false;
 
 	for (auto const& keysmap : *prevKeyframeMap)
 	{
 		std::string* jointName = keysmap.first;
+		JointTransform* previousTransform = nullptr;
+		JointTransform* nextTransform = nullptr;
 
-		JointTransform* previousTransform = prevKeyframeMap->at(jointName);
-		JointTransform* nextTransform = nextKeyframeMap->at(jointName);
+		for (auto keysvalues : *prevKeyframeMap)
+		{
+			if (*keysvalues.first == *jointName)
+			{
+				previousTransform = keysvalues.second;
+				first = true;
+				break;
+			}
+		}
+		for (auto keysvalues2 : *nextKeyframeMap)
+		{
+			if (*keysvalues2.first == *jointName)
+			{
+				nextTransform = keysvalues2.second;
+				second = true;
+				break;
+			}
+		}
 
-		JointTransform* currentTransform = JointTransform::interpolate(previousTransform, nextTransform, progression);
+		//JointTransform* previousTransform = prevKeyframeMap->at(jointName);
+		//JointTransform* nextTransform = nextKeyframeMap->at(jointName);
 
-		currentPose->insert(std::pair<std::string*, Matrix4*>(jointName, currentTransform->getLocalTransform()));
+		if (first && second)
+		{
+			JointTransform* currentTransform = JointTransform::interpolate(previousTransform, nextTransform, progression);
+
+			currentPose->insert(std::pair<std::string*, Matrix4*>(jointName, currentTransform->getLocalTransform()));
+		}
 	}
 
 	return currentPose;

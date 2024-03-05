@@ -116,7 +116,12 @@ std::vector<VertexSkinData*>* SkinLoader::getSkinData(pugi::xpath_node weightsDa
 			int jointId = std::stoi(rawData[pointer++]);
 			int weightId = std::stoi(rawData[pointer++]);
 
-			skinData->addJointEffect(jointId, weights[weightId]);
+			if (weightId < countWeights)
+			{
+				float weight_value = weights[weightId];
+
+				skinData->addJointEffect(jointId, weight_value);
+			}
 		}
 
 		skinData->limitJointNumber(maxWeights);

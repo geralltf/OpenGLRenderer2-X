@@ -54,11 +54,14 @@ float VertexSkinData::saveTopWeights(std::vector<float>** topWeightsArray)
 
 	std::vector<float>* LIST = *topWeightsArray;
 	
+	auto start = LIST->begin();
+	auto end = LIST->end();
+
 	int i = 0;
-	for (auto element_position = LIST->begin(); element_position < LIST->end(); element_position++)
+	for (int element_position = 0; element_position < LIST->size() && i < weights->size(); element_position++)
 	{
 		local_w = weights->at(i);
-		(*topWeightsArray)->insert(element_position, local_w);
+		(*topWeightsArray)->insert(LIST->begin() + element_position, local_w);
 		total += local_w;
 		i++;
 	}

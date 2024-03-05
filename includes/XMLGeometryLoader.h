@@ -42,10 +42,10 @@ private:
 	std::vector<GLfloat>* vertexBiTangents;
 	int vertexBiTangentsCount;
 
-	std::vector<Vertex*>* vertices;
-	std::vector<Vector2f*>* textures;
-	std::vector<Vector3f*>* normals;
-	std::vector<unsigned int>* indices;
+	std::vector<Vertex*>* vertices = new std::vector<Vertex*>();
+	std::vector<Vector2f*>* textures = new std::vector<Vector2f*>();
+	std::vector<Vector3f*>* normals = new std::vector<Vector3f*>();
+	std::vector<unsigned int>* indices = new std::vector<unsigned int>();
 
 public:
 	GeometryLoader(pugi::xpath_node geometryNode, std::vector<VertexSkinData*>* vertexWeights);

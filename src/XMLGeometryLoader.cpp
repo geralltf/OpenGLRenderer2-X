@@ -38,6 +38,11 @@ void GeometryLoader::readPositions()
 	int count = std::stoi(std::string(positionsData.node().attribute("count").value()));
 	std::vector<std::string> posData = StringSplit(std::string(positionsData.node().text().as_string()), " ");
 
+	if (vertices == nullptr) 
+	{
+		vertices = new std::vector<Vertex*>();
+	}
+
 	for (int i = 0; i < count / 3; i++)
 	{
 		float x = std::stof(posData[i * 3]);
@@ -94,6 +99,11 @@ void GeometryLoader::readNormals()
 
 		hasNormals = count > 0;
 
+		if (normals == nullptr)
+		{
+			normals = new std::vector<Vector3f*>();
+		}
+
 		for (int i = 0; i < count / 3; i++)
 		{
 			float x = std::stof(normData[i * 3]);
@@ -142,6 +152,11 @@ void GeometryLoader::readTextureCoords()
 		std::vector<std::string> texData = StringSplit(std::string(texCoordsData.node().text().as_string()), " ");
 
 		hasTexCoords = count > 0;
+
+		if (textures == nullptr)
+		{
+			textures = new std::vector<Vector2f*>();
+		}
 
 		for (int i = 0; i < count / 2; i++)
 		{
@@ -216,8 +231,8 @@ std::vector<unsigned int>* GeometryLoader::convertIndicesListToArray()
 
 float GeometryLoader::convertDataToArrays()
 {
-	Vector3f* tangent;
-	Vector3f* bitangent;
+	Vector3f* tangent = new Vector3f();
+	Vector3f* bitangent = new Vector3f();
 	float furthestPoint = 0;
 	for (int i = 0; i < vertices->size(); i++)
 	{
@@ -227,6 +242,12 @@ float GeometryLoader::convertDataToArrays()
 			furthestPoint = currentVertex->getLength();
 		}
 		Vector3f* position = currentVertex->getPosition();
+
+		if (verticesArray == nullptr)
+		{
+			verticesArray = new std::vector<GLfloat>();
+		}
+
 		verticesArray->push_back(position->x);
 		verticesArray->push_back(position->y);
 		verticesArray->push_back(position->z);
@@ -234,6 +255,11 @@ float GeometryLoader::convertDataToArrays()
 		if (hasTexCoords)
 		{
 			Vector2f* textureCoord = textures->at(currentVertex->getTextureIndex());
+
+			if (texturesArray == nullptr)
+			{
+				texturesArray = new std::vector<GLfloat>();
+			}
 
 			texturesArray->push_back(textureCoord->x);
 			texturesArray->push_back(textureCoord->y);
@@ -271,6 +297,11 @@ float GeometryLoader::convertDataToArrays()
 		{
 			Vector3f* normalVector = normals->at(currentVertex->getNormalIndex());
 
+			if (normalsArray == nullptr)
+			{
+				normalsArray = new std::vector<GLfloat>();
+			}
+
 			normalsArray->push_back(normalVector->x);
 			normalsArray->push_back(normalVector->y);
 			normalsArray->push_back(normalVector->z);
@@ -280,12 +311,22 @@ float GeometryLoader::convertDataToArrays()
 
 		if(weights->jointIds->size() > 0)
 		{
+			if (jointIdsArray == nullptr)
+			{
+				jointIdsArray = new std::vector<unsigned int>();
+			}
+
 			jointIdsArray->push_back(weights->jointIds->at(0));
 			jointIdsArray->push_back(weights->jointIds->at(1));
 			jointIdsArray->push_back(weights->jointIds->at(2));
 		}
 		if (weights->weights->size() > 0)
 		{
+			if (weightsArray == nullptr)
+			{
+				weightsArray = new std::vector<GLfloat>();
+			}
+
 			weightsArray->push_back(weights->weights->at(0));
 			weightsArray->push_back(weights->weights->at(1));
 			weightsArray->push_back(weights->weights->at(2));

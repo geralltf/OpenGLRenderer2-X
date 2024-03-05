@@ -355,9 +355,9 @@ void Matrix4::Scale(float uniform_scalar)
 	Vector4f* i1 = new Vector4f(1, uniform_scalar, 1, 1);
 	Vector4f* i2 = new Vector4f(1, 1, uniform_scalar, 1);
 
-	r0->Multiply(r0, i0);
-	r1->Multiply(r1, i1);
-	r2->Multiply(r2, i2);
+	r0 = r0->Multiply(r0, i0);
+	r1 = r1->Multiply(r1, i1);
+	r2 = r2->Multiply(r2, i2);
 	r3->w = 1.0f;
 
 	Row0(r0);
@@ -376,9 +376,9 @@ void Matrix4::Scale(Vector3f* scale)
 	Vector4f* i1 = new Vector4f(1, scale->y, 1, 1);
 	Vector4f* i2 = new Vector4f(1, 1, scale->z, 1);
 
-	r0->Multiply(r0, i0);
-	r1->Multiply(r1, i1);
-	r2->Multiply(r2, i2);
+	r0 = r0->Multiply(r0, i0);
+	r1 = r1->Multiply(r1, i1);
+	r2 = r2->Multiply(r2, i2);
 	r3->w = 1.0f;
 
 	Row0(r0);
@@ -399,10 +399,10 @@ void Matrix4::Scale(Vector4f* scale)
 	Vector4f* i2 = new Vector4f(1, 1, scale->z, 1);
 	Vector4f* i3 = new Vector4f(1, 1, 1, scale->w);
 
-	r0->Multiply(r0, i0);
-	r1->Multiply(r1, i1);
-	r2->Multiply(r2, i2);
-	r3->Multiply(r3, i3);
+	r0 = r0->Multiply(r0, i0);
+	r1 = r1->Multiply(r1, i1);
+	r2 = r2->Multiply(r2, i2);
+	r3 = r3->Multiply(r3, i3);
 
 	Row0(r0);
 	Row1(r1);

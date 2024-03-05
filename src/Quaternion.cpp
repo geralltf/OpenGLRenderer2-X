@@ -226,7 +226,9 @@ Vector4f* Quaternion::ToAxisAngle()
 
     if (scale > 0.0001f)
     {
-        result->xyz(Vector3f::Divide(q->xyz(), scale));
+        Vector3f* a = q->xyz();
+        Vector3f* b = new Vector3f(a->x * (1.0f / scale), a->y * (1.0f / scale), a->z * (1.0f / scale));
+        result->xyz(b);
     }
     else
     {
