@@ -191,11 +191,11 @@ void CharacterController::PollInput()
 	camera_speed = movementSpeed;
 	turnSpeed = movementSpeed;
 
-	cameraTransform->Rotate(rotation->x* rotSpeed, rotation->y* rotSpeed, rotation->z* rotSpeed);
-	cameraTransform->Translate(Vector3f::Scale(direction, movementSpeed));
-	worldPosition = Vector3f::Scale(direction, movementSpeed);
+	//cameraTransform->Rotate(rotation->x* rotSpeed, rotation->y* rotSpeed, rotation->z* rotSpeed);
+	//cameraTransform->Translate(Vector3f::Scale(direction, movementSpeed));
+	//worldPosition = Vector3f::Scale(direction, movementSpeed);
 
-	modelview = Matrix4::Multiply(modelview, Quaternion::Euler(modelRotation->x * rotSpeed, modelRotation->y * rotSpeed, modelRotation->z * rotSpeed)->RotationMatrix());
+	//modelview = Matrix4::Multiply(modelview, Quaternion::Euler(modelRotation->x * rotSpeed, modelRotation->y * rotSpeed, modelRotation->z * rotSpeed)->RotationMatrix());
 
 	lightModelView->RotationYawPitchRoll(lightRotation->x * rotSpeed, lightRotation->y * rotSpeed, lightRotation->z * rotSpeed);
 	lightModelView->Translate(Vector3f::Scale(lightDirection, speed));
@@ -204,22 +204,28 @@ void CharacterController::PollInput()
 	//std::cout << "x: " << pos.x << " y: " << pos.y << " z: " << pos.z << " [" << rotation.x << ", " << rotation.y << ", " << rotation.z << "]" << std::endl;
 	
 	Vector3f* cam_position = camera_pos->Add(new Vector3f(0.0f, 0.0f, -2.0f));
-
 	Matrix4* cam_transl = Matrix4::CreateTranslationMatrix(cam_position);
 
 	Matrix4* camera = Matrix4::Identity();
+	
 	camera = Matrix4::Multiply(camera, cam_transl);
+
 	Matrix4* rotX = Matrix4::CreateRotationXMatrix(camera_angle_pitch);
 	Matrix4* rotY = Matrix4::CreateRotationYMatrix(camera_angle_yaw);
 	Matrix4* rotZ = Matrix4::CreateRotationZMatrix(camera_angle_roll);
+
 	camera = Matrix4::Multiply(camera, rotX);
 	camera = Matrix4::Multiply(camera, rotY);
 	camera = Matrix4::Multiply(camera, rotZ);
-	Vector3f* cam_forward = Matrix4::TransformVector(camera, new Vector3f(0.0f, 0.0f, 1.0f))->Normalised();
-	Vector3f* cam_up = Matrix4::TransformVector(camera, new Vector3f(0.0f, 1.0f, 0.0f))->Normalised();
+
+	Vector3f* cam_forward = camera->TransformNormal(camera, new Vector3f(0.0f, 0.0f, 1.0f));
+	Vector3f* cam_up = camera->TransformNormal(camera, new Vector3f(0.0f, 1.0f, 0.0f));
+
+	delete camera_front;
+	delete camera_up;
+
 	camera_front = cam_forward;
 	camera_up = cam_up;
 
 	cameraTransform->localMatrix = camera;
-
 }
