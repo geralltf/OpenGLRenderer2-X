@@ -283,7 +283,7 @@ void Skybox::Render(Transform* cameraTransform, Matrix4* projection)
 	std::vector<Uniform*>* inUniforms = new std::vector<Uniform*>();
 	inUniforms->push_back((Uniform*)projectionMatrix);
 	inUniforms->push_back((Uniform*)viewMatrix);
-	inUniforms->push_back((Uniform*)modelMatrix);
+	//inUniforms->push_back((Uniform*)modelMatrix);
 	inUniforms->push_back((Uniform*)cubeMap);
 	
 	shader->start();
@@ -302,7 +302,7 @@ void Skybox::Render(Transform* cameraTransform, Matrix4* projection)
 	Matrix4* model = Matrix4::Identity();
 	//model->Scale(2.0f);
 
-	modelMatrix->loadMatrix(shader->programID, model);
+	//modelMatrix->loadMatrix(shader->programID, model);
 
 	//view->SetTranslation(new Vector3f(0.0f, 0.0f, -2.0f));
 	//view = new Matrix4(

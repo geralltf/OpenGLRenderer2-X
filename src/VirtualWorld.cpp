@@ -68,11 +68,11 @@ void VirtualWorld::Initilise()
 	//character00->LoadModel(new std::string("Assets/teapot.obj"));
 	character00->LoadTextures();
 
-	character01 = new Character();
+	//character01 = new Character();
 	//character01->LoadModel("Assets/Harpy/Harpy.obj");
 	//character01->LoadModel("Assets/boggie/head.obj");
-	character01->LoadModel(new std::string("Assets/african_head/african_head_eye_inner.obj"));
-	character01->LoadTextures();
+	//character01->LoadModel(new std::string("Assets/african_head/african_head_eye_inner.obj"));
+	//character01->LoadTextures();
 
 	//character02 = new Character();
 	//character02->LoadModel("Assets/boggie/eyes.obj");
@@ -145,11 +145,11 @@ void VirtualWorld::Render(sf::RenderWindow* window, Transform* cameraTransform, 
 	character00->lutTexture03 = lutTexture03;
 	character00->lutTexture04 = lutTexture04;
 
-	character01->lutTexture00 = lutTexture00;
-	character01->lutTexture01 = lutTexture01;
-	character01->lutTexture02 = lutTexture02;
-	character01->lutTexture03 = lutTexture03;
-	character01->lutTexture04 = lutTexture04;
+	//character01->lutTexture00 = lutTexture00;
+	//character01->lutTexture01 = lutTexture01;
+	//character01->lutTexture02 = lutTexture02;
+	//character01->lutTexture03 = lutTexture03;
+	//character01->lutTexture04 = lutTexture04;
 
 	//character02->lutTexture00 = lutTexture00;
 	//character02->lutTexture01 = lutTexture01;
@@ -161,14 +161,13 @@ void VirtualWorld::Render(sf::RenderWindow* window, Transform* cameraTransform, 
 
 	floor->Render(window, cameraTransform, projectionMatrix, model_floor, light_dir, lightModelView);
 
-
 	Matrix4* model = Matrix4::Identity();
 	//model->Scale(0.1f);
 	model->Translate(modelview->GetTranslation());
 	model->Translate(new Vector3f(1.5f, 0.0f, 0.0f));
 
 
-	character00->Render(window, cameraTransform, projectionMatrix, Matrix4::Multiply(model, modelview), light_dir, lightModelView);
+	character00->Render(window, cameraTransform, projectionMatrix, model, light_dir, lightModelView);
 	//character01->Render(window, cameraTransform, projectionMatrix, model * modelview, light_dir, lightModelView);
 	//character02->Render(window, cameraTransform, projectionMatrix, model * modelview, light_dir, lightModelView);
 

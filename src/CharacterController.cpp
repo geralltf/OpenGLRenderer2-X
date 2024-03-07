@@ -207,7 +207,7 @@ void CharacterController::PollInput()
 	Matrix4* cam_transl = Matrix4::CreateTranslationMatrix(cam_position);
 
 	Matrix4* camera = Matrix4::Identity();
-	
+
 	camera = Matrix4::Multiply(camera, cam_transl);
 
 	Matrix4* rotX = Matrix4::CreateRotationXMatrix(camera_angle_pitch);

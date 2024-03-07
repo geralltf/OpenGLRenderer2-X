@@ -205,6 +205,7 @@ void MeshBufferVAO::LoadModelBuffers(Model* model,
 	int i;
 
 	Bounds = new AABB();
+	int face_index = 0;
 
 	for (i = 0; i < model->faces_count(); i++)
 	{
@@ -257,6 +258,8 @@ void MeshBufferVAO::LoadModelBuffers(Model* model,
 
 			AppendModelBuffersTriangle(Bounds, v0, v1, v2, t0, t1, t2, n0, n1, n2, verticies, texCoords, normals, tangents, bitangents);
 		}
+
+		face_index++;
 	}
 
 	if (quads)
@@ -344,9 +347,10 @@ void MeshBufferVAO::LoadModel(std::string* fileNameModel)
 	float* farray = to_float_array(model->face_verts->data(), model->face_verts->size());
 	float* farray_norms = to_float_array(model->face_normals->data(), model->face_normals->size());
 	float* farray_texcoords = to_float_array(model->tex_coordA->data(), model->tex_coordA->size());
-	float* farray_tangents = to_float_array(model->face_tangents->data(), model->face_tangents->size());
-	float* farray_bitangents = to_float_array(model->face_bitangents->data(), model->face_bitangents->size());
-
+	//float* farray_tangents = to_float_array(model->face_tangents->data(), model->face_tangents->size());
+	//float* farray_bitangents = to_float_array(model->face_bitangents->data(), model->face_bitangents->size());
+	float* farray_tangents = to_float_array(tangents); // to_float_array(tangents->data(), tangents->size());
+	float* farray_bitangents = to_float_array(bitangents); // to_float_array(model->face_bitangents->data(), model->face_bitangents->size());
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -368,12 +372,12 @@ void MeshBufferVAO::LoadModel(std::string* fileNameModel)
 
 	glGenBuffers(1, &tangents_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, tangents_vbo);
-	glBufferData(GL_ARRAY_BUFFER, model->face_tangents->size() * sizeof(float) * 3, farray_tangents, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, tangents->size() * sizeof(float) * 3, farray_tangents, GL_STATIC_DRAW); // face_tangents
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 	glGenBuffers(1, &bitangents_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, bitangents_vbo);
-	glBufferData(GL_ARRAY_BUFFER, model->face_bitangents->size() * sizeof(float) * 3, farray_bitangents, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, bitangents->size() * sizeof(float), farray_bitangents, GL_STATIC_DRAW); // face_bitangents
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 	glGenBuffers(1, &_TEST_EBO);
@@ -408,13 +412,13 @@ void MeshBufferVAO::LoadTextures()
 
 	if (model->specularmap_ != nullptr && model->specularmap_->textureData->getBuffer() != nullptr)
 	{
-		model->specularmap_->bindToUnit(1);
+		model->specularmap_->bindToUnit(2);
 		textureSpecularMap = model->specularmap_->textureId;
 	}
 
 	if (model->glowmap_ != nullptr && model->glowmap_->textureData->getBuffer() != nullptr)
 	{
-		model->glowmap_->bindToUnit(1);
+		model->glowmap_->bindToUnit(3);
 		textureGlowMap = model->glowmap_->textureId;
 	}
 }
@@ -436,11 +440,15 @@ void MeshBufferVAO::Render()
 	glEnableVertexAttribArray(3);
 	glEnableVertexAttribArray(4);
 	glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
+	//glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, texcoords_vbo);
+	//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, normals_vbo);
+	//glEnableClientState(GL_NORMAL_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, tangents_vbo);
+	//glEnableClientState(GL_TANGENT_ARRAY_TYPE_EXT);
 	glBindBuffer(GL_ARRAY_BUFFER, bitangents_vbo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _TEST_EBO);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _TEST_EBO);
 	if (quads)
 	{
 		glDrawArrays(GL_QUADS, 0, verticiesCount);

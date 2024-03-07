@@ -22,7 +22,7 @@
 class Renderer
 {
 private:
-	int fov = 90;
+	int fov = 90; // Field of view.
 	GLuint programScreenQuad = 0;
 	GLuint programScreenQuadAO = 0;
 	GLuint programCursor = 0;

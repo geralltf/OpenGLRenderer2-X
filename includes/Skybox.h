@@ -18,7 +18,7 @@ private:
 
 	UniformMatrix* projectionMatrix = new UniformMatrix(new std::string("projectionMatrix"));
 	UniformMatrix* viewMatrix = new UniformMatrix(new std::string("viewMatrix"));
-	UniformMatrix* modelMatrix = new UniformMatrix(new std::string("modelMatrix"));
+	//UniformMatrix* modelMatrix = new UniformMatrix(new std::string("modelMatrix"));
 	UniformSampler* cubeMap = new UniformSampler(new std::string("cubemap"));
 
 	unsigned int _TEST_VAO;

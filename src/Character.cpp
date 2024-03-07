@@ -72,6 +72,7 @@ void Character::RenderModel(sf::RenderWindow* window, Transform* cameraTransform
 {
 	OpenGlUtils::Antialias(true);
 	OpenGlUtils::DisableBlending();
+	//OpenGlUtils::EnableAlphaBlending();
 	OpenGlUtils::EnableDepthTesting(true);
 
 	glEnable(GL_CULL_FACE);  // cull face
@@ -173,7 +174,10 @@ void Character::RenderModel(sf::RenderWindow* window, Transform* cameraTransform
 		delete ambient;
 		delete position;
 	}
-	
+	GLint colourTestLocationID = glGetUniformLocation(program->programID, "COLOURTest");
+	if (colourTestLocationID != -1) {
+		glUniform1f(colourTestLocationID, 0.8f);
+	}
 
 	meshBuffer->BindTextures();
 

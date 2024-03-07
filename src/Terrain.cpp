@@ -40,7 +40,7 @@ Terrain::~Terrain()
 	delete vao;
 	delete projectionMatrix;
 	delete viewMatrix;
-	delete modelMatrix;
+	//delete modelMatrix;
 	delete cubeMap;
 }
 
@@ -455,14 +455,14 @@ void Terrain::renderCube(Transform* cameraTransform, Matrix4* projection, Matrix
 	std::vector<Uniform*>* inUniforms = new std::vector<Uniform*>();
 	inUniforms->push_back((Uniform*)projectionMatrix);
 	inUniforms->push_back((Uniform*)viewMatrix);
-	inUniforms->push_back((Uniform*)modelMatrix);
+	//inUniforms->push_back((Uniform*)modelMatrix);
 	inUniforms->push_back((Uniform*)cubeMap);
 
 	vao->bind();
 	vao->binder(0, 2);
 	shader->start();
 	projectionMatrix->loadMatrix(shader->programID, projection);
-	modelMatrix->loadMatrix(shader->programID, Matrix4::Multiply(this->model, model));
+	//modelMatrix->loadMatrix(shader->programID, Matrix4::Multiply(this->model, model));
 	viewMatrix->loadMatrix(shader->programID, cameraTransform->localMatrix);
 	cubeMap->loadTexUnit(shader->programID, 0); // Indicates which texture unit the cubemap texture should be sampled from
 	shader->storeAllUniformLocations(inUniforms);
@@ -511,7 +511,7 @@ void Terrain::renderCubes_instanced(Transform* cameraTransform, Matrix4* project
 	std::vector<Uniform*>* inUniforms = new std::vector<Uniform*>();
 	inUniforms->push_back((Uniform*)projectionMatrix);
 	inUniforms->push_back((Uniform*)viewMatrix);
-	inUniforms->push_back((Uniform*)modelMatrix);
+	//inUniforms->push_back((Uniform*)modelMatrix);
 	//inUniforms->push_back((Uniform*)chunkTransforms);
 	inUniforms->push_back((Uniform*)cubeMap);
 	inUniforms->push_back((Uniform*)lightDirection);
@@ -520,7 +520,7 @@ void Terrain::renderCubes_instanced(Transform* cameraTransform, Matrix4* project
 	vao->binder(0, 2);
 	shader->start();
 	projectionMatrix->loadMatrix(shader->programID, projection);
-	modelMatrix->loadMatrix(shader->programID, Matrix4::Multiply(this->model, model));
+	//modelMatrix->loadMatrix(shader->programID, Matrix4::Multiply(this->model, model));
 	viewMatrix->loadMatrix(shader->programID, cameraTransform->localMatrix);
 	lightDirection->loadVec3(shader->programID, lightDir);
 	//chunkTransforms->loadMatrixArray(shader->programID, transforms);

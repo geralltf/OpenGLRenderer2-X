@@ -79,6 +79,7 @@ uniform float near_plane;
 uniform float far_plane;
 uniform vec3 eye;
 uniform int outlinePass;
+uniform float COLOURTest;
 
 //uniform DirLight dirLight;
 
@@ -607,8 +608,8 @@ void main()
 	// {
 		// bright_color = vec4(0.0, 0.0, 0.0, 1.0);	
 	// }
-	//frag_colour = vec4(1.0, 0.0, 0.0, 1.0);
-	//bright_color = vec4(1.0, 0.0, 0.0, 1.0);
+	//frag_colour = vec4(COLOURTest, 0.0, 0.0, 1.0);
+	//bright_color = vec4(COLOURTest, 0.0, 0.0, 1.0);
 	//frag_colour = bright_color;
 	//frag_colour = vec4(frag_colour.rgb + outlineColour * dot(n,viewDir), 1.0);
 	

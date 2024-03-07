@@ -175,7 +175,7 @@ void Renderer::renderQuad()
 
 void Renderer::Render(Transform* cameraTransform)
 {
-    if(!noErrors) return;
+    //if(!noErrors) return;
 
 	TimeManager::Update();
 	messageQueue->update();
@@ -184,7 +184,8 @@ void Renderer::Render(Transform* cameraTransform)
 
 	// CLEAR THE BUFFERS
 	glClearColor(0, 0, 0, 1);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glViewport(0, 0, window->getSize().x, window->getSize().y);
 
 	// check OpenGL error
@@ -261,6 +262,7 @@ void Renderer::Render(Transform* cameraTransform)
 		// 3. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
 		// --------------------------------------------------------------------------------------------------------------------------
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		shaderBloomFinal->start();
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, colorBuffers[0]);
@@ -608,7 +610,7 @@ void Renderer::RenderCursor(Transform* cameraTransform)
 	quadView = cameraTransform->localMatrix;
 	Matrix4* quadProj;
 	quadProj = Matrix4::Orthographic(-1, 1, -1, 1, -1.0f, 1.0f);
-	//quadProj = Matrix4::Perspective(90, window->getSize().x / (float)window->getSize().y, 0.1f, 1000);
+	//quadProj = Matrix4::Perspective(Renderer::fov, window->getSize().x / (float)window->getSize().y, 0.1f, 1000);
 	//quadProj = Matrix4::Orthographic(0.0f, window->getSize().x, window->getSize().y, 0.0f, -1.0f, 1.0f);
 	//quadProj = Matrix4::Orthographic(0, 1, -1, 0, -1.0f, 1.0f);
 	//quadProj = Matrix4::Orthographic(0, window->getSize().x, window->getSize().y, 0, 0.1f, 1.0f);
@@ -632,6 +634,7 @@ void Renderer::RenderCursor(Transform* cameraTransform)
 		vaoCursor->binder(0, 1);
 		glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, indicies->data());
 		vaoCursor->unbinder(0, 1);
+		vaoCursor->unbind();
 		glUseProgram(0);
 	}
 

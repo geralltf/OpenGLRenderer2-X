@@ -39,7 +39,7 @@ private:
 
 	UniformMatrix* projectionMatrix = new UniformMatrix(new std::string("projectionMatrix"));
 	UniformMatrix* viewMatrix = new UniformMatrix(new std::string("viewMatrix"));
-	UniformMatrix* modelMatrix = new UniformMatrix(new std::string("modelMatrix"));
+	//UniformMatrix* modelMatrix = new UniformMatrix(new std::string("modelMatrix"));
 	UniformSampler* cubeMap = new UniformSampler(new std::string("cubemap"));
 	UniformVec3* lightDirection = new UniformVec3(new std::string("lightDirection"));
 
