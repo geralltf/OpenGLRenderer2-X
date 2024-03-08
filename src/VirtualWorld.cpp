@@ -168,7 +168,7 @@ void VirtualWorld::Render(sf::RenderWindow* window, Transform* cameraTransform, 
 
 
 	character00->Render(window, cameraTransform, projectionMatrix, model, light_dir, lightModelView);
-	//character01->Render(window, cameraTransform, projectionMatrix, model * modelview, light_dir, lightModelView);
+	//character01->Render(window, cameraTransform, projectionMatrix, model, light_dir, lightModelView);
 	//character02->Render(window, cameraTransform, projectionMatrix, model * modelview, light_dir, lightModelView);
 
 	//Debug::DrawLines_RenderDispatch(window, cameraTransform, projectionMatrix, model * modelview);

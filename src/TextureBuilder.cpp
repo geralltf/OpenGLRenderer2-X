@@ -24,7 +24,7 @@ Texture* TextureBuilder::Create()
 {
 	if (cubemap == false)
 	{
-		TextureData* textureData = TextureUtils::decodeTextureFile(file);
+		TextureData* textureData = TextureUtils::decodeTextureFile(file, true);
 
 		GLuint textureId = TextureUtils::uploadTextureToOpenGL(textureData, this);
 
@@ -32,12 +32,12 @@ Texture* TextureBuilder::Create()
 	}
 	else 
 	{
-		TextureData* dataRight = TextureUtils::decodeTextureFile(texFileRightPosX);
-		TextureData* dataLeft = TextureUtils::decodeTextureFile(texFileLeftNegX);
-		TextureData* dataTop = TextureUtils::decodeTextureFile(texFileTopPosY);
-		TextureData* dataBottom = TextureUtils::decodeTextureFile(texFileBottomNegY);
-		TextureData* dataBack = TextureUtils::decodeTextureFile(texFileBackPosZ);
-		TextureData* dataFront = TextureUtils::decodeTextureFile(texFileFrontNegZ);
+		TextureData* dataRight = TextureUtils::decodeTextureFile(texFileRightPosX, false);
+		TextureData* dataLeft = TextureUtils::decodeTextureFile(texFileLeftNegX, false);
+		TextureData* dataTop = TextureUtils::decodeTextureFile(texFileTopPosY, false);
+		TextureData* dataBottom = TextureUtils::decodeTextureFile(texFileBottomNegY, false);
+		TextureData* dataBack = TextureUtils::decodeTextureFile(texFileBackPosZ, false);
+		TextureData* dataFront = TextureUtils::decodeTextureFile(texFileFrontNegZ, false);
 
 		GLuint textureId = TextureUtils::uploadTextureToOpenGL(dataRight, dataLeft, dataTop, dataBottom, dataBack, dataFront, this);
 

@@ -2,7 +2,7 @@
 #include "TGADecoder.h"
 #include <vector>
 
-TextureData* TextureUtils::decodeTextureFile(std::string* file)
+TextureData* TextureUtils::decodeTextureFile(std::string* file, bool flip_vertically = true)
 {
 	int width = 0;
 	int height = 0;
@@ -12,7 +12,12 @@ TextureData* TextureUtils::decodeTextureFile(std::string* file)
 	TGADecoder* tgaDecoder = new TGADecoder();
 
 	bool loaded = tgaDecoder->read_tga_file(file);
-	//tgaDecoder->flip_vertically();
+
+	if (flip_vertically)
+	{
+		tgaDecoder->flip_vertically();
+	}
+
 	width = tgaDecoder->get_width();
 	height = tgaDecoder->get_height();
 	bytesPerPixel = tgaDecoder->get_bytesPerPixel();

@@ -15,7 +15,7 @@ class TextureBuilder;
 class TextureUtils 
 {
 public:
-	static TextureData* decodeTextureFile(std::string* file);
+	static TextureData* decodeTextureFile(std::string* file, bool flip_vertically);
 	static GLuint uploadTextureToOpenGL(TextureData* data, TextureBuilder* builder);
 	static GLuint uploadTextureToOpenGL(TextureData* dataRight, TextureData* dataLeft,
 		TextureData* dataTop, TextureData* dataBottom,

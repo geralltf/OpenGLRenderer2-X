@@ -200,7 +200,7 @@ Texture* Model::load_texture(std::string* filename, std::string* suffix)
     {
         texfile = new std::string(texfile->substr(0, dot) + *suffix);
 
-        texture = Texture::LoadTexture(texfile)->Anisotropic()->Create();
+        texture = Texture::LoadTexture(texfile)->NormalMipMap()->ClampEdges()->Anisotropic()->Create();
     }
     return texture;
 }
