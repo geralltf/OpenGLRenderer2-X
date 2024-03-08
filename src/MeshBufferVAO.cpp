@@ -347,10 +347,10 @@ void MeshBufferVAO::LoadModel(std::string* fileNameModel)
 	float* farray = to_float_array(model->face_verts->data(), model->face_verts->size());
 	float* farray_norms = to_float_array(model->face_normals->data(), model->face_normals->size());
 	float* farray_texcoords = to_float_array(model->tex_coordA->data(), model->tex_coordA->size());
-	//float* farray_tangents = to_float_array(model->face_tangents->data(), model->face_tangents->size());
-	//float* farray_bitangents = to_float_array(model->face_bitangents->data(), model->face_bitangents->size());
-	float* farray_tangents = to_float_array(tangents); // to_float_array(tangents->data(), tangents->size());
-	float* farray_bitangents = to_float_array(bitangents); // to_float_array(model->face_bitangents->data(), model->face_bitangents->size());
+	float* farray_tangents = to_float_array(model->face_tangents->data(), model->face_tangents->size());
+	float* farray_bitangents = to_float_array(model->face_bitangents->data(), model->face_bitangents->size());
+	//float* farray_tangents = to_float_array(tangents); // to_float_array(tangents->data(), tangents->size());
+	//float* farray_bitangents = to_float_array(bitangents); // to_float_array(model->face_bitangents->data(), model->face_bitangents->size());
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -372,12 +372,12 @@ void MeshBufferVAO::LoadModel(std::string* fileNameModel)
 
 	glGenBuffers(1, &tangents_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, tangents_vbo);
-	glBufferData(GL_ARRAY_BUFFER, tangents->size() * sizeof(float) * 3, farray_tangents, GL_STATIC_DRAW); // face_tangents
+	glBufferData(GL_ARRAY_BUFFER, model->face_tangents->size() * sizeof(float) * 3, farray_tangents, GL_STATIC_DRAW); // face_tangents
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 	glGenBuffers(1, &bitangents_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, bitangents_vbo);
-	glBufferData(GL_ARRAY_BUFFER, bitangents->size() * sizeof(float), farray_bitangents, GL_STATIC_DRAW); // face_bitangents
+	glBufferData(GL_ARRAY_BUFFER, model->face_bitangents->size() * sizeof(float) * 3, farray_bitangents, GL_STATIC_DRAW); // face_bitangents
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 	glGenBuffers(1, &_TEST_EBO);

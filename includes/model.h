@@ -50,7 +50,8 @@ public:
     bool has_init = false;
     Model(std::string* filename);
     void parse(std::string* _file_name);
-    void tangent_bitangent_compute(Vector3f* vert_pos0, Vector3f* vert_pos1, Vector3f* vert_pos2, Vector3f* uv0, Vector3f* uv1, Vector3f* uv2);
+    void tangent_bitangent_compute(Vector3f* vert_pos0, Vector3f* vert_pos1, Vector3f* vert_pos2, Vector3f* uv0, Vector3f* uv1, Vector3f* uv2, Vector3f** tangent, Vector3f** bitangent);
+
     //Vector3f* uv(const int iface, const int nthvert) const;
     inline Vector3f* uv(const int iface, const int nthvert) const {
         return (*tex_coord)[(*facet_texcoords)[iface * 3 + nthvert]];

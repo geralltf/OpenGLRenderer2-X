@@ -103,6 +103,8 @@ void Model::parse(std::string* _file_name)
             Vector3f* uv0 = nullptr;
             Vector3f* uv1 = nullptr;
             Vector3f* uv2 = nullptr;
+            Vector3f* tangent = new Vector3f();
+            Vector3f* bitangent = new Vector3f();
             tmp = new Vector3f(0.0f, 0.0f, 0.0f);
             //while (iss >> _f >> trash >> _t >> trash >> _n)
             while (iss >> tmp->x >> trash >> tmp->y >> trash >> tmp->z)
@@ -159,7 +161,7 @@ void Model::parse(std::string* _file_name)
 
                     if (vert_pos0 != nullptr && vert_pos1 != nullptr && vert_pos2 != nullptr)
                     {
-                        tangent_bitangent_compute(vert_pos0, vert_pos1, vert_pos2, uv0, uv1, uv2);
+                        tangent_bitangent_compute(vert_pos0, vert_pos1, vert_pos2, uv0, uv1, uv2, &tangent, &bitangent);
 
                         face_index++;
                     }
@@ -167,7 +169,7 @@ void Model::parse(std::string* _file_name)
 
                 cnt++;
                 //vertex++;
-                vertex = (vertex + 1) % 2;
+                vertex = (vertex + 1) % 3;
             }
             faces_indicies->push_back(f);
             if (3 != cnt)
@@ -198,7 +200,7 @@ Texture* Model::load_texture(std::string* filename, std::string* suffix)
     return texture;
 }
 
-void Model::tangent_bitangent_compute(Vector3f* vert_pos0, Vector3f* vert_pos1, Vector3f* vert_pos2, Vector3f* uv0, Vector3f* uv1, Vector3f* uv2)
+void Model::tangent_bitangent_compute(Vector3f* vert_pos0, Vector3f* vert_pos1, Vector3f* vert_pos2, Vector3f* uv0, Vector3f* uv1, Vector3f* uv2, Vector3f** tangent, Vector3f** bitangent)
 {
     Vector3f* tangent1 = new Vector3f();
     Vector3f* bitangent1 = new Vector3f();
@@ -220,6 +222,15 @@ void Model::tangent_bitangent_compute(Vector3f* vert_pos0, Vector3f* vert_pos1, 
 
     face_tangents->push_back(tangent1);
     face_bitangents->push_back(bitangent1);
+
+    face_tangents->push_back(tangent1);
+    face_bitangents->push_back(bitangent1);
+
+    face_tangents->push_back(tangent1);
+    face_bitangents->push_back(bitangent1);
+
+    (*tangent) = tangent1;
+    (*bitangent) = bitangent1;
 }
 
 ColourRGBA* Model::emissiveness(Vector2f* uvf)

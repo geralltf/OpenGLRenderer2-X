@@ -39,11 +39,12 @@ void main()
 	
 	tex_coord = vertex_texcoord;
 	lightDirection = lightDir;
-	
+	float black_mode = 0.0; // When 1.0 means true to make the lighting fully black.
 	// See https://learnopengl.com/Advanced-Lighting/Normal-Mapping
-	vec3 T = normalize(vec3(modelviewMatrix * vec4(vertex_tangent, 0.0)));
-	vec3 B = normalize(vec3(modelviewMatrix * vec4(vertex_bitangent, 0.0)));
-	vec3 N = normalize(vec3(modelviewMatrix * vec4(vertex_normal, 0.0)));
+	vec3 T = normalize(vec3(modelviewMatrix * vec4(vertex_tangent, 0.0))) * ((1.0 - black_mode));
+	vec3 B = normalize(vec3(modelviewMatrix * vec4(vertex_bitangent, 0.0))) * ((1.0 - black_mode));
+	vec3 N = normalize(vec3(modelviewMatrix * vec4(vertex_normal, 0.0))) * ((1.0 - black_mode));
+
 	TBN = mat3(T, B, N);
 	//TBN = transpose(mat3(T, B, N)); 
 }

@@ -107,16 +107,16 @@ void VirtualWorld::Initilise()
 
 	//std::string model = "Assets/Animations/Mannequin_figure/free3DmodelDAE/free3Dmodel2.dae";
 	//std::string anim = "Assets/Animations/Mannequin_figure/Male_Locomotion_PackDAE/walking.dae";
-	//std::string model = "Assets/Animations/model.dae";
-	//std::string anim = "Assets/Animations/model.dae";
-	//animModel = AnimatedModelLoader::LoadModel(model);
-	////AnimatedModel* animModel2 = AnimatedModelLoader::LoadModel(anim);
-	////animModel = animModel2;
-	//animRenderer = new AnimatedModelRenderer();
-	//animDiffuseTexture = Texture::LoadTexture(new std::string("Assets/Animations/diffuse.tga"))->Anisotropic()->Create();
-	//selectedAnimation = animModel->getAnimation();
-	//animator = new Animator(animModel);
-	//animator->doAnimation(selectedAnimation);
+	std::string model = "Assets/Animations/model.dae";
+	std::string anim = "Assets/Animations/model.dae";
+	animModel = AnimatedModelLoader::LoadModel(model);
+	//AnimatedModel* animModel2 = AnimatedModelLoader::LoadModel(anim);
+	//animModel = animModel2;
+	animRenderer = new AnimatedModelRenderer();
+	animDiffuseTexture = Texture::LoadTexture(new std::string("Assets/Animations/diffuse.tga"))->Anisotropic()->Create();
+	selectedAnimation = animModel->getAnimation();
+	animator = new Animator(animModel);
+	animator->doAnimation(selectedAnimation);
 
 	skybox = new Skybox(new std::string("Assets/mp_midnight/midnight-silence_rt.tga"),
 		new std::string("Assets/mp_midnight/midnight-silence_lf.tga"), 
@@ -205,17 +205,17 @@ void VirtualWorld::Render(sf::RenderWindow* window, Transform* cameraTransform, 
 	}
 
 	// Show Actor
-	//animator->update();
-	//if(animDiffuseTexture != nullptr) animDiffuseTexture->bindToUnit(0);
-	//if(animNormalTexture != nullptr) animNormalTexture->bindToUnit(1);
-	//if(animSpecularTexture != nullptr) animSpecularTexture->bindToUnit(2);
-	//if (lutTexture00 != nullptr) lutTexture00->bindToUnit(4);
-	//if (lutTexture01 != nullptr) lutTexture01->bindToUnit(5);
-	//if (lutTexture02 != nullptr) lutTexture02->bindToUnit(6);
-	//if (lutTexture03 != nullptr) lutTexture03->bindToUnit(7);
-	//if (lutTexture04 != nullptr) lutTexture04->bindToUnit(8);
+	animator->update();
+	if(animDiffuseTexture != nullptr) animDiffuseTexture->bindToUnit(0);
+	if(animNormalTexture != nullptr) animNormalTexture->bindToUnit(1);
+	if(animSpecularTexture != nullptr) animSpecularTexture->bindToUnit(2);
+	if (lutTexture00 != nullptr) lutTexture00->bindToUnit(4);
+	if (lutTexture01 != nullptr) lutTexture01->bindToUnit(5);
+	if (lutTexture02 != nullptr) lutTexture02->bindToUnit(6);
+	if (lutTexture03 != nullptr) lutTexture03->bindToUnit(7);
+	if (lutTexture04 != nullptr) lutTexture04->bindToUnit(8);
 
-	//animRenderer->render(animModel, cameraTransform, projectionMatrix, modelview, light_dir);
+	animRenderer->render(animModel, cameraTransform, projectionMatrix, modelview, light_dir);
 
 	//terrain->lutTexture00 = lutTexture00;
 	//terrain->lutTexture01 = lutTexture01;
