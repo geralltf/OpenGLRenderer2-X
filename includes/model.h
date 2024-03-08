@@ -9,6 +9,7 @@
 #include "ColourRGBA.h"
 #include "Vector2i.h"
 #include "Texture.h"
+#include "AABB.h"
 
 #include <GL\glew.h>
 //#define GLFW_DLL
@@ -48,6 +49,7 @@ public:
     unsigned int bitangentsBuffer;
     unsigned int EBO;
     bool has_init = false;
+    AABB* Bounds;
     Model(std::string* filename);
     void parse(std::string* _file_name);
     void tangent_bitangent_compute(Vector3f* vert_pos0, Vector3f* vert_pos1, Vector3f* vert_pos2, Vector3f* uv0, Vector3f* uv1, Vector3f* uv2, Vector3f** tangent, Vector3f** bitangent);

@@ -23,6 +23,7 @@ void Model::parse(std::string* _file_name)
     face_tangents = new std::vector<Vector3f*>();
     face_bitangents = new std::vector<Vector3f*>();
     face_indicies = new std::vector<unsigned int>();
+    Bounds = new AABB();
 
     this->file_name = _file_name;
     VAO = -1;
@@ -132,6 +133,10 @@ void Model::parse(std::string* _file_name)
                 facet_normals->push_back(NN);
 
                 int face_vert_index = FF;
+                Vector3f* vertex_vect = (*verts)[face_vert_index];
+
+                this->Bounds->Add(vertex_vect); // Extend bounds by verticy vector.
+
                 face_verts->push_back((*verts)[face_vert_index]);
 
                 int face_tex_index = TT;

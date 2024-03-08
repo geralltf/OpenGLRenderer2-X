@@ -329,10 +329,21 @@ void MeshBufferVAO::LoadModel(std::string* fileNameModel)
 	std::vector<GLfloat>* bitangents = new std::vector<GLfloat>();
 
 	model = new Model(fileNameModel);
-
-	LoadModelBuffers(model, &verticies, &texCoords, &normals, &tangents, &bitangents, verticiesCount);
 	
-	if (verticies->size() == 0) {
+	this->Bounds = model->Bounds;
+
+	//LoadModelBuffers(model, &verticies, &texCoords, &normals, &tangents, &bitangents, verticiesCount);
+	
+	if (quads)
+	{
+		verticiesCount = model->faces_count() * 4;
+	}
+	else
+	{
+		verticiesCount = model->faces_count() * 3;
+	}
+
+	if (verticiesCount == 0) {
 		std::cout << "Verticies could not be found." << std::endl;
 		return;
 	}
