@@ -38,10 +38,10 @@ void main(void)
 		vec4 worldNormal = jointTransform * vec4(in_normal, 0.0);
 		totalNormal += worldNormal * in_weights[i];
 	}
-
-	gl_Position = MVP * totalLocalPos; // With skeletal animation data
+	//gl_Position = MVP * vec4(in_position, 1.0);
+	gl_Position = MVP * vec4(totalLocalPos.xyz, 1.0); // With skeletal animation data
 	//FragPos = gl_Position.xyz;
-	FragPos = vec3(modelviewMatrix * totalLocalPos);
+	FragPos = vec3(modelviewMatrix * vec4(totalLocalPos.xyz, 1.0));
 	
 	pass_normal = normalize(vec3(modelviewMatrix * vec4(totalNormal.xyz, 0.0)));
 		

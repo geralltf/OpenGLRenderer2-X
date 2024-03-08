@@ -26,7 +26,8 @@ void AnimatedModelRenderer::render(AnimatedModel* entity, Transform* camera, Mat
 	{
 		entity->getModel()->bind();
 		entity->getModel()->binder(0, 6);
-		shader->jointTransforms->loadMatrixArray(shader->programID, entity->getJointTransforms());
+		std::vector<Matrix4*>* jointTransforms = entity->getJointTransforms();
+		shader->jointTransforms->loadMatrixArray(shader->programID, jointTransforms);
 		glDrawElements(GL_TRIANGLES, entity->getModel()->getIndexCount(), GL_UNSIGNED_INT, nullptr);
 		entity->getModel()->unbind();
 		entity->getModel()->unbinder(0, 6);
