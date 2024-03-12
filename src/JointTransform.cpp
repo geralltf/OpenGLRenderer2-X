@@ -1,10 +1,12 @@
 #include "JointTransform.h"
+//#include "AnimatedModelLoader.h"
 
 Matrix4* JointTransform::getLocalTransform()
 {
-	Matrix4* m = Matrix4::Identity();
-	m->SetTranslation(this->position);
-	m = Matrix4::Multiply(m, rotation->RotationMatrix());
+	Matrix4* m = rotation->ToRotationMatrix();
+	Matrix4* m2 = Matrix4::Identity();
+	m2->SetTranslation(this->position);
+	m = Matrix4::Multiply(m, m2);
 	return m;
 }
 
@@ -12,12 +14,13 @@ JointTransform* JointTransform::interpolate(JointTransform* frameA, JointTransfo
 {
 	Vector3f* pos = Vector3f::Lerp(frameA->position, frameB->position, progression);
 
-	Quaternion* rotation = Quaternion::Slerp(frameA->rotation, frameB->rotation, progression);
+	Quaternion* _rotation = Quaternion::Slerp(frameA->rotation, frameB->rotation, progression);
 
-	Matrix4* m = Matrix4::Identity();
-	m->Translate(pos);
-	m = Matrix4::Multiply(m, rotation->RotationMatrix());
+	Matrix4* m = _rotation->ToRotationMatrix();
+	Matrix4* m2 = Matrix4::Identity();
+	m2->SetTranslation(pos);
+	m = Matrix4::Multiply(m, m2);
 
-	JointTransform* inbetween  = new JointTransform(pos, rotation);
+	JointTransform* inbetween  = new JointTransform(pos, _rotation, m);
 	return inbetween;
 }

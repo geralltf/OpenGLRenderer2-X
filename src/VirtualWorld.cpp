@@ -209,6 +209,7 @@ void VirtualWorld::Render(sf::RenderWindow* window, Transform* cameraTransform, 
 	if(animDiffuseTexture != nullptr) animDiffuseTexture->bindToUnit(0);
 	if(animNormalTexture != nullptr) animNormalTexture->bindToUnit(1);
 	if(animSpecularTexture != nullptr) animSpecularTexture->bindToUnit(2);
+	if (animGlowTexture != nullptr) animGlowTexture->bindToUnit(3);
 	if (lutTexture00 != nullptr) lutTexture00->bindToUnit(4);
 	if (lutTexture01 != nullptr) lutTexture01->bindToUnit(5);
 	if (lutTexture02 != nullptr) lutTexture02->bindToUnit(6);

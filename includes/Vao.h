@@ -20,6 +20,7 @@ private:
 public:
 	GLuint id;
 	std::vector<unsigned int>* indicies_data;
+	int verticiesCount;
 	Vao();
 	Vao(GLuint id);
 	~Vao();

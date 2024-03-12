@@ -218,6 +218,7 @@ void Renderer::Render(Transform* cameraTransform)
 
 	virtualWorld->Render(window, cameraTransform, projectionMatrix, modelview, lightDir, lightModelView);
 
+	RenderCursor(cameraTransform);
 
 	//
 	//ShowShadowMap(cameraTransform);
@@ -292,7 +293,7 @@ void Renderer::Render(Transform* cameraTransform)
 	}
 	//ShowNoiseMap();
 
-	RenderCursor(cameraTransform);
+	//RenderCursor(cameraTransform);
 }
 
 void Renderer::InitFBOs()
@@ -621,7 +622,7 @@ void Renderer::RenderCursor(Transform* cameraTransform)
 	float* arrMVP = MVP->ToArray();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	OpenGlUtils::EnableAlphaBlending();
-	OpenGlUtils::EnableDepthTesting(false);
+	OpenGlUtils::EnableDepthTesting(true);
 	glUseProgram(programCursor);
 	glUniformMatrix4fv(glGetUniformLocation(programCursor, "MVP"), 1, GL_FALSE, arrMVP);
 	glUniform2f(glGetUniformLocation(programCursor, "textureSize"), 320, 320);

@@ -27,6 +27,7 @@ public:
 	Texture* animDiffuseTexture;
 	Texture* animNormalTexture;
 	Texture* animSpecularTexture;
+	Texture* animGlowTexture;
 	Texture* lutTexture00;
 	Texture* lutTexture01;
 	Texture* lutTexture02;

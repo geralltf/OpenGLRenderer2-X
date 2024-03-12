@@ -42,19 +42,19 @@ public:
 	 */
 	AnimatedModelShader() : ShaderProgram() //: ShaderProgram(VERTEX_SHADER, FRAGMENT_SHADER)
 	{
-		vertexShaderID = loadShader(VERTEX_SHADER, GL_VERTEX_SHADER);
+		//vertexShaderID = loadShader(VERTEX_SHADER, GL_VERTEX_SHADER);
 		vertexShaderID_HasAnim = loadShader(VERTEX_SHADER_HAS_ANIM, GL_VERTEX_SHADER);
 		fragmentShaderID = loadShader(FRAGMENT_SHADER, GL_FRAGMENT_SHADER);
 
-		AssociateShader(VERTEX_SHADER, ShaderType::ST_VertexShader);
+		//AssociateShader(VERTEX_SHADER, ShaderType::ST_VertexShader);
 		AssociateShader(VERTEX_SHADER_HAS_ANIM, ShaderType::ST_VertexShader);
 		AssociateShader(FRAGMENT_SHADER, ShaderType::ST_FragmentShader);
 
 		// Create primary program for when dealing with just geometry.
-		programID = glCreateProgram();
-		programID_Geo = programID;
-		attach();
-		link();
+		//programID = glCreateProgram();
+		//programID_Geo = programID;
+		//attach();
+		//link();
 
 		// Create second program for when animations are included.
 		programID_HasAnim = glCreateProgram();
@@ -66,7 +66,7 @@ public:
 			link();
 			vertexShaderID = temp;
 		}
-		programID = programID_Geo;
+		//programID = programID_Geo;
 
 		std::vector<Uniform*>* inUniforms = new std::vector<Uniform*>();
 		inUniforms->push_back((Uniform*)projectionMatrix);
@@ -88,7 +88,7 @@ public:
 			storeAllUniformLocations(inUniforms);
 			connectTextureUnits();
 		}
-		programID = programID_Geo;
+		//programID = programID_Geo;
 	}
 
 	~AnimatedModelShader() 
@@ -111,7 +111,8 @@ public:
 
 	void start()
 	{
-		programID = programID_Geo;
+		//programID = programID_Geo;
+		programID = programID_HasAnim;
 		ShaderProgram::start();
 	}
 

@@ -45,6 +45,7 @@ public:
 	std::string* name;
 	std::string* sid;
 	std::vector<Joint*>* children = new std::vector<Joint*>();
+	int depth;
 	Joint* parent;
 
 	Joint() : index(-1), parent(nullptr)

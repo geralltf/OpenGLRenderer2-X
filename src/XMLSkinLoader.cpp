@@ -155,12 +155,12 @@ std::vector<Matrix4*>* SkinLoader::loadBindPoses()
 
 		bindPose = bindPose->Transpose();
 
-		//if (i == 0)
-		//{
-		//	//because in Blender z is up, but in our game y is up.
+		if (i == 0)
+		{
+			//because in Blender z is up, but in our game y is up.
 
-		//	bindPose = AnimatedModelLoader::CORRECTION * bindPose;
-		//}
+			bindPose = Matrix4::Multiply(AnimatedModelLoader::CORRECTION, bindPose);
+		}
 
 		bindPoses->push_back(bindPose);
 	}

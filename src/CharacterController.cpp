@@ -176,7 +176,7 @@ void CharacterController::PollInput()
 	{
 		Vector3f* rot = new Vector3f(dx, 0, dy);
 
-		Matrix4* rotMat = Quaternion::Euler(rot->x * rotSpeed, rot->y * rotSpeed, rot->z * rotSpeed)->RotationMatrix();
+		Matrix4* rotMat = Quaternion::Euler(rot->x * rotSpeed, rot->y * rotSpeed, rot->z * rotSpeed)->ToRotationMatrix();
 
 		modelview = Matrix4::Multiply(modelview, rotMat);
 	}

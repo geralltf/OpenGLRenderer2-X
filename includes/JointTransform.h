@@ -24,6 +24,7 @@ private:
 	// remember, this position and rotation are relative to the parent bone!
 	Vector3f* position;
 	Quaternion* rotation;
+	Matrix4* mat;
 
 public:
 	/**
@@ -38,10 +39,11 @@ public:
 	 *            - the rotation of the joint relative to the parent joint
 	 *            (bone-space) at a certain keyframe.
 	 */
-	JointTransform(Vector3f* position, Quaternion* rotation) 
+	JointTransform(Vector3f* position, Quaternion* rotation, Matrix4* matrix) 
 	{
 		this->position = position;
 		this->rotation = rotation;
+		this->mat = matrix;
 	}
 
 	~JointTransform() 

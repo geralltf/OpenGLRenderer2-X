@@ -38,6 +38,8 @@ public:
     void xyzw(Vector4f* value);
     Matrix4* RotationMatrix();
 
+    Matrix4* ToRotationMatrix();
+
     static Quaternion* Identity();
 
     Quaternion();

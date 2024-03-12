@@ -141,7 +141,7 @@ float Matrix4::Determinant()
 }
 Matrix4* Matrix4::Inverse()
 {
-	Matrix4* result;
+	Matrix4* result = Identity();
 
 	Invert(&result);
 
@@ -914,10 +914,11 @@ Matrix4* Matrix4::CreateRotationZMatrix(float angle)
 
 Matrix4* Matrix4::CreateRotatationMatrix(Quaternion* q)
 {
-	Vector3f* axis = new Vector3f();
-	float* angle = new float(0.0f);
-	q->DeconstructQuaternion(&axis, &angle);
-	return CreateRotatationMatrix(axis, *angle);
+	//Vector3f* axis = new Vector3f();
+	//float* angle = new float(0.0f);
+	//q->DeconstructQuaternion(&axis, &angle);
+	//return CreateRotatationMatrix(axis, *angle);
+	return q->ToRotationMatrix();
 }
 
 Matrix4* Matrix4::CreateRotatationMatrix(Vector3f* axis, float angle)

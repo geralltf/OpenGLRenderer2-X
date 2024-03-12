@@ -28,10 +28,14 @@ void AnimatedModelRenderer::render(AnimatedModel* entity, Transform* camera, Mat
 		entity->getModel()->binder(0, 6);
 		std::vector<Matrix4*>* jointTransforms = entity->getJointTransforms();
 		shader->jointTransforms->loadMatrixArray(shader->programID, jointTransforms);
+		//glDrawArrays(GL_TRIANGLES, 0, entity->getModel()->verticiesCount);
 		glDrawElements(GL_TRIANGLES, entity->getModel()->getIndexCount(), GL_UNSIGNED_INT, nullptr);
 		entity->getModel()->unbind();
 		entity->getModel()->unbinder(0, 6);
 		finish();
+	}
+	else {
+		std::cout << "Model not available to render." << std::endl;
 	}
 }
 

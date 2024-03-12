@@ -47,25 +47,31 @@ Animation* AnimatedModel::getAnimation()
 
 std::vector<Matrix4*>* AnimatedModel::getJointTransforms()
 {
-	std::stack<Joint*> stack;
+	std::stack<Joint*>* stack = new std::stack<Joint*>();
 	std::vector<Matrix4*>* jointMatrices = new std::vector<Matrix4*>(jointCount);
 
 	if (jointCount > 0)
 	{
-		stack.push(rootJoint);
+		stack->push(rootJoint);
 
-		while (!stack.empty())
+		while (!stack->empty())
 		{
-			Joint* jointNode = stack.top();
-			stack.pop();
+			Joint* jointNode = stack->top();
+			stack->pop();
 
-			jointMatrices->at(jointNode->index) = jointNode->getAnimatedTransform();
+			Matrix4* m = jointNode->getAnimatedTransform();
+
+			if (jointMatrices->at(jointNode->index) == nullptr) 
+			{
+				jointMatrices->at(jointNode->index) = m;
+			}
 
 			for (Joint* childJoint : *jointNode->children)
 			{
-				stack.push(childJoint);
+				stack->push(childJoint);
 			}
 		}
 	}
+	delete stack;
 	return jointMatrices;
 }

@@ -10,6 +10,7 @@ layout(location = 6) in vec3 in_bitangent;
 
 const int MAX_JOINTS = 100;//max joints allowed in a skeleton
 const int MAX_WEIGHTS = 3;//max number of joints that can affect a vertex
+const int MAX_ACTIVE_JOINTS = 8;
 
 out vec3 FragPos;
 out vec2 pass_textureCoords;
@@ -25,23 +26,33 @@ uniform vec3 eye;
 void main(void)
 {
 	mat4 MVP = projectionMatrix * viewMatrix * modelviewMatrix;
-	
+	mat4 projectionViewMatrix = projectionMatrix * viewMatrix;
 	vec4 totalLocalPos = vec4(0.0);
 	vec4 totalNormal = vec4(0.0);
-		
-	for(int i=0;i<MAX_WEIGHTS;i++)
+	
+	for(int j=0;j<MAX_ACTIVE_JOINTS;j++)
 	{
-		mat4 jointTransform = jointTransforms[in_jointIndices[i]];
-		vec4 posePosition = jointTransform * vec4(in_position, 1.0);
-		totalLocalPos += posePosition * in_weights[i];
-		
-		vec4 worldNormal = jointTransform * vec4(in_normal, 0.0);
-		totalNormal += worldNormal * in_weights[i];
+		for(int i=0;i<MAX_WEIGHTS;i++)
+		{
+			int joint_index = in_jointIndices[j];
+			mat4 jointTransform = jointTransforms[joint_index];
+			vec4 posePosition = jointTransform * vec4(in_position, 1.0);
+			totalLocalPos += posePosition * in_weights[i];
+			
+			vec4 worldNormal = jointTransform * vec4(in_normal, 0.0);
+			totalNormal += worldNormal * in_weights[i];
+		}
 	}
+	gl_Position = MVP * vec4(totalLocalPos.xyz / (MAX_ACTIVE_JOINTS * MAX_WEIGHTS), 1.0);
+
+	//totalNormal = normalize(totalNormal);
+	totalNormal = vec4(normalize(totalNormal.xyz), 1.0);
 	//gl_Position = MVP * vec4(in_position, 1.0);
-	gl_Position = MVP * vec4(totalLocalPos.xyz, 1.0); // With skeletal animation data
+	//gl_Position = projectionViewMatrix * vec4(totalLocalPos.xyz, 1.0); // With skeletal animation data
 	//FragPos = gl_Position.xyz;
-	FragPos = vec3(modelviewMatrix * vec4(totalLocalPos.xyz, 1.0));
+	//FragPos = vec3(MVP * vec4(totalLocalPos.xyz / (MAX_ACTIVE_JOINTS * MAX_WEIGHTS), 1.0));
+	FragPos = (MVP * vec4(totalLocalPos.xyz / (MAX_ACTIVE_JOINTS * MAX_WEIGHTS), 1.0)).xyz;
+	//FragPos = vec3(modelviewMatrix * vec4(totalLocalPos.xyz, 1.0));
 	
 	pass_normal = normalize(vec3(modelviewMatrix * vec4(totalNormal.xyz, 0.0)));
 		
@@ -51,7 +62,7 @@ void main(void)
 	vec3 T = normalize(vec3(modelviewMatrix * vec4(in_tangent, 0.0)));
 	//vec3 B = normalize(vec3(modelviewMatrix * vec4(in_bitangent, 0.0)));
 	vec3 N = normalize(vec3(modelviewMatrix * vec4(in_normal, 0.0)));
-	
+	N = totalNormal.xyz;
 	// re-orthogonalize T with respect to N
 	T = normalize(T - dot(T, N) * N);
 	// then retrieve perpendicular vector B with the cross product of T and N

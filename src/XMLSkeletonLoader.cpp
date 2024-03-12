@@ -129,6 +129,7 @@ JointData* SkeletonLoader::extractMainJointData(pugi::xpath_node jointNode, bool
 
 	Matrix4* inverseBindPoseTransform = (*bindPoses)[index];
 
+
 	jointCount++;
 	return new JointData(index, id, name, sid, localBindTransform, inverseBindPoseTransform);
 }

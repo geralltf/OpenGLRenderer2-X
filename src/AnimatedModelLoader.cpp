@@ -8,9 +8,9 @@ AnimatedModel* AnimatedModelLoader::LoadModel(std::string modelFile)
 	bool loadedData;
 	bool loadedSkeletonData;
 	bool loadedAnimData;
-
+	
 	CORRECTION = Matrix4::Identity();
-	//CORRECTION = CORRECTION.RotationYawPitchRoll(0, -90, 0);
+	CORRECTION  = Matrix4::CreateRotationXMatrix(-90.0f);
 
 	// Parse Collada.
 	AnimatedModelData* entityData = ColladaLoader::loadColladaModel(modelFile, MAX_WEIGHTS, loadedData, loadedSkeletonData, loadedAnimData);
@@ -64,6 +64,8 @@ Vao* AnimatedModelLoader::createVao(MeshData* data)
 	if (data == nullptr) return nullptr;
 	Vao* vao = Vao::create();
 	vao->bind();
+	vao->binder(0, 6);
+	vao->verticiesCount = data->getVertices()->size();
 	vao->createIndexBuffer(data->getIndices());
 	vao->createAttribute(0, data->getVertices(), 3);
 	vao->createAttribute(1, data->getTextureCoords(), 2);
@@ -73,6 +75,7 @@ Vao* AnimatedModelLoader::createVao(MeshData* data)
 	vao->createAttribute(5, data->getVertexTangents(), 3);
 	vao->createAttribute(6, data->getVertexBiTangents(), 3);
 	vao->unbind();
+	vao->unbinder(0, 6);
 	return vao;
 }
 
@@ -90,8 +93,9 @@ KeyFrame* AnimatedModelLoader::createKeyFrame(KeyFrameData* data)
 JointTransform* AnimatedModelLoader::createTransform(JointTransformData* data)
 {
 	Matrix4* mat = data->jointLocalTransform;
+
 	Vector3f* translation = mat->GetTranslation();
 	Quaternion* rotation = Quaternion::FromMatrix(mat);
 
-	return new JointTransform(translation, rotation);
+	return new JointTransform(translation, rotation, mat);
 }

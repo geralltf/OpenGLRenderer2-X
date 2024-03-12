@@ -50,6 +50,37 @@ Matrix4* Quaternion::RotationMatrix()
     return Matrix4::CreateRotatationMatrix(this);
 }
 
+Matrix4* Quaternion::ToRotationMatrix()
+{
+    Matrix4* matrix = new Matrix4();
+    float xy = x * y;
+    float xz = x * z;
+    float xw = x * w;
+    float yz = y * z;
+    float yw = y * w;
+    float zw = z * w;
+    float xSquared = x * x;
+    float ySquared = y * y;
+    float zSquared = z * z;
+    matrix->m00 = 1 - 2 * (ySquared + zSquared);
+    matrix->m01 = 2 * (xy - zw);
+    matrix->m02 = 2 * (xz + yw);
+    matrix->m03 = 0;
+    matrix->m10 = 2 * (xy + zw);
+    matrix->m11 = 1 - 2 * (xSquared + zSquared);
+    matrix->m12 = 2 * (yz - xw);
+    matrix->m13 = 0;
+    matrix->m20 = 2 * (xz - yw);
+    matrix->m21 = 2 * (yz + xw);
+    matrix->m22 = 1 - 2 * (xSquared + ySquared);
+    matrix->m23 = 0;
+    matrix->m30 = 0;
+    matrix->m31 = 0;
+    matrix->m32 = 0;
+    matrix->m33 = 1;
+    return matrix;
+}
+
 Quaternion* Quaternion::Identity()
 {
     return new Quaternion(0, 0, 0, 1);

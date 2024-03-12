@@ -107,6 +107,7 @@ void main(void)
     //vec3 VertexToEye = normalize(eye - FragPosition);
     vec3 LightReflect = normalize(reflect(lightDir, n));
     float SpecularFactor = dot(VertexToEye, LightReflect);
+
     vec3 SpecularColor = vec3(0,0,0);
 	
     if (SpecularFactor > 0)
@@ -125,7 +126,7 @@ void main(void)
 	SpecularColor = vec3(0,0,0);
 	//diffuse = vec3(0,0,0);
 	//SpecularColor = celShadeSpec;
-	diffuse = celShadeDiff;
+	//diffuse = celShadeDiff;
 	//diffuse = vec3(1,0,0);
 	emissive = vec3(0,0,0);
 	ambient = vec3(0,0,0);
@@ -142,6 +143,6 @@ void main(void)
 	, 1.0); 
 	
 	//float diffuseLight = diff;// * lightBias.x + lightBias.y;
-	//frag_colour = diffuseColour * diffuseLight;
+	//frag_colour = vec4(diffuse * diffuseValue * visibility, 1.0);
 	//frag_colour = vec4(1,0,0,1);
 }

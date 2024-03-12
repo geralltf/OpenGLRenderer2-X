@@ -45,7 +45,7 @@ private:
 	float animationTime = 0;
 
 public:
-
+	bool tracing = false;
 	Animator() 
 	{
 
@@ -142,7 +142,7 @@ private:
 	 *            - the desired model-space transform of the parent joint for
 	 *            the pose.
 	 */
-	void applyPoseToJoints(std::map<std::string*, Matrix4*>* currentPose, Joint* joint, Matrix4* parentTransform);
+	void applyPoseToJoints(std::map<std::string*, Matrix4*>* currentPose, Joint* joint, Matrix4** parentTransform);
 
 	/**
 	 * Finds the previous keyframe in the animation and the next keyframe in the

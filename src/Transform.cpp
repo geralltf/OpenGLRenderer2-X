@@ -211,7 +211,7 @@ void Transform::RotateZ(float angleInDegrees)
 void Transform::Rotate(float rotationXPitchInDegrees, float rotationYYawInDegrees, float rotationZRollInDegrees)
 {
 	Quaternion* rotation = Quaternion::Euler(rotationXPitchInDegrees, rotationYYawInDegrees, rotationZRollInDegrees);
-	localMatrix = Matrix4::Multiply(rotation->RotationMatrix(), localMatrix);
+	localMatrix = Matrix4::Multiply(rotation->ToRotationMatrix(), localMatrix);
 }
 
 

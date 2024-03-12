@@ -38,7 +38,14 @@ public:
 		{
 			j = i * MATRIX_SIZE;
 			m = (*matrixArray)[i];
-			matrix = m->ToArray();
+			if (m != nullptr)
+			{
+				matrix = m->ToArray();
+			}
+			else 
+			{
+				matrix = Matrix4::Identity()->ToArray();
+			}
 
 			for (k = 0; k < MATRIX_SIZE; k++)
 			{
