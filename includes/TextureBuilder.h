@@ -34,7 +34,7 @@ public:
 		std::string* textureFileTopPosY, std::string* texFileBottomNegY,
 		std::string* textureFileBackPosZ, std::string* texFileFrontNegZ);
 
-	Texture* Create();
+	Texture* Create(bool flip_vertically = true);
 	TextureBuilder* ClampEdges();
 	TextureBuilder* NormalMipMap();
 	TextureBuilder* NearestFiltering();

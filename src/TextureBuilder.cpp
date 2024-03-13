@@ -20,11 +20,11 @@ TextureBuilder::TextureBuilder(std::string* texFileRightPosX, std::string* texFi
 	this->texFileFrontNegZ = texFileFrontNegZ;
 }
 
-Texture* TextureBuilder::Create()
+Texture* TextureBuilder::Create(bool flip_vertically)
 {
 	if (cubemap == false)
 	{
-		TextureData* textureData = TextureUtils::decodeTextureFile(file, true);
+		TextureData* textureData = TextureUtils::decodeTextureFile(file, flip_vertically);
 
 		GLuint textureId = TextureUtils::uploadTextureToOpenGL(textureData, this);
 

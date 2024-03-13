@@ -518,7 +518,7 @@ void Renderer::ShowAOMap()
 
 void Renderer::InitCursor()
 {
-	textureCursor = Texture::LoadTexture(new std::string("light_cursor.tga"))->Create();
+	textureCursor = Texture::LoadTexture(new std::string("light_cursor.tga"))->NearestFiltering()->Create(false);
 	std::vector<GLfloat>* vertices = new std::vector<GLfloat>();
 	GLfloat v = 0.0f;
 	GLfloat v2 = 1.0f;
