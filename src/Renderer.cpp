@@ -202,7 +202,7 @@ void Renderer::Render(Transform* cameraTransform)
 		glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 	}
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 
 
@@ -218,7 +218,7 @@ void Renderer::Render(Transform* cameraTransform)
 
 	virtualWorld->Render(window, cameraTransform, projectionMatrix, modelview, lightDir, lightModelView);
 
-	RenderCursor(cameraTransform);
+	RenderCursor(window, cameraTransform, projectionMatrix, modelview, lightDir, lightModelView);
 
 	//
 	//ShowShadowMap(cameraTransform);
@@ -551,7 +551,6 @@ void Renderer::InitCursor()
 	texCoords->push_back(f);
 	texCoords->push_back(f2);
 
-
 	indicies = new std::vector<unsigned int>();
 	unsigned int i = 0;
 	unsigned int i2 = 1;
@@ -571,7 +570,7 @@ void Renderer::InitCursor()
 	vaoCursor->unbind();
 }
 
-void Renderer::RenderCursor(Transform* cameraTransform)
+void Renderer::RenderCursor(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview, Vector3f* light_dir, Matrix4* lightModelView)
 {
 	//float screenW = 64, screenH = 64; // size of the cursor in pixels
 	//float sizeX = (screenW / (float)window->getSize().x);
@@ -587,59 +586,63 @@ void Renderer::RenderCursor(Transform* cameraTransform)
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(*window);
 	Vector2i* mouse = new Vector2i(mousePosition.x, mousePosition.y);
 	Vector2f* screenSize = new Vector2f((float)window->getSize().x, (float)window->getSize().y);
-	Vector3f* position = ScreenSpaceToOrthographic(mouse, screenSize, cursorSize);
-
+	//Vector3f* position = ScreenSpaceToOrthographic(mouse, screenSize, cursorSize);
+	Vector3f* position = new Vector3f(((float)mouse->x / screenSize->x) - 0.05f, (1.0f - ((float)mouse->y / screenSize->y)) - 0.05f , -2.0f);
 	Matrix4* model = Matrix4::Identity();
 
-	float sizeX = (cursorSize->x / (float)window->getSize().x);
-	float sizeY = (cursorSize->y / (float)window->getSize().y);
-	model->Scale(new Vector3f(sizeX, sizeY, 1.0f));
-	model->Translate(new Vector3f(-0.5f * sizeX, -0.5f * sizeY, 0.0f));
-	model = Matrix4::Multiply(model, Matrix4::RotationYawPitchRoll(0.0f, 0.0f, 0.0f));
-	model->Translate(new Vector3f(0.5f * sizeX, 0.5f * sizeY, 0.0f));
+	float sizeX = ((cursorSize->x / (float)window->getSize().x));
+	float sizeY = ((cursorSize->y / (float)window->getSize().y));
+
+	Matrix4* scalarMatrix = Matrix4::Scale(0.1f, 0.1f, 1.0f);
+
+	model = Matrix4::Multiply(model, scalarMatrix);
 	model->Translate(position);
 
-
-	Matrix4* scalem = Matrix4::Identity();
-	//scalem.Scale(Vector3(1,1,1) * 0.01f);
-
 	Matrix4* quadModelView = model;
-	//quadModelView.Scale(Vector3(1, 1, 1) * 10);
-	//quadModelView.Translate(Vector3(10,0,0));
 	Matrix4* quadView;
-	//quadView = Matrix4::LookAt(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3::Up);
-	quadView = cameraTransform->localMatrix;
+	quadView = Matrix4::Identity(); // Dont use camera transform local matrix since the sprite is meant to follow the user interface on screen as the player moves.
 	Matrix4* quadProj;
-	quadProj = Matrix4::Orthographic(-1, 1, -1, 1, -1.0f, 1.0f);
+	quadProj = Matrix4::Orthographic(0.0f, 1.0f, 0.0f, 1.0f, 0.1f, 1000.0f);
+	//quadProj = Matrix4::Orthographic(-1, 1, -1, 1, -1.0f, 1.0f);
 	//quadProj = Matrix4::Perspective(Renderer::fov, window->getSize().x / (float)window->getSize().y, 0.1f, 1000);
 	//quadProj = Matrix4::Orthographic(0.0f, window->getSize().x, window->getSize().y, 0.0f, -1.0f, 1.0f);
 	//quadProj = Matrix4::Orthographic(0, 1, -1, 0, -1.0f, 1.0f);
 	//quadProj = Matrix4::Orthographic(0, window->getSize().x, window->getSize().y, 0, 0.1f, 1.0f);
 	//quadProj = Matrix4::GetIdentity();
 	Matrix4* MVP = Matrix4::Multiply(Matrix4::Multiply(quadProj, quadView), quadModelView);
-	MVP = Matrix4::Multiply(Matrix4::Multiply(quadProj, scalem), quadModelView);
 
 	float* arrMVP = MVP->ToArray();
+	float* arrP = quadProj->ToArray();
+	float* arrV = quadView->ToArray();
+	float* arrM = quadModelView->ToArray();
+
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	OpenGlUtils::EnableAlphaBlending();
-	OpenGlUtils::EnableDepthTesting(true);
+	OpenGlUtils::EnableDepthTesting(false);
 	glUseProgram(programCursor);
 	glUniformMatrix4fv(glGetUniformLocation(programCursor, "MVP"), 1, GL_FALSE, arrMVP);
-	glUniform2f(glGetUniformLocation(programCursor, "textureSize"), 320, 320);
+	glUniformMatrix4fv(glGetUniformLocation(programCursor, "projectionMatrix"), 1, GL_FALSE, arrP);
+	glUniformMatrix4fv(glGetUniformLocation(programCursor, "viewMatrix"), 1, GL_FALSE, arrV);
+	glUniformMatrix4fv(glGetUniformLocation(programCursor, "modelMatrix"), 1, GL_FALSE, arrM);
+	glUniform2f(glGetUniformLocation(programCursor, "textureSize"), 64, 64);
 	glUniform1i(glGetUniformLocation(programCursor, "cursorTexture"), 0);
 
+	glActiveTexture(GL_TEXTURE0);
 	textureCursor->bindToUnit(0);
 	if (vaoCursor != nullptr)
 	{
 		vaoCursor->bind();
 		vaoCursor->binder(0, 1);
-		glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, indicies->data());
+		glDrawElements(GL_QUADS, indicies->size(), GL_UNSIGNED_INT, nullptr);
 		vaoCursor->unbinder(0, 1);
 		vaoCursor->unbind();
 		glUseProgram(0);
 	}
 
 	delete[] arrMVP;
+	delete[] arrP;
+	delete[] arrV;
+	delete[] arrM;
 }
 
 void Renderer::InitNoiseMap()

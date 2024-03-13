@@ -83,7 +83,7 @@ public:
 	void ShowShadowMap(Transform* cameraTransform);
 	void ShowAOMap();
 	void InitCursor();
-	void RenderCursor(Transform* cameraTransform);
+	void RenderCursor(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview, Vector3f* light_dir, Matrix4* lightModelView);
 	void InitNoiseMap();
 	void ShowNoiseMap();
 };
