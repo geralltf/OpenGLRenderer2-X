@@ -344,27 +344,27 @@ void Matrix4::SetTRS(Vector3f* translation, Quaternion* rotation, Vector3f* scal
 	this->Row3(result->Row3());
 }
 
+Matrix4* Matrix4::Scale(float x, float y, float z)
+{
+	Matrix4* result = Identity();
+	result->Row0(Vector4f::Scale(Vector4f::UnitX, x));
+	result->Row1(Vector4f::Scale(Vector4f::UnitY, x));
+	result->Row2(Vector4f::Scale(Vector4f::UnitZ, x));
+	result->Row2(Vector4f::UnitW);
+	return result;
+}
+
 void Matrix4::Scale(float uniform_scalar) 
 {
-	Vector4f* r0 = Row0();
-	Vector4f* r1 = Row0();
-	Vector4f* r2 = Row0();
-	Vector4f* r3 = Row0();
+	Matrix4* scalar_matrix = Scale(uniform_scalar, uniform_scalar, uniform_scalar);
 
-	Vector4f* i0 = new Vector4f(uniform_scalar, 1, 1, 1);
-	Vector4f* i1 = new Vector4f(1, uniform_scalar, 1, 1);
-	Vector4f* i2 = new Vector4f(1, 1, uniform_scalar, 1);
+ 	Matrix4* result = Matrix4::Multiply(this, scalar_matrix);
 
-	r0 = r0->Multiply(r0, i0);
-	r1 = r1->Multiply(r1, i1);
-	r2 = r2->Multiply(r2, i2);
-	r3->w = 1.0f;
-
-	Row0(r0);
-	Row1(r1);
-	Row2(r2);
-	Row3(r3);
+	this->Row0(result->Row0());
+	this->Row1(result->Row1());
+	this->Row2(result->Row0());
 }
+
 void Matrix4::Scale(Vector3f* scale)
 {
 	Vector4f* r0 = Row0();
@@ -375,6 +375,7 @@ void Matrix4::Scale(Vector3f* scale)
 	Vector4f* i0 = new Vector4f(scale->x, 1, 1, 1);
 	Vector4f* i1 = new Vector4f(1, scale->y, 1, 1);
 	Vector4f* i2 = new Vector4f(1, 1, scale->z, 1);
+	Vector4f* i3 = new Vector4f(1, 1, 1, 1.0f);
 
 	r0 = r0->Multiply(r0, i0);
 	r1 = r1->Multiply(r1, i1);
@@ -397,7 +398,7 @@ void Matrix4::Scale(Vector4f* scale)
 	Vector4f* i0 = new Vector4f(scale->x, 1, 1, 1);
 	Vector4f* i1 = new Vector4f(1, scale->y, 1, 1);
 	Vector4f* i2 = new Vector4f(1, 1, scale->z, 1);
-	Vector4f* i3 = new Vector4f(1, 1, 1, scale->w);
+	Vector4f* i3 = new Vector4f(1, 1, 1, 1.0f);
 
 	r0 = r0->Multiply(r0, i0);
 	r1 = r1->Multiply(r1, i1);

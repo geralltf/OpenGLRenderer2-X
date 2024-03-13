@@ -100,6 +100,9 @@ public:
 
     void SetTRS(Vector3f* translation, Quaternion* rotation, Vector3f* scale);
 
+
+    static Matrix4* Scale(float x, float y, float z);
+
     void Scale(float scalar);
 
     void Scale(Vector3f* scale);
