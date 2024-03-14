@@ -14,7 +14,7 @@ void main()
 {
 	mat4 _MVP = projectionMatrix * viewMatrix * modelMatrix;
 
-	TexCoords = vec2(vertex_texcoord.x, vertex_texcoord.y);
+	//TexCoords = vec2(vertex_texcoord.x, vertex_texcoord.y);
 	TexCoords = vertex_position.xy;
 	gl_Position = _MVP * vec4(vertex_position, 1.0);
 }
