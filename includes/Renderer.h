@@ -44,6 +44,7 @@ private:
 	int screenQuadVertexCount = 0;
 	bool noErrors = true;
 	Texture* textureCursor;
+	Texture* textureCursorInventory;
 	VirtualWorld* virtualWorld;
 
 	FileWatcher* fw;

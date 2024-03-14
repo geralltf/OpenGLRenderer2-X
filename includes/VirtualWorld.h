@@ -14,6 +14,7 @@
 #include "Terrain.h"
 #include "OctreeRenderer.h"
 #include "Random.h"
+#include "Inventory.h"
 
 class VirtualWorld 
 {
@@ -41,6 +42,7 @@ public:
 	OctreeRenderer* octreeRenderer;
 	Random* random;
 	Vector3f* worldPosition = new Vector3f(0.0f, 0.0f, 0.0f);
+	InventoryView* inventoryView;
 public:
 	VirtualWorld();
 	~VirtualWorld();

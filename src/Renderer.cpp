@@ -20,7 +20,7 @@ MessageCallback(GLenum source,
 		type, severity, message);
 }
 
-Renderer::Renderer() : window(nullptr), textureCursor(nullptr)
+Renderer::Renderer() : window(nullptr), textureCursor(nullptr), textureCursorInventory(nullptr)
 {
 
 }
@@ -30,6 +30,7 @@ Renderer::~Renderer()
 
 	delete vaoCursor;
 	delete textureCursor;
+	delete textureCursorInventory;
 	delete fw;
 
 	glDeleteProgram(programScreenQuad);
@@ -519,6 +520,8 @@ void Renderer::ShowAOMap()
 void Renderer::InitCursor()
 {
 	textureCursor = Texture::LoadTexture(new std::string("light_cursor.tga"))->NearestFiltering()->Create(false);
+	textureCursorInventory = Texture::LoadTexture(new std::string("Assets/sprites/inventory_cursor.tga"))->NearestFiltering()->Create(true);
+
 	std::vector<GLfloat>* vertices = new std::vector<GLfloat>();
 	GLfloat v = 0.0f;
 	GLfloat v2 = 1.0f;
@@ -593,7 +596,7 @@ void Renderer::RenderCursor(sf::RenderWindow* window, Transform* cameraTransform
 	float sizeX = ((cursorSize->x / (float)window->getSize().x));
 	float sizeY = ((cursorSize->y / (float)window->getSize().y));
 
-	Matrix4* scalarMatrix = Matrix4::Scale(0.1f, 0.1f, 1.0f);
+	Matrix4* scalarMatrix = Matrix4::Scale(0.05f, 0.05f, 1.0f);
 
 	model = Matrix4::Multiply(model, scalarMatrix);
 	model->Translate(position);
@@ -628,7 +631,14 @@ void Renderer::RenderCursor(sf::RenderWindow* window, Transform* cameraTransform
 	glUniform1i(glGetUniformLocation(programCursor, "cursorTexture"), 0);
 
 	glActiveTexture(GL_TEXTURE0);
-	textureCursor->bindToUnit(0);
+	if (virtualWorld->inventoryView->visible)
+	{
+		textureCursorInventory->bindToUnit(0);
+	}
+	else {
+		textureCursor->bindToUnit(0);
+	}
+	
 	if (vaoCursor != nullptr)
 	{
 		vaoCursor->bind();

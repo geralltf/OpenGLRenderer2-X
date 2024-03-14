@@ -38,6 +38,9 @@ VirtualWorld::~VirtualWorld()
 
 void VirtualWorld::Initilise()
 {
+	// User Interfaces.
+	inventoryView = new InventoryView();
+
 	floor = new Character();
 	floor->LoadModel(new std::string("Assets/floor.obj"));
 	floor->LoadTextures();
@@ -57,6 +60,7 @@ void VirtualWorld::Initilise()
 	//character00->LoadModel("Assets/Harpy/Harpy.obj");
 	//character00->LoadModel("Assets/Cars/Audi_R8.obj");
 	character00->LoadModel(new std::string("Assets/diablo3_pose/diablo3_pose.obj"));
+	//character00->LoadModel(new std::string("Assets/boat/boat.obj"));
 	//character00->LoadModel("Assets/Dragon.obj");
 	//character00->LoadModel(new std::string("Assets/cactus_v1.obj"));
 	//character00->LoadModel(new std::string("Assets/african_head/african_head.obj"));
@@ -68,11 +72,12 @@ void VirtualWorld::Initilise()
 	//character00->LoadModel(new std::string("Assets/teapot.obj"));
 	character00->LoadTextures();
 
-	//character01 = new Character();
+	character01 = new Character();
+	character01->LoadModel(new std::string("Assets/boat/boat.obj"));
 	//character01->LoadModel("Assets/Harpy/Harpy.obj");
 	//character01->LoadModel("Assets/boggie/head.obj");
 	//character01->LoadModel(new std::string("Assets/african_head/african_head_eye_inner.obj"));
-	//character01->LoadTextures();
+	character01->LoadTextures();
 
 	//character02 = new Character();
 	//character02->LoadModel("Assets/boggie/eyes.obj");
@@ -108,10 +113,7 @@ void VirtualWorld::Initilise()
 	//std::string model = "Assets/Animations/Mannequin_figure/free3DmodelDAE/free3Dmodel2.dae";
 	//std::string anim = "Assets/Animations/Mannequin_figure/Male_Locomotion_PackDAE/walking.dae";
 	std::string model = "Assets/Animations/model.dae";
-	std::string anim = "Assets/Animations/model.dae";
 	animModel = AnimatedModelLoader::LoadModel(model);
-	//AnimatedModel* animModel2 = AnimatedModelLoader::LoadModel(anim);
-	//animModel = animModel2;
 	animRenderer = new AnimatedModelRenderer();
 	animDiffuseTexture = Texture::LoadTexture(new std::string("Assets/Animations/diffuse.tga"))->Anisotropic()->Create();
 	selectedAnimation = animModel->getAnimation();
@@ -166,9 +168,13 @@ void VirtualWorld::Render(sf::RenderWindow* window, Transform* cameraTransform, 
 	model->Translate(modelview->GetTranslation());
 	model->Translate(new Vector3f(1.5f, 0.0f, 0.0f));
 
+	Matrix4* model2 = Matrix4::Identity();
+	//model->Scale(0.1f);
+	model2->Translate(modelview->GetTranslation());
+	model2->Translate(new Vector3f(5.0f, -1.0f, 0.0f));
 
 	character00->Render(window, cameraTransform, projectionMatrix, model, light_dir, lightModelView);
-	//character01->Render(window, cameraTransform, projectionMatrix, model, light_dir, lightModelView);
+	character01->Render(window, cameraTransform, projectionMatrix, model2, light_dir, lightModelView);
 	//character02->Render(window, cameraTransform, projectionMatrix, model * modelview, light_dir, lightModelView);
 
 	//Debug::DrawLines_RenderDispatch(window, cameraTransform, projectionMatrix, model * modelview);
@@ -226,4 +232,7 @@ void VirtualWorld::Render(sf::RenderWindow* window, Transform* cameraTransform, 
 
 	//terrain->Render(cameraTransform, projectionMatrix, lightDir);
 	skybox->Render(cameraTransform, projectionMatrix);
+
+	// User interfaces.
+	inventoryView->renderSprites(window);
 }
