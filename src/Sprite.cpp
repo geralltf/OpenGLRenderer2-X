@@ -87,7 +87,7 @@ void Sprite::render(sf::RenderWindow* window)
 	float sizeY = ((this->sprite_size->y / (float)window->getSize().y));
 
 	Matrix4* scalarMatrix = Matrix4::Scale(scale->x, scale->y, 1.0f);
-
+	
 	model = Matrix4::Multiply(model, scalarMatrix);
 	model->Translate(position);
 
@@ -131,4 +131,16 @@ void Sprite::render(sf::RenderWindow* window)
 	delete[] arrP;
 	delete[] arrV;
 	delete[] arrM;
+	delete MVP;
+	delete quadProj;
+	delete quadView;
+	delete quadModelView;
+	delete scalarMatrix;
+
+	delete position;
+	delete screenSize;
+	delete screenSpacePosition;
+
+	//delete vaoSprite;
+	//delete model;
 }
