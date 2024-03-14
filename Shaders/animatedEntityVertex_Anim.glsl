@@ -10,7 +10,7 @@ layout(location = 6) in vec3 in_bitangent;
 
 const int MAX_JOINTS = 100;//max joints allowed in a skeleton
 const int MAX_WEIGHTS = 3;//max number of joints that can affect a vertex
-const int MAX_ACTIVE_JOINTS = 16;
+const int MAX_ACTIVE_JOINTS = 3;
 
 out vec3 FragPos;
 out vec2 pass_textureCoords;
