@@ -1,13 +1,13 @@
 #include "Sprite.h"
 
-Sprite* Sprite::Create(std::string texture_file_name, Vector2f* sprite_size, Vector3f* sprite_position, Vector2f* scale, bool flip_vertically)
+Sprite* Sprite::Create(std::string texture_file_name, Vector2f* sprite_size, Vector3f* sprite_position, Vector3f* scale, bool flip_vertically)
 {
 	return Create(&texture_file_name, sprite_size, sprite_position, scale, flip_vertically);
 }
 
-Sprite* Sprite::Create(std::string* texture_file_name, Vector2f* sprite_size, Vector3f* sprite_position, Vector2f* scale, bool flip_vertically)
+Sprite* Sprite::Create(std::string* texture_file_name, Vector2f* sprite_size, Vector3f* sprite_position, Vector3f* scale, bool flip_vertically)
 {
-	Texture* spriteTexture = Texture::LoadTexture(texture_file_name)->Anisotropic()->ClampEdges()->Create(flip_vertically);
+	Texture* spriteTexture = Texture::LoadTexture(texture_file_name)->Anisotropic()->ClampEdges()->NearestFiltering()->Create(flip_vertically);
 
 	ShaderProgram* program = new ShaderProgram("Shaders/screenSprite_vs.glsl", "Shaders/screenSprite_fs.glsl");
 
@@ -73,10 +73,10 @@ Sprite* Sprite::Create(std::string* texture_file_name, Vector2f* sprite_size, Ve
 void Sprite::render(sf::RenderWindow* window)
 {
 	//Vector2f* spriteSize = new Vector2f(64, 64); // size of the sprite in pixels
-	Vector2i* screenSpacePosition = new Vector2i(position->x, position->y);
+	Vector2i* screenSpacePosition = new Vector2i(this->position->x, this->position->y);
 	Vector2f* screenSize = new Vector2f((float)window->getSize().x, (float)window->getSize().y);
 	//Vector3f* position = ScreenSpaceToOrthographic(mouse, screenSize, cursorSize);
-	Vector3f* position = new Vector3f(
+	Vector3f* position2 = new Vector3f(
 		((float)screenSpacePosition->x / screenSize->x) - 0.05f,
 		(1.0f - ((float)screenSpacePosition->y / screenSize->y)) - 0.05f,
 		-2.0f
@@ -86,10 +86,10 @@ void Sprite::render(sf::RenderWindow* window)
 	float sizeX = ((this->sprite_size->x / (float)window->getSize().x));
 	float sizeY = ((this->sprite_size->y / (float)window->getSize().y));
 
-	Matrix4* scalarMatrix = Matrix4::Scale(scale->x, scale->y, 1.0f);
+	Matrix4* scalarMatrix = Matrix4::Scale(this->scale->x, this->scale->y, this->scale->z);
 	
 	model = Matrix4::Multiply(model, scalarMatrix);
-	model->Translate(position);
+	model->Translate(position2);
 
 	Matrix4* quadModelView = model;
 	Matrix4* quadView;
@@ -112,7 +112,7 @@ void Sprite::render(sf::RenderWindow* window)
 	glUniformMatrix4fv(glGetUniformLocation(program->programID, "projectionMatrix"), 1, GL_FALSE, arrP);
 	glUniformMatrix4fv(glGetUniformLocation(program->programID, "viewMatrix"), 1, GL_FALSE, arrV);
 	glUniformMatrix4fv(glGetUniformLocation(program->programID, "modelMatrix"), 1, GL_FALSE, arrM);
-	glUniform2f(glGetUniformLocation(program->programID, "textureSize"), sprite_size->x, sprite_size->y);
+	glUniform2f(glGetUniformLocation(program->programID, "textureSize2"), sprite_size->x, sprite_size->y);
 	glUniform1i(glGetUniformLocation(program->programID, "spriteTexture"), 0);
 
 	glActiveTexture(GL_TEXTURE0);
@@ -137,9 +137,9 @@ void Sprite::render(sf::RenderWindow* window)
 	delete quadModelView;
 	delete scalarMatrix;
 
-	delete position;
-	delete screenSize;
-	delete screenSpacePosition;
+	//delete position;
+	//delete screenSize;
+	//delete screenSpacePosition;
 
 	//delete vaoSprite;
 	//delete model;

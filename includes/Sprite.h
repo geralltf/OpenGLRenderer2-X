@@ -18,9 +18,9 @@ public:
 
 	Vector3f* position;
 	Vector2f* sprite_size;
-	Vector2f* scale;
+	Vector3f* scale;
 
-	Sprite(Texture* texture, ShaderProgram* shaderProgram, Vao* vao, Vector2f* spriteSize, Vector3f* position, Vector2f* scalar)
+	Sprite(Texture* texture, ShaderProgram* shaderProgram, Vao* vao, Vector2f* spriteSize, Vector3f* position, Vector3f* scalar)
 	{
 		this->spriteTexture = texture;
 		this->program = shaderProgram;
@@ -40,9 +40,9 @@ public:
 		delete sprite_size;
 	}
 
-	static Sprite* Create(std::string texture_file_name, Vector2f* sprite_size, Vector3f* sprite_position, Vector2f* scale, bool flip_vertically);
+	static Sprite* Create(std::string texture_file_name, Vector2f* sprite_size, Vector3f* sprite_position, Vector3f* scale, bool flip_vertically);
 
-	static Sprite* Create(std::string* texture_file_name, Vector2f* sprite_size, Vector3f* sprite_position, Vector2f* scale, bool flip_vertically);
+	static Sprite* Create(std::string* texture_file_name, Vector2f* sprite_size, Vector3f* sprite_position, Vector3f* scale, bool flip_vertically);
 
 	void render(sf::RenderWindow* window);
 };

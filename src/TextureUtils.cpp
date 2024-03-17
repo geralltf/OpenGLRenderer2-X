@@ -23,7 +23,8 @@ TextureData* TextureUtils::decodeTextureFile(std::string* file, bool flip_vertic
 	bytesPerPixel = tgaDecoder->get_bytesPerPixel();
 	buffer = tgaDecoder->buffer(); // in BRGA format
 
-	std::cout << "Texture file " << *file << " loading " << (loaded ? "ok" : "failed") << std::endl;
+	std::cout << "Texture file " << *file << " loading " << (loaded ? "ok" : "failed") 
+		<< " width: " << width << " height: " << height << " channels: " << bytesPerPixel << std::endl;
 
 	//TODO: handle PNG decoding
 
