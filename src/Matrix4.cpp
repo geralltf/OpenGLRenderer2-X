@@ -348,8 +348,8 @@ Matrix4* Matrix4::Scale(float x, float y, float z)
 {
 	Matrix4* result = Identity();
 	result->Row0(Vector4f::Scale(Vector4f::UnitX, x));
-	result->Row1(Vector4f::Scale(Vector4f::UnitY, x));
-	result->Row2(Vector4f::Scale(Vector4f::UnitZ, x));
+	result->Row1(Vector4f::Scale(Vector4f::UnitY, y));
+	result->Row2(Vector4f::Scale(Vector4f::UnitZ, z));
 	result->Row2(Vector4f::UnitW);
 	return result;
 }
