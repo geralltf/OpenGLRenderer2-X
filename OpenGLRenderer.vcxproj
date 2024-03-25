@@ -172,6 +172,7 @@
     <ClCompile Include="src\HE_Face.cpp" />
     <ClCompile Include="src\HE_Pair.cpp" />
     <ClCompile Include="src\HE_Vertex.cpp" />
+    <ClCompile Include="src\Inventory.cpp" />
     <ClCompile Include="src\IOHelpers.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\JointData.cpp" />
@@ -205,6 +206,7 @@
     <ClCompile Include="src\SkeletonData.cpp" />
     <ClCompile Include="src\SkinningData.cpp" />
     <ClCompile Include="src\Skybox.cpp" />
+    <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\StringHelpers.cpp" />
     <ClCompile Include="src\SystemTests.cpp" />
     <ClCompile Include="src\Terrain.cpp" />
@@ -257,6 +259,7 @@
     <ClInclude Include="includes\Editor.h" />
     <ClInclude Include="includes\EntryPoint.h" />
     <ClInclude Include="includes\FileWatcher.h" />
+    <ClInclude Include="includes\Inventory.h" />
     <ClInclude Include="includes\Light.h" />
     <ClInclude Include="includes\MathLib.h" />
     <ClInclude Include="includes\MeshBufferVAO.h" />
@@ -267,6 +270,7 @@
     <ClInclude Include="includes\Rigidbody.h" />
     <ClInclude Include="includes\SFMLCanvas.h" />
     <ClInclude Include="includes\Skybox.h" />
+    <ClInclude Include="includes\Sprite.h" />
     <ClInclude Include="includes\Terrain.h" />
     <ClInclude Include="includes\TimeManager.h" />
     <ClInclude Include="includes\Edge.h" />

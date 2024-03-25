@@ -13,6 +13,8 @@ public:
 	Sprite* greatsword;
 	Sprite* scrollbar_horiz;
 	Sprite* scrollbar_horiz_sliderbar;
+	Sprite* hovered_item;
+	Sprite* selected_item;
 	Vector2f* slots_position;
 	bool visible = false;
 	bool quests_visible = false;
@@ -27,6 +29,7 @@ public:
 	bool beginSlider = true;
 	float sliderRatio;
 	float progression = 0.0f;
+	bool selected = false;
 	InventoryView()
 	{
 		resumeGame = Sprite::Create(
@@ -92,6 +95,22 @@ public:
 			new Vector3f(0.3f, 0.3f, 1.0f),
 			true
 		);
+
+		hovered_item = Sprite::Create(
+			"Assets/sprites/hovered_item.tga",
+			new Vector2f(64, 64),
+			new Vector3f(256.0f, 800.0f, 0.0f),
+			new Vector3f(0.06f, 0.06f, 1.0f),
+			true
+		);
+
+		selected_item = Sprite::Create(
+			"Assets/sprites/selected_item.tga",
+			new Vector2f(64, 64),
+			new Vector3f(256.0f, 800.0f, 0.0f),
+			new Vector3f(0.06f, 0.06f, 1.0f),
+			true
+		);
 	}
 	~InventoryView()
 	{
@@ -145,6 +164,12 @@ public:
 		}
 	}
 
+	enum InventorySlotType
+	{
+		Dagger = 0x00,
+		GreatSword = 0x01,
+		EnchantedSword = 0x02
+	};
 	void renderScrollView(sf::RenderWindow* window)
 	{
 		slots_position = new Vector2f(60.0f, 44.0f);
@@ -156,37 +181,496 @@ public:
 		int h = ((1.0f - 0.0f) * maximumViewItemsCount);
 		Vector2f* beginValue = new Vector2f();
 
-		for (int x = 0; x < (20 * sliderRatio) + 1; x++)
-		{
-			for (int y = 0; y < 13; y++)
-			{
-				if(x >= 5) 
-				{
+		std::vector<InventorySlotType>* inventory_slots = new std::vector<InventorySlotType>();
 
-				}
-				else 
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::GreatSword);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::GreatSword);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::GreatSword);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::GreatSword);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::GreatSword);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::GreatSword);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::GreatSword);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::GreatSword);
+		inventory_slots->push_back(InventorySlotType::GreatSword);
+		inventory_slots->push_back(InventorySlotType::GreatSword);
+		inventory_slots->push_back(InventorySlotType::GreatSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);		
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);		
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);		
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);		
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);		
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);		
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::Dagger);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		inventory_slots->push_back(InventorySlotType::EnchantedSword);
+		std::vector<bool>* inventory_slots_equipped = new std::vector<bool>(inventory_slots->size());
+		int width = 5;
+		int xx = 0;
+		int yy = 0;
+		int page_count = 5 * 13;
+		int master_index = 0;
+		for (int index = 0; index < inventory_slots->size(); index++)
+		{
+			InventorySlotType slotType = inventory_slots->at((master_index + index) % inventory_slots->size());
+
+			xx = (index) % width;
+			yy = (index) / width;
+
+			bool can_render = true;
+			if (yy >= 13) {
+				can_render = false;				
+			}
+
+			int num_pages_count = (int)(((float)inventory_slots->size() / (float)page_count));
+
+			master_index = ((num_pages_count * page_count) * sliderRatio);
+
+			if (can_render)
+			{
+				switch (slotType)
 				{
-					if (x % 5 == 0)
+				case InventorySlotType::Dagger:
+					dagger->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+					dagger->scale = new Vector3f(0.03f, 0.05f, 1.0f);
+					dagger->render(window);
+					break;
+				case InventorySlotType::GreatSword:
+					greatsword->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+					greatsword->scale = new Vector3f(0.03f, 0.05f, 1.0f);
+					greatsword->render(window);
+					break;
+				case InventorySlotType::EnchantedSword:
+					enchantedSword->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+					enchantedSword->scale = new Vector3f(0.03f, 0.05f, 1.0f);
+					enchantedSword->render(window);
+					break;
+				}
+
+				bool hovered = false;
+
+				if (inventory_slots_equipped->size() - 1 >= index)
+				{
+					inventory_slots_equipped->at(index) = false;
+				}
+				inventory_slots_equipped->at(index) = false;
+				selected = false;
+
+				if (sf::Mouse::getPosition().x >= startX + (xx * slots_position->x) && sf::Mouse::getPosition().x <= startX + (xx * slots_position->x) + 64.0f)
+				{
+					if (sf::Mouse::getPosition().y >= startY + (yy * slots_position->y) && sf::Mouse::getPosition().y <= startY + (yy * slots_position->y) + 64.0f)
 					{
-						greatsword->position = new Vector3f(startX + (x * slots_position->x), startY + (y * slots_position->y), 0.0f);
-						greatsword->scale = new Vector3f(0.03f, 0.05f, 1.0f);
-						greatsword->render(window);
+						hovered = true;
+
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+						{
+							inventory_slots_equipped->at(index) = true;
+							selected = true;
+						}
 					}
-					else if (x >=2 && x <= 3 && y == 4)
-					{
-						enchantedSword->position = new Vector3f(startX + (x * slots_position->x), startY + (y * slots_position->y), 0.0f);
-						enchantedSword->scale = new Vector3f(0.03f, 0.05f, 1.0f);
-						enchantedSword->render(window);
-					}
-					else {
-						dagger->position = new Vector3f(startX + (x * slots_position->x), startY + (y * slots_position->y), 0.0f);
-						dagger->scale = new Vector3f(0.03f, 0.05f, 1.0f);
-						dagger->render(window);
-					}
+				}
+
+				if (hovered)
+				{
+					hovered_item->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+					hovered_item->scale = new Vector3f(0.03f, 0.05f, 1.0f);
+					hovered_item->render(window);
+				}
+
+				if (selected)
+				{
+					selected_item->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+					selected_item->scale = new Vector3f(0.03f, 0.05f, 1.0f);
+					selected_item->render(window);
 				}
 			}
 		}
-
 		progression += 0.01f;
 
 		if (beginSlider)
