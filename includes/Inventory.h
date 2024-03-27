@@ -9,7 +9,8 @@ enum InventorySlotType
 	Dagger = 0x00,
 	GreatSword = 0x01,
 	EnchantedSword = 0x02,
-	Potion = 0x03
+	Potion = 0x03,
+	Potion_Red = 0x04
 };
 
 class InventoryView {
@@ -21,6 +22,7 @@ public:
 	Sprite* dagger;
 	Sprite* greatsword;
 	Sprite* potion;
+	Sprite* potion_red;
 	Sprite* scrollbar_horiz;
 	Sprite* scrollbar_horiz_sliderbar;
 	Sprite* hovered_item;
