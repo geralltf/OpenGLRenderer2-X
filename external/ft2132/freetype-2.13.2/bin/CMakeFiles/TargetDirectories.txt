@@ -1,0 +1,5 @@
+C:/Users/geral/Downloads/ft2132/freetype-2.13.2/bin/CMakeFiles/freetype.dir
+C:/Users/geral/Downloads/ft2132/freetype-2.13.2/bin/CMakeFiles/PACKAGE.dir
+C:/Users/geral/Downloads/ft2132/freetype-2.13.2/bin/CMakeFiles/INSTALL.dir
+C:/Users/geral/Downloads/ft2132/freetype-2.13.2/bin/CMakeFiles/ALL_BUILD.dir
+C:/Users/geral/Downloads/ft2132/freetype-2.13.2/bin/CMakeFiles/ZERO_CHECK.dir

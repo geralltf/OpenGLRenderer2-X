@@ -52,7 +52,11 @@ public:
         this->x = (float)x;
         this->y = (float)y;
     }
-
+    Vector2f(unsigned int _x, unsigned int _y)
+    {
+        this->x = (float)x;
+        this->y = (float)y;
+    }
     Vector2f* xy();
     void xy(Vector2f* value);
     Vector3f* xyz();

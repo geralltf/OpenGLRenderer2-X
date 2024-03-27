@@ -1,0 +1,10 @@
+^C:\USERS\GERAL\DOWNLOADS\FT2132\FREETYPE-2.13.2\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/geral/Downloads/ft2132/freetype-2.13.2 -BC:/Users/geral/Downloads/ft2132/freetype-2.13.2/bin --check-stamp-file C:/Users/geral/Downloads/ft2132/freetype-2.13.2/bin/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

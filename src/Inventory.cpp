@@ -50,6 +50,14 @@ InventoryView::InventoryView()
 		true
 	);
 
+	potion = Sprite::Create(
+		"Assets/sprites/potion.tga",
+		new Vector2f(64, 64),
+		new Vector3f(256.0f, 800.0f, 0.0f),
+		new Vector3f(0.06f, 0.06f, 1.0f),
+		true
+	);
+
 	scrollbar_horiz = Sprite::Create(
 		"Assets/sprites/scrollbar_horiz.tga",
 		new Vector2f(246, 14),
@@ -81,10 +89,13 @@ InventoryView::InventoryView()
 		new Vector3f(0.06f, 0.06f, 1.0f),
 		true
 	);
+
+	fontRenderer = new FontRenderer();
 }
 InventoryView::~InventoryView()
 {
 	delete resumeGame;
+	delete fontRenderer;
 }
 
 void InventoryView::renderSprites(sf::RenderWindow* window)
@@ -140,14 +151,10 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 
 	float startX = 148.0f + (5 * 64) + 16;
 	float startY = 148.0f;
-	int maximumViewItemsCount = 20;
-	int w = ((1.0f - sliderRatio) * maximumViewItemsCount);
-	int h = ((1.0f - 0.0f) * maximumViewItemsCount);
-	Vector2f* beginValue = new Vector2f();
 
 	std::vector<InventorySlotType>* inventory_slots = new std::vector<InventorySlotType>();
 
-	inventory_slots->push_back(InventorySlotType::EnchantedSword);
+	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::GreatSword);
 	inventory_slots->push_back(InventorySlotType::EnchantedSword);
@@ -221,7 +228,6 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::Dagger);
-	inventory_slots->push_back(InventorySlotType::EnchantedSword);
 	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::Dagger);
@@ -545,7 +551,6 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::Dagger);
-	inventory_slots->push_back(InventorySlotType::EnchantedSword);
 	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::Dagger);
@@ -556,28 +561,51 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::Dagger);
 	inventory_slots->push_back(InventorySlotType::Dagger);
-	inventory_slots->push_back(InventorySlotType::EnchantedSword);
-	inventory_slots->push_back(InventorySlotType::EnchantedSword);
-	inventory_slots->push_back(InventorySlotType::EnchantedSword);
+	inventory_slots->push_back(InventorySlotType::Dagger);
+	inventory_slots->push_back(InventorySlotType::Dagger);
+	inventory_slots->push_back(InventorySlotType::Dagger);
+	inventory_slots->push_back(InventorySlotType::Dagger);
+	inventory_slots->push_back(InventorySlotType::Dagger);
+	inventory_slots->push_back(InventorySlotType::Potion);
+	inventory_slots->push_back(InventorySlotType::Potion);
+	inventory_slots->push_back(InventorySlotType::Potion);
+	inventory_slots->push_back(InventorySlotType::Potion);
+	inventory_slots->push_back(InventorySlotType::Potion);
+
 	std::vector<bool>* inventory_slots_equipped = new std::vector<bool>(inventory_slots->size());
 	int width = 5;
 	int xx = 0;
 	int yy = 0;
 	int page_count = 5 * 13;
 	int master_index = 0;
+	int num_pages_count = (int)(((float)inventory_slots->size() / (float)page_count));
+	std::string* potionNumber;
+	ColourRGBA* textColour = new ColourRGBA(1.0f, 1.0f, 1.0f, 1.0f);
+
 	for (int index = 0; index < inventory_slots->size(); index++)
 	{
-		InventorySlotType slotType = inventory_slots->at((master_index + index) % inventory_slots->size());
+		int lookup_index = (master_index + index) % inventory_slots->size();
+		InventorySlotType slotType = inventory_slots->at(lookup_index);
+		int count = 0;
+		InventorySlotType other_slot_type;
+		for (int slot_index = 0; slot_index < inventory_slots->size(); slot_index++)
+		{
+			other_slot_type = inventory_slots->at(slot_index);
+			if (slotType == other_slot_type)
+			{
+				count++;
+			}
+		}
+
+		potionNumber = new std::string(std::to_string(count));
 
 		xx = (index) % width;
 		yy = (index) / width;
 
 		bool can_render = true;
-		if (yy >= 13) {
+		if (yy >= 13 || xx >= 5) {
 			can_render = false;
 		}
-
-		int num_pages_count = (int)(((float)inventory_slots->size() / (float)page_count));
 
 		master_index = ((num_pages_count * page_count) * sliderRatio);
 
@@ -589,16 +617,60 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 				dagger->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
 				dagger->scale = new Vector3f(0.03f, 0.05f, 1.0f);
 				dagger->render(window);
+				delete dagger->position;
+				delete dagger->scale;
+
+				//fontRenderer->sprite_size = new Vector2f(64, 64);
+				//fontRenderer->scale = new Vector3f(0.001f, 0.001f, 1.0f);
+				//fontRenderer->iscale = new Vector3f(0.005f, 0.005f, 1.0f);
+				//fontRenderer->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+				//fontRenderer->Render(window, potionNumber, textColour);
 				break;
 			case InventorySlotType::GreatSword:
 				greatsword->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
 				greatsword->scale = new Vector3f(0.03f, 0.05f, 1.0f);
 				greatsword->render(window);
+				delete greatsword->position;
+				delete greatsword->scale;
+
+				//fontRenderer->sprite_size = new Vector2f(64, 64);
+				//fontRenderer->scale = new Vector3f(0.001f, 0.001f, 1.0f);
+				//fontRenderer->iscale = new Vector3f(0.005f, 0.005f, 1.0f);
+				//fontRenderer->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+				//fontRenderer->Render(window, potionNumber, textColour);
 				break;
 			case InventorySlotType::EnchantedSword:
 				enchantedSword->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
 				enchantedSword->scale = new Vector3f(0.03f, 0.05f, 1.0f);
 				enchantedSword->render(window);
+				delete enchantedSword->position;
+				delete enchantedSword->scale;
+
+				//fontRenderer->sprite_size = new Vector2f(64, 64);
+				//fontRenderer->scale = new Vector3f(0.001f, 0.001f, 1.0f);
+				//fontRenderer->iscale = new Vector3f(0.005f, 0.005f, 1.0f);
+				//fontRenderer->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+				//fontRenderer->Render(window, potionNumber, textColour);
+
+				fontRenderer->sprite_size = new Vector2f(64, 64);
+				fontRenderer->scale = new Vector3f(1.0f, 1.0f, 1.0f);
+				fontRenderer->iscale = new Vector3f(0.0003f, 0.0003f, 1.0f);
+				fontRenderer->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+				fontRenderer->Render(window, potionNumber, textColour);
+				break;
+			case InventorySlotType::Potion:
+				potion->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+				potion->scale = new Vector3f(0.03f, 0.05f, 1.0f);
+				potion->render(window);
+
+				delete potion->position;
+				delete potion->scale;
+
+				fontRenderer->sprite_size = new Vector2f(64, 64);
+				fontRenderer->scale = new Vector3f(1.0f, 1.0f, 1.0f);
+				fontRenderer->iscale = new Vector3f(0.0003f, 0.0003f, 1.0f);
+				fontRenderer->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+				fontRenderer->Render(window, potionNumber, textColour);
 				break;
 			}
 

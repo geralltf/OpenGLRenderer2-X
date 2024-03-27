@@ -1,0 +1,10 @@
+^C:\USERS\GERAL\DOWNLOADS\FT2132\FREETYPE-2.13.2\BIN\CMAKEFILES\174E54FF61D9AE0E38A3E3C36309C605\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/geral/Downloads/ft2132/freetype-2.13.2 -BC:/Users/geral/Downloads/ft2132/freetype-2.13.2/bin --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/geral/Downloads/ft2132/freetype-2.13.2/bin/freetype.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
