@@ -98,6 +98,14 @@ InventoryView::InventoryView()
 		true
 	);
 
+	description_onhover = Sprite::Create(
+		"Assets/sprites/description_onhover.tga",
+		new Vector2f(256, 128),
+		new Vector3f(256.0f, 800.0f, 0.0f),
+		new Vector3f(0.06f, 0.06f, 1.0f),
+		true
+	);
+
 	fontRenderer = new FontRenderer();
 }
 InventoryView::~InventoryView()
@@ -121,6 +129,7 @@ void InventoryView::renderSprites(sf::RenderWindow* window)
 			if (dt >= 1.0f)
 			{
 				inventory_hasopened = true;
+
 				dt = 0.0f;
 			}
 		}
@@ -580,15 +589,15 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 	inventory_slots->push_back(InventorySlotType::Potion); 
 	inventory_slots->push_back(InventorySlotType::Potion);
 	inventory_slots->push_back(InventorySlotType::Potion_Red);
-	//inventory_slots->push_back(InventorySlotType::Potion_Red);
-	//inventory_slots->push_back(InventorySlotType::Potion_Red);
-	//inventory_slots->push_back(InventorySlotType::Potion_Red);
-	//inventory_slots->push_back(InventorySlotType::Potion_Red);
-	//inventory_slots->push_back(InventorySlotType::Potion_Red);
-	//inventory_slots->push_back(InventorySlotType::Potion_Red);
-	//inventory_slots->push_back(InventorySlotType::Potion_Red);
-	//inventory_slots->push_back(InventorySlotType::Potion_Red);
-	//inventory_slots->push_back(InventorySlotType::Potion_Red);
+	inventory_slots->push_back(InventorySlotType::Potion_Red);
+	inventory_slots->push_back(InventorySlotType::Potion_Red);
+	inventory_slots->push_back(InventorySlotType::Potion_Red);
+	inventory_slots->push_back(InventorySlotType::Potion_Red);
+	inventory_slots->push_back(InventorySlotType::Potion_Red);
+	inventory_slots->push_back(InventorySlotType::Potion_Red);
+	inventory_slots->push_back(InventorySlotType::Potion_Red);
+	inventory_slots->push_back(InventorySlotType::Potion_Red);
+	inventory_slots->push_back(InventorySlotType::Potion_Red);
 
 	std::vector<bool>* inventory_slots_equipped = new std::vector<bool>(inventory_slots->size());
 	int width = 5;
@@ -599,7 +608,11 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 	int num_pages_count = (int)(((float)inventory_slots->size() / (float)page_count));
 	std::string* item_number_count;
 	ColourRGBA* textColour = new ColourRGBA(1.0f, 1.0f, 1.0f, 1.0f);
-
+	bool hovered = false;
+	bool hovered2 = false;
+	InventorySlotType hovered_type;
+	Vector3f* last_position = nullptr;
+	
 	for (int index = 0; index < inventory_slots->size(); index++)
 	{
 		int lookup_index = (master_index + index) % inventory_slots->size();
@@ -639,6 +652,8 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 
 		if (can_render)
 		{
+			last_position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
+
 			switch (slotType)
 			{
 			case InventorySlotType::Dagger:
@@ -708,7 +723,7 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 				break;
 			}
 
-			bool hovered = false;
+			hovered = false;
 
 			if (inventory_slots_equipped->size() - 1 >= index)
 			{
@@ -736,6 +751,9 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 				hovered_item->position = new Vector3f(startX + (xx * slots_position->x), startY + (yy * slots_position->y), 0.0f);
 				hovered_item->scale = new Vector3f(0.03f, 0.05f, 1.0f);
 				hovered_item->render(window);
+
+				hovered2 = true;
+				hovered_type = slotType;
 			}
 
 			if (selected)
@@ -746,6 +764,85 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 			}
 		}
 	}
+
+	if (hovered2)
+	{
+		description_onhover->position = new Vector3f(startX + (xx * slots_position->x) + 64, startY + (yy * slots_position->y) + 246, -1.0f);
+		description_onhover->position = new Vector3f(last_position->x + 64, last_position->y + 246, -1.0f);
+		description_onhover->scale = new Vector3f(0.26f, 0.30f, 1.0f);
+		description_onhover->render(window);
+
+		std::string* inventory_slot_type_string = nullptr;
+
+		switch (hovered_type)
+		{
+		case InventorySlotType::Dagger:
+			inventory_slot_type_string = new std::string("Steel Dagger");
+			break;
+		case InventorySlotType::GreatSword:
+			inventory_slot_type_string = new std::string("Great Sword");
+			break;
+		case InventorySlotType::EnchantedSword:
+			inventory_slot_type_string = new std::string("Enchanted Sword");
+			break;
+		case InventorySlotType::Potion:
+			inventory_slot_type_string = new std::string("Potion");
+			break;
+		case InventorySlotType::Potion_Red:
+			inventory_slot_type_string = new std::string("Potion");
+			break;
+		}
+
+		std::string* title_string = inventory_slot_type_string;
+		std::string* description_type_string = new std::string("Type: Short Blade, One Handed");
+		std::string* stats_string0 = new std::string("Chop: 10");
+		std::string* stats_string1 = new std::string("Slash: 10");
+		std::string* stats_string2 = new std::string("Thrust: 12");
+		std::string* stats_string3 = new std::string("Condition: 350/350");
+		std::string* stats_string4 = new std::string("Weight: 8");
+		std::string* stats_string5 = new std::string("Value: 55");
+		std::string* stats_string6 = new std::string("Cast When Strikes:");
+		std::string* stats_string7 = new std::string("Damage Health 2 to 4 pts for 3 secs on Touch");
+
+		fontRenderer->sprite_size = new Vector2f(64, 64);
+		fontRenderer->scale = new Vector3f(1.0f, 1.0f, 1.0f);
+		fontRenderer->iscale = new Vector3f(0.00015f, 0.00015f, 1.0f);
+		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12, 0.0f);
+		fontRenderer->Render(window, title_string, textColour);
+
+		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 16, 0.0f);
+		fontRenderer->Render(window, description_type_string, textColour);
+
+		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 32, 0.0f);
+		fontRenderer->Render(window, stats_string0, textColour);
+
+		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 64, 0.0f);
+		fontRenderer->Render(window, stats_string1, textColour);
+
+		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 96, 0.0f);
+		fontRenderer->Render(window, stats_string2, textColour);
+
+		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 128, 0.0f);
+		fontRenderer->Render(window, stats_string3, textColour);
+
+		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 160, 0.0f);
+		fontRenderer->Render(window, stats_string4, textColour);
+
+		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 192, 0.0f);
+		fontRenderer->Render(window, stats_string5, textColour);
+
+		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 224, 0.0f);
+		fontRenderer->Render(window, stats_string6, textColour);
+
+		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16 - 128, startY + (yy * slots_position->y) - 12 + 256, 0.0f);
+		fontRenderer->Render(window, stats_string7, textColour);
+
+		//delete title_string;
+		//delete description_type_string;
+		//delete stats_string;
+		//delete inventory_slot_type_string;
+	}
+
 	progression += 0.01f;
 
 	if (beginSlider)

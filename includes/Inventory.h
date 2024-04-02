@@ -27,6 +27,7 @@ public:
 	Sprite* scrollbar_horiz_sliderbar;
 	Sprite* hovered_item;
 	Sprite* selected_item;
+	Sprite* description_onhover;
 	Vector2f* slots_position;
 	FontRenderer* fontRenderer;
 	bool visible = false;
