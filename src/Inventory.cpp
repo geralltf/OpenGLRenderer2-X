@@ -1,4 +1,5 @@
 #include "Inventory.h"
+#include "Debug.h"
 
 InventoryView::InventoryView()
 {
@@ -106,7 +107,25 @@ InventoryView::InventoryView()
 		true
 	);
 
+	skilltree_node = Sprite::Create(
+		"Assets/sprites/skilltree_node.tga",
+		new Vector2f(64, 64),
+		new Vector3f(256.0f, 800.0f, 0.0f),
+		new Vector3f(0.06f, 0.06f, 1.0f),
+		true
+	);
+
+	skilltree_node_selected = Sprite::Create(
+		"Assets/sprites/skilltree_node_selected.tga",
+		new Vector2f(64, 64),
+		new Vector3f(256.0f, 800.0f, 0.0f),
+		new Vector3f(0.06f, 0.06f, 1.0f),
+		true
+	);
+
 	fontRenderer = new FontRenderer();
+
+	create_skilltree();
 }
 InventoryView::~InventoryView()
 {
@@ -114,7 +133,112 @@ InventoryView::~InventoryView()
 	delete fontRenderer;
 }
 
-void InventoryView::renderSprites(sf::RenderWindow* window)
+void InventoryView::create_skilltree()
+{
+	line_colour = new ColourRGBA(1.0f, 0.0f, 1.0f, 0.0f);
+
+	skillTreeDiagram = new SkillTreeDiagram();
+	node_root = new SkillTreeNode();
+
+	if (skillTreeDiagram->rnd == nullptr)
+	{
+		skillTreeDiagram->rnd = new Random();
+	}
+
+	skillTreeDiagram->AddNode(node_root);
+
+	create_skilltree_node(node_root, 0);
+
+	skillTreeDiagram->Arrange();
+}
+
+void InventoryView::create_skilltree_node(SkillTreeNode* parent_node, int depth)
+{
+	int num_children = skillTreeDiagram->rnd->RandomInt(3, 8);
+	SkillTreeNode* child;
+	int child_index;
+	int max_depth = 4;
+
+	parent_node->inventory_view = this;
+	parent_node->diagram = skillTreeDiagram;
+
+	if (depth < max_depth)
+	{
+		for (child_index = 0; child_index < num_children; child_index++)
+		{
+			child = new SkillTreeNode();
+			child->parent = parent_node;
+			child->diagram = skillTreeDiagram;
+			child->inventory_view = this;
+
+			parent_node->connections->push_back(child);
+
+			create_skilltree_node(child, depth + 1);
+		}
+	}
+}
+
+void InventoryView::render_skilltree(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview)
+{
+	skillTreeDiagram->Draw(window, cameraTransform, projectionMatrix, modelview, skillTreeDiagram->GetDiagramBounds());
+}
+void InventoryView::render_skilltree_node_connection(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview, SkillTreeNode* node, Vector3f* start, Vector3f* end)
+{
+	if (node->parent == nullptr)
+	{
+		start = node->location;
+	}
+	else
+	{
+		start = node->parent->location;
+	}
+	
+	SkillTreeNode* p = node;
+	int curr_depth = 0;
+
+	while (p->parent != nullptr) 
+	{
+		curr_depth++;
+		p = p->parent;
+	}
+
+
+	end = node->location;
+
+	if (node->size == nullptr)
+	{
+		node->size = Vector3f::Multiply(node->location, new Vector3f(0.5f, 0.5f, 0.5f));
+	}
+
+	AABB* bounds = new AABB(node->location, node->size);
+	bounds->Center = node->location;
+	bounds->HalfSize = Vector3f::Divide(node->size, 2.0f);
+	bounds->Min = bounds->GetMin();
+	bounds->Max = bounds->GetMax();
+	render_skilltree_node(window, node, bounds);
+
+	//line_colour = new ColourRGBA(1.0f, 1.0f * curr_depth * 0.2f, 1.0f * curr_depth * 0.4f, 1.0f * curr_depth * 0.9f);
+	line_colour = new ColourRGBA(1.0f, (end->x - start->x), (end->y - start->y), (end->z - start->z));
+
+	Debug::DrawLine(start, end, line_colour);
+
+	Debug::DrawLines_RenderDispatch(window, cameraTransform, projectionMatrix, modelview);
+}
+
+void InventoryView::render_skilltree_node(sf::RenderWindow* window, SkillTreeNode* node, AABB* bounds)
+{	
+	skilltree_node->scale = new Vector3f(0.05f, 0.05f, 1.0f);
+	skilltree_node->position = Vector3f::Add(
+		Vector3f::Multiply(node->location, new Vector3f(1.0f, 1.0f, 1.0f)), 
+		new Vector3f(skillTreeDiagram->chart_origin->x + 500.0f, 
+			skillTreeDiagram->chart_origin->y + 500.0f, 
+			skillTreeDiagram->chart_origin->z
+		)
+	);
+	skilltree_node->render(window);
+}
+
+void InventoryView::renderSprites(sf::RenderWindow* window, Transform* cameraTransform, Matrix4* projectionMatrix, Matrix4* modelview)
 {
 	if (visible)
 	{
@@ -152,6 +276,11 @@ void InventoryView::renderSprites(sf::RenderWindow* window)
 		questsUI->render(window);
 	}
 
+	if (skilltree_hasopened)
+	{
+		render_skilltree(window, cameraTransform, projectionMatrix, modelview);
+	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
 		visible = !visible;
@@ -160,6 +289,34 @@ void InventoryView::renderSprites(sf::RenderWindow* window)
 	{
 		quests_visible = !quests_visible;
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) 
+	{
+		skilltree_hasopened = !skilltree_hasopened;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		chart_origin_x -= chart_origin_scale;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		chart_origin_x += chart_origin_scale;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	{
+		chart_origin_y -= chart_origin_scale;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		chart_origin_y += chart_origin_scale;
+	}
+
+	if (skillTreeDiagram->chart_origin != nullptr)
+	{
+		delete skillTreeDiagram->chart_origin;
+	}
+	skillTreeDiagram->chart_origin = new Vector3f(chart_origin_x * 800.0f, chart_origin_y * 600.0f, 0.0f);
 }
 
 void InventoryView::renderScrollView(sf::RenderWindow* window)
@@ -767,9 +924,9 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 
 	if (hovered2)
 	{
-		description_onhover->position = new Vector3f(startX + (xx * slots_position->x) + 64, startY + (yy * slots_position->y) + 246, -1.0f);
-		description_onhover->position = new Vector3f(last_position->x + 64, last_position->y + 246, -1.0f);
-		description_onhover->scale = new Vector3f(0.26f, 0.30f, 1.0f);
+		//description_onhover->position = new Vector3f(startX + (xx * slots_position->x) + 64, startY + (yy * slots_position->y) + 246, -1.0f);
+		description_onhover->position = new Vector3f(last_position->x + 64, last_position->y + 246 + 5, -1.0f);
+		description_onhover->scale = new Vector3f(0.30f, 0.30f, 1.0f);
 		description_onhover->render(window);
 
 		std::string* inventory_slot_type_string = nullptr;
@@ -786,15 +943,35 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 			inventory_slot_type_string = new std::string("Enchanted Sword");
 			break;
 		case InventorySlotType::Potion:
-			inventory_slot_type_string = new std::string("Potion");
+			inventory_slot_type_string = new std::string("Potion Health");
 			break;
 		case InventorySlotType::Potion_Red:
-			inventory_slot_type_string = new std::string("Potion");
+			inventory_slot_type_string = new std::string("Potion Arcana");
 			break;
 		}
 
+		std::string* description_type_string = nullptr;
+		if (hovered_type == InventorySlotType::Dagger)
+		{
+			description_type_string = new std::string("Type: Short Blade, One Handed");
+		}
+		if (hovered_type == InventorySlotType::GreatSword)
+		{
+			description_type_string = new std::string("Type: Long Blade, One Handed");
+		}
+		if (hovered_type == InventorySlotType::EnchantedSword)
+		{
+			description_type_string = new std::string("Type: Long Blade, One Handed Enchanted");
+		}
+		if (hovered_type == InventorySlotType::Potion)
+		{
+			description_type_string = new std::string("Type: Potion, Quick Release Health");
+		}
+		if (hovered_type == InventorySlotType::Potion_Red)
+		{
+			description_type_string = new std::string("Type: Potion, Quick Release Arcana");
+		}
 		std::string* title_string = inventory_slot_type_string;
-		std::string* description_type_string = new std::string("Type: Short Blade, One Handed");
 		std::string* stats_string0 = new std::string("Chop: 10");
 		std::string* stats_string1 = new std::string("Slash: 10");
 		std::string* stats_string2 = new std::string("Thrust: 12");
@@ -804,38 +981,60 @@ void InventoryView::renderScrollView(sf::RenderWindow* window)
 		std::string* stats_string6 = new std::string("Cast When Strikes:");
 		std::string* stats_string7 = new std::string("Damage Health 2 to 4 pts for 3 secs on Touch");
 
+		delete fontRenderer->position;
 		fontRenderer->sprite_size = new Vector2f(64, 64);
 		fontRenderer->scale = new Vector3f(1.0f, 1.0f, 1.0f);
 		fontRenderer->iscale = new Vector3f(0.00015f, 0.00015f, 1.0f);
 		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12, 0.0f);
 		fontRenderer->Render(window, title_string, textColour);
 
-		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 16, 0.0f);
+		delete fontRenderer->position;
+		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 - 32, startY + (yy * slots_position->y) - 12 + 16, 0.0f);
 		fontRenderer->Render(window, description_type_string, textColour);
 
+		delete fontRenderer->position;
 		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 32, 0.0f);
 		fontRenderer->Render(window, stats_string0, textColour);
 
+		delete fontRenderer->position;
 		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 64, 0.0f);
 		fontRenderer->Render(window, stats_string1, textColour);
 
+		delete fontRenderer->position;
 		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 96, 0.0f);
 		fontRenderer->Render(window, stats_string2, textColour);
 
+		delete fontRenderer->position;
 		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 128, 0.0f);
 		fontRenderer->Render(window, stats_string3, textColour);
 
+		delete fontRenderer->position;
 		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 160, 0.0f);
 		fontRenderer->Render(window, stats_string4, textColour);
 
+		delete fontRenderer->position;
 		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 192, 0.0f);
 		fontRenderer->Render(window, stats_string5, textColour);
 
+		delete fontRenderer->position;
 		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16, startY + (yy * slots_position->y) - 12 + 224, 0.0f);
 		fontRenderer->Render(window, stats_string6, textColour);
 
+		delete fontRenderer->position;
 		fontRenderer->position = new Vector3f(startX + (xx * slots_position->x) + 64 + 128 + 16 - 128, startY + (yy * slots_position->y) - 12 + 256, 0.0f);
 		fontRenderer->Render(window, stats_string7, textColour);
+
+		delete fontRenderer->position;
+		delete title_string;
+		delete description_type_string;
+		delete stats_string7;
+		delete stats_string6;
+		delete stats_string5;
+		delete stats_string4;
+		delete stats_string3;
+		delete stats_string2;
+		delete stats_string1;
+		delete stats_string0;
 
 		//delete title_string;
 		//delete description_type_string;

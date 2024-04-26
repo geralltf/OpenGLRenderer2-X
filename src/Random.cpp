@@ -1,5 +1,14 @@
 #include "Random.h"
 
+Random::Random()
+{
+
+}
+Random::Random(uint32_t seed)
+{
+	this->seed = seed;
+}
+
 bool Random::RandomBool()
 {
 	return Rand() % 2 == 1;
@@ -18,7 +27,7 @@ double Random::RandomDouble(double min, double max)
 	return scalar * (r / div);
 }
 
-double Random::RandomFloat(float min, float max)
+float Random::RandomFloat(float min, float max)
 {
 	double r = (double)Rand();
 	double div = (double)(0xFFFFFFFF);

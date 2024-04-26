@@ -234,5 +234,5 @@ void VirtualWorld::Render(sf::RenderWindow* window, Transform* cameraTransform, 
 	skybox->Render(cameraTransform, projectionMatrix);
 
 	// User interfaces.
-	inventoryView->renderSprites(window);
+	inventoryView->renderSprites(window, cameraTransform, projectionMatrix, modelview);
 }
