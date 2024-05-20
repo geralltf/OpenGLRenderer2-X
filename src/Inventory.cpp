@@ -149,31 +149,45 @@ void InventoryView::create_skilltree()
 
 	create_skilltree_node(node_root, 0);
 
-	skillTreeDiagram->Arrange();
+	//skillTreeDiagram->Arrange();
 }
 
 void InventoryView::create_skilltree_node(SkillTreeNode* parent_node, int depth)
 {
-	int num_children = skillTreeDiagram->rnd->RandomInt(3, 8);
+	int num_children = skillTreeDiagram->rnd->RandomInt(5, 12);
 	SkillTreeNode* child;
 	int child_index;
 	int max_depth = 4;
+	std::queue<SkillTreeNode*>* work_items = new std::queue<SkillTreeNode*>();
+	SkillTreeNode* current_node;
 
 	parent_node->inventory_view = this;
 	parent_node->diagram = skillTreeDiagram;
 
-	if (depth < max_depth)
+	work_items->push(parent_node);
+
+	while (work_items->size() > 0) 
 	{
-		for (child_index = 0; child_index < num_children; child_index++)
+		current_node = work_items->front();
+		work_items->pop();
+
+		if (current_node->depth < max_depth)
 		{
-			child = new SkillTreeNode();
-			child->parent = parent_node;
-			child->diagram = skillTreeDiagram;
-			child->inventory_view = this;
+			num_children = skillTreeDiagram->rnd->RandomInt(3, 8);
 
-			parent_node->connections->push_back(child);
+			for (child_index = 0; child_index < num_children; child_index++)
+			{
+				child = new SkillTreeNode();
+				child->parent = current_node;
+				child->diagram = skillTreeDiagram;
+				child->inventory_view = this;
+				child->depth = current_node->depth + 1;
+				current_node->connections->push_back(child);
 
-			create_skilltree_node(child, depth + 1);
+				work_items->push(child);
+
+				//create_skilltree_node(child, depth + 1);
+			}
 		}
 	}
 }

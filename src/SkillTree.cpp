@@ -500,8 +500,12 @@ void SkillTreeDiagram::DrawNode(sf::RenderWindow* render_window, Transform* came
 		{
 			Vector3f* destination = ScalePoint(other->location, scale);
 			node->DrawConnector(render_window, cameraTransform, projectionMatrix, modelview, Vector3f::Add(center, source), Vector3f::Add(center, destination), other);
+		
+			DrawNode(render_window, cameraTransform, projectionMatrix, modelview, other, bounds, center, scale);
 		}
 	}
+
+	scale = scale * 2.0f;
 
 	int ch = 0;
 	// then draw all of the nodes
@@ -533,13 +537,13 @@ void SkillTreeDiagram::DrawNode(sf::RenderWindow* render_window, Transform* came
 		AABB* nodeBoundsAABB = new AABB(node_center, half_size);
 
 		float numNodes = parent_node->connections->size();
-		float angle = (ch / (numNodes / 2.0f)) * PI; // Calculate the angle at which the element will be placed.
-		float radius = 500.0f;
+		float angle = (ch / (numNodes / scale)) * PI; // Calculate the angle at which the element will be placed.
+		float radius = 500.0f * scale;
 		float width = 10.0f;
 
 		// For a semicircle, we would use (i / numNodes) * Math.PI.
-		float x = (radius * cos(angle)) + (width / 2); // Calculate the x position of the element.
-		float y = (radius * sin(angle)) + (width / 2); // Calculate the y position of the element.
+		float x = (radius * cos(angle)) + (width / scale); // Calculate the x position of the element.
+		float y = (radius * sin(angle)) + (width / scale); // Calculate the y position of the element.
 
 		node->location = new Vector3f(x, y, 0.0f);
 		//node->location = node_center;

@@ -32,6 +32,7 @@ public:
 	SkillTreeNode* parent;						// the parent of the current node.
 	Vector3f* size;						// Gets the size of the node(for drawing purposes).
 	InventoryView* inventory_view;		// underlying inventory view UI that's main job is for UI renderering.
+	int depth = 0;
 
 	/// <summary>
 	/// Initialises a new instance of the Node class.

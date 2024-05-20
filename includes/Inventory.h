@@ -1,6 +1,8 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
 
+#include <queue>
+
 #include "Sprite.h"
 #include "Font.h"
 #include "SkillTree.h"
